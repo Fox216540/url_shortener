@@ -2,6 +2,7 @@ from typing import Optional
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
 from src.app.service.link_service import LinkService
+from src.domain.link.models.link import Link
 from src.domain.security.password_hasher import PasswordHasher
 
 from uuid import UUID
@@ -43,7 +44,7 @@ class UserService:
 		user = self.authenticate(email, password)
 		return user.id if user else None
 
-	def create_user_link(self, email: str, password: str, alias: str, original_url: str) -> Optional[str]:
+	def create_user_link(self, email: str, password: str, alias: str, original_url: str) -> Optional[Link]:
 		user = self.authenticate(email=email, password=password)
-		link_user = self.link_service.add_link(owner_id=user.id, url=original_url)
+		link_user = self.link_service.add_link(owner_id=user.id, url=original_url, alias=alias)
 		return link_user

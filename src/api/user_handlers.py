@@ -30,6 +30,6 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 
 @router.post("/create_link", response_model=CreateUserLinkResponse)
 def create_link(request: CreateUserLinkRequest, service: UserService = Depends(get_user_service)):
-	short_code = service.create_user_link(**request.dict())
+	short_code = service.create_user_link(**request.dict()).short_code
 	return CreateUserLinkResponse(url_short=URL+short_code)
 

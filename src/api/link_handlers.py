@@ -16,16 +16,16 @@ router = APIRouter(tags=["link"])
 
 @router.get("/{short_code}", response_model=GetUrlOriginResponse)
 def get_original_link(short_code: str, service: LinkService = Depends(get_link_service)):
-    url = service.get_url_by_short_code(short_code)
+    url = service.get_url_by_short_code(short_code).original_url
     return RedirectResponse(url)
 
 
 @router.post("/short", response_model=CreateLinkResponse)
 def create_short_link(request: CreateLinkRequest, service: LinkService = Depends(get_link_service)):
-    short_code = service.add_link(
+    code = service.add_link(
         request.url_origin,
-    )
-    return CreateLinkResponse(url_short=URL+short_code)
+    ).short_code
+    return CreateLinkResponse(url_short=URL+code)
 
 # @router.post('/reg', response_model=)
 
