@@ -1,27 +1,49 @@
 from typing import Optional
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
-
-from src.app.service.success import success_message_create_user
-
+from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
+
+from uuid import UUID
 
 
 class UserService:
-	def __init__(self, repo: UserRepository, hasher: PasswordHasher):
+	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService):
 		self.repo = repo
 		self.hasher = hasher
+		self.link_service = link_service
 
-	def create_user(self, user: User) -> Optional[str]:
-		user.password = self.hasher.hash(user.password)
-		saved = self.repo.create(user)
-		if saved:
-			return success_message_create_user
+	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[User]:
+		if self.repo.exists_by_email(email):
+			return None
+		hash_password = self.hasher.hash(password)
+		user = User(
+			email=email,
+			name=name,
+			password=hash_password,
+			username=username
+		)
+		saved = self.repo.save(user)
+		if not saved:
+			pass
+		return saved
 
-	def get_id_by_mail_password(self, mail: str, password: str) -> Optional[User]:
-		user = self.repo.get_by_mail(mail=mail)  # запрашиваем по почте и паролю
+	def authenticate(self, email: str, password: str) -> Optional[User]:
+		"""Аутентификация пользователя"""
+		user = self.repo.get_by_email(email)  # Используем новый метод
 		if not user:
 			return None
+
 		if not self.hasher.verify(password, user.password):
 			return None
-		return user.id
+
+		return user
+
+	def get_user_id(self, email: str, password: str) -> Optional[UUID]:
+		user = self.authenticate(email, password)
+		return user.id if user else None
+
+	def create_user_link(self, email: str, password: str, alias: str, original_url: str) -> Optional[str]:
+		user = self.authenticate(email=email, password=password)
+		link_user = self.link_service.add_link(owner_id=user.id, url=original_url)
+		return link_user

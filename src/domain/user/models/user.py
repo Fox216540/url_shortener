@@ -7,7 +7,7 @@ from uuid import UUID
 @dataclass
 class User:
     name: Optional[str]
-    mail: Optional[str]
+    email: Optional[str]
     username: Optional[str]
     password: Optional[str]
     id: Optional[UUID] = None
@@ -17,7 +17,7 @@ class User:
         return cls(
             id=orm_obj.uuid_id,
             name=orm_obj.name,
-            mail=orm_obj.mail,
+            email=orm_obj.email,
             username=orm_obj.username,
             password=orm_obj.password,
         )

@@ -5,11 +5,16 @@ from typing import Optional
 
 class UserRepository(ABC):
     @abstractmethod
-    def create(self, user: User) -> Optional[bool]:
+    def save(self, user: User) -> Optional[User]:
         """Добавляет юзера"""
         pass
 
     @abstractmethod
-    def get_by_mail(self, mail: str) -> Optional[User]:
+    def get_by_email(self, email: str) -> Optional[User]:
         """Возвращает пользователя по его id"""
+        pass
+
+    @abstractmethod
+    def exists_by_email(self, email: str) -> Optional[bool]:
+        """Проверяет существование пользователя с указанным email"""
         pass

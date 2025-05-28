@@ -14,5 +14,6 @@ def get_link_service() -> LinkService:
 def get_user_service() -> UserService:
     repo = UserRepositoryImpl()
     hasher = PasslibHasher()
-    return UserService(repo, hasher)
+    link_service = get_link_service()
+    return UserService(repo, hasher, link_service)
 

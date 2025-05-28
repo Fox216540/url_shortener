@@ -6,42 +6,35 @@ from src.infra.repositories.models.user_model import UserORM
 
 
 class UserRepositoryImpl(UserRepository):
-    def create(self, user: User) -> bool:
+    def save(self, user: User) -> Optional[User]:
         with get_session() as session:
-            new_link = UserORM(
+            new_user = UserORM(
                 name=user.name,
-                mail=user.mail,
+                email=user.email,
                 username=user.username,
                 password=user.password,
             )
 
-            session.add(new_link)
+            session.add(new_user)
             session.commit()
-            return True
+            session.refresh(new_user)
+            return User.from_orm(new_user)
 
-    def get_by_mail(self, mail: str) -> Optional[User]:
+    def get_by_email(self, email: str) -> Optional[User]:
         with get_session() as session:
-            user = session.query(UserORM).filter(UserORM.mail == mail).first()
+            user = session.query(UserORM).filter(UserORM.email == email).first()
             if not user:
                 return None
             return User.from_orm(user)
 
+    def exists_by_email(self, email: str) -> Optional[bool]:
+        with get_session() as session:
+            exists = session.query(
+                session.query(UserORM)
+                .filter(UserORM.email == email)
+                .exists()
+            ).scalar()
+        return bool(exists)
 
-# '''
-# EXAMPLE:
-# '''
-#
-# class Figure(ABC):
-#     square: float
-#
-#     @abstractmethod
-#     def calc_square(self):
-#         pass
-#
-# class Rectangle(Figure):
-#     def calc_square(self):
-#         pass
-#
-# class Triangle(Figure):
-#     def calc_square(self):
-#         pass
+
+

@@ -2,14 +2,15 @@ import base62
 from typing import Optional
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
+from uuid import UUID
 
 
 class LinkService:
 	def __init__(self, repo: LinkRepository):
 		self.repo = repo
 
-	def add_link(self, url: str) -> Optional[str]:
-		link = Link(original_url=url)
+	def add_link(self, url: str, owner_id: UUID = None) -> Optional[str]:
+		link = Link(original_url=url, owner_id=owner_id)
 		saved = self.repo.create(link)
 		return saved.short_code
 
