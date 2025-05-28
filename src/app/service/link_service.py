@@ -10,7 +10,7 @@ class LinkService:
 
 	def add_link(self, url: str) -> Optional[str]:
 		link = Link(original_url=url)
-		saved = self.repo.add(link)
+		saved = self.repo.create(link)
 		return saved.short_code
 
 	def get_url_by_short_code(self, short_code: str) -> Optional[str]:
