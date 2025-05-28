@@ -5,8 +5,14 @@ import atexit
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# DATABASE_URL = f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"
-DATABASE_URL = f"postgresql://user:password@localhost:5432/books"
+from settings import DB_CONFIG
+#DATABASE_URL = f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"
+#DATABASE_URL = f"postgresql://user:password@localhost:5432/books"
+
+DATABASE_URL = (
+    f"postgresql+psycopg2://{DB_CONFIG['user']}:{DB_CONFIG['password']}"
+    f"@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"
+)
 
 engine = create_engine(DATABASE_URL, pool_size=POOL_SIZE, max_overflow=POOL_MAX_SIZE)
 Session = sessionmaker(

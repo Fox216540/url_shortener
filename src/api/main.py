@@ -8,6 +8,7 @@ from src.app.dtos.link_dto import (GetUrlOriginResponse,
 from fastapi import Depends
 from src.app.di.di import get_service
 from settings import URL
+from fastapi.responses import RedirectResponse
 #from app.logger import logger
 
 router = APIRouter(tags=["link"])
@@ -16,7 +17,7 @@ router = APIRouter(tags=["link"])
 @router.get("/{short_code}", response_model=GetUrlOriginResponse)
 def get_original_link(short_code: str, service: LinkService = Depends(get_service)):
     url = service.get_url_by_short_code(short_code)
-    return GetUrlOriginResponse(url_origin=url)
+    return RedirectResponse(url)
 
 
 @router.post("/short", response_model=CreateLinkResponse)
