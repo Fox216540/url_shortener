@@ -1,11 +1,11 @@
 import base62
 from typing import Optional
-from src.infra.repositories.link_repo import LinkRepositoryImpl
 from src.domain.link.models.link import Link
+from src.domain.link.repositories.link_repo import LinkRepository
 
 
 class LinkService:
-	def __init__(self, repo: LinkRepositoryImpl):
+	def __init__(self, repo: LinkRepository):
 		self.repo = repo
 
 	def add_link(self, url: str) -> Optional[str]:
@@ -18,5 +18,5 @@ class LinkService:
 			link_id = base62.decode(short_code)     # декодируем строку в int
 		except ValueError:
 			return None  # неверный формат short_code
-		link = self.repo.get_by_id(link_id)     # запрашиваем по int-ID
+		link = self.repo.get_by_id(link_id)  # запрашиваем по int-ID
 		return link.original_url

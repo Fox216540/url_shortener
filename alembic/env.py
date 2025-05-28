@@ -24,8 +24,13 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from src.infra.repositories.models.link_model import Base
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
+
+import src.infra.repositories.models.link_model
+import src.infra.repositories.models.user_model
+
+from src.infra.repositories.models.base import Base
+
 target_metadata = Base.metadata
 # target_metadata = None
 

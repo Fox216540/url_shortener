@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from src.api.main import router
+from src.api.link_handlers import router as link_router
+from src.api.user_handlers import router as user_router
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from src.logger import status_logger
@@ -33,7 +34,8 @@ app.add_middleware(
     allow_headers=["Content-Type"],  # Разрешаем все заголовки
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)# type: ignore
-app.include_router(router)
+app.include_router(link_router)
+app.include_router(user_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

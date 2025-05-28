@@ -6,7 +6,7 @@ from src.infra.repositories.models.link_model import LinkORM
 
 
 class LinkRepositoryImpl(LinkRepository):
-    def add(self, link: Link) -> Link:
+    def create(self, link: Link) -> Link:
         with get_session() as session:
             new_link = LinkORM(
                 original_url=link.original_url,

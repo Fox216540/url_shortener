@@ -8,11 +8,11 @@ from typing import Optional
 
 class LinkRepository(ABC):
     @abstractmethod
-    def add(self, link: Link) -> Link:
+    def create(self, link: Link) -> Link:
         """Добавляет линк"""
         pass
 
     @abstractmethod
-    def get_by_id(self, short_code: str) -> Optional[Link]:
-        """Возвращает линк по его сокращённому коду"""
+    def get_by_id(self, link_id: int) -> Optional[Link]:
+        """Возвращает линк по его id"""
         pass
