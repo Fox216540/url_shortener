@@ -1,8 +1,8 @@
 from contextlib import contextmanager
-from url_shortener.settings import DB_CONFIG, POOL_SIZE, POOL_MAX_SIZE
+from settings import POOL_SIZE, POOL_MAX_SIZE
 import atexit
 
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # DATABASE_URL = f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"

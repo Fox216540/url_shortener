@@ -1,0 +1,97 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:17.3
+    container_name: db
+    env_file:
+      - ".env"  # Подключаем файл .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - my_network
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB'" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+#  pgloader:
+#    image: dimitri/pgloader
+#    env_file:
+#      - ".env"
+#    volumes:
+#      - ./dumps:/dumps  # Та же директория с дампом
+#    command:
+#      - /bin/sh
+#      - -c
+#      - |
+#        echo "Waiting for PostgreSQL..."
+#        echo "Starting migration..."
+#        pgloader --type sqlite sqlite:///dumps/$${DUMP_NAME} postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@db:$${POSTGRES_PORT}/$${POSTGRES_DB}
+#    networks:
+#      - my_network
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#  web:
+#    build: .  # Собираем образ из Dockerfile
+#    command: bash -c "gunicorn start:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000 --log-level critical --access-logfile /dev/null --error-logfile /dev/null --workers 2"
+#    env_file:
+#      - ".env"  # Используем переменные окружения из файла .env
+#    volumes:
+#      - ./logs:/logs
+#    ports:
+#      - "${WEB_PORT}:8000"
+#    networks:
+#      - my_network
+#    tmpfs:
+#      - /tmp
+#    depends_on:
+#      pgloader:
+#        condition: service_completed_successfully
+#  directus:
+#    image: directus/directus:latest
+#    container_name: directus
+#    ports:
+#      - "${ADMIN_DIRECTUS_PORT}:8055" # Порт админки
+#    environment:
+#      - ADMIN_EMAIL=${ADMIN_EMAIL}
+#      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+#      - KEY=${KEY}
+#      - SECRET=${SECRET}
+#      - DB_CLIENT=postgres
+#      - DB_HOST=db
+#      - DB_PORT=${POSTGRES_PORT}
+#      - DB_DATABASE=${POSTGRES_DB}
+#      - DB_USER=${POSTGRES_USER}
+#      - DB_PASSWORD=${POSTGRES_PASSWORD}
+#    depends_on:
+#      pgloader:
+#        condition: service_completed_successfully
+#    networks:
+#      - my_network
+#  hasura:
+#    image: hasura/graphql-engine:v2.35.0
+#    env_file:
+#      - ".env"
+#    ports:
+#      - "${ADMIN_HASURA_PORT}:8080"
+#    depends_on:
+#      pgloader:
+#        condition: service_completed_successfully
+#    environment:
+#      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}"
+#      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+#      HASURA_GRAPHQL_DEV_MODE: "true"
+#      HASURA_GRAPHQL_ADMIN_SECRET: ${KEY_HASURA}
+#    networks:
+#      - my_network
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

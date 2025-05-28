@@ -1,7 +1,7 @@
 import base62
 from typing import Optional
-from url_shortener.src.infra.repositories.link_repo import LinkRepositoryImpl
-from url_shortener.src.domain.link.models.link import Link
+from src.infra.repositories.link_repo import LinkRepositoryImpl
+from src.domain.link.models.link import Link
 
 
 class LinkService:

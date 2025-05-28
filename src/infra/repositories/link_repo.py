@@ -1,9 +1,9 @@
-from url_shortener.src.domain.link.models.link import Link
-from url_shortener.src.domain.link.repositories.link_repo import LinkRepository
+from src.domain.link.models.link import Link
+from src.domain.link.repositories.link_repo import LinkRepository
 from typing import Optional
-from url_shortener.src.infra.database import get_session
-from url_shortener.src.infra.repositories.models.link_model import LinkORM
-import base62
+from src.infra.database import get_session
+from src.infra.repositories.models.link_model import LinkORM
+
 
 class LinkRepositoryImpl(LinkRepository):
     def add(self, link: Link) -> Link:

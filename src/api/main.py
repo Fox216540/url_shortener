@@ -1,19 +1,13 @@
-import logging
-from abc import update_abstractmethods
-from http import HTTPStatus
-from http.client import HTTPException
-from pyexpat.errors import messages
+from fastapi import APIRouter
 
-from fastapi import APIRouter, Response, HTTPException
-
-from url_shortener.src.app.service.link_service import LinkService
-from url_shortener.src.app.dtos.link_dto import (GetUrlOriginResponse,
-                                                 CreateLinkResponse,
-                                                 CreateLinkRequest
-                                                 )
+from src.app.service.link_service import LinkService
+from src.app.dtos.link_dto import (GetUrlOriginResponse,
+                                   CreateLinkResponse,
+                                   CreateLinkRequest
+                                   )
 from fastapi import Depends
-from url_shortener.src.app.di.di import get_service
-from url_shortener.settings import URL
+from src.app.di.di import get_service
+from settings import URL
 #from app.logger import logger
 
 router = APIRouter(tags=["link"])

@@ -2,7 +2,7 @@
 #     funcname()...
 # }
 from abc import ABC, abstractmethod
-from url_shortener.src.domain.link.models.link import Link
+from src.domain.link.models.link import Link
 from typing import Optional
 
 
