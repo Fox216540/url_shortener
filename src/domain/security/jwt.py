@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 from uuid import UUID
-from types import SimpleNamespace
 
 
 class JWT(ABC):
@@ -20,10 +19,9 @@ class JWT(ABC):
         pass
 
     @abstractmethod
-    def decode(self, token: str) -> SimpleNamespace:
+    def decode(self, token: str) -> dict:
         """
         Расшифровывает и верифицирует любой токен.
-        Бросает исключение при невалидном или просроченном токене.
         """
         pass
 

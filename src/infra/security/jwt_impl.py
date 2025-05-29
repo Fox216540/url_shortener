@@ -16,9 +16,8 @@ class JWTImpl(JWT):
         payload = {"sub": str(user_id), "exp": datetime.utcnow() + timedelta(days=7)}
         return jwt.encode(payload, self.secret, algorithm="HS256")
 
-    def decode(self, token: str) -> SimpleNamespace:
-        token = jwt.decode(token, self.secret, algorithms=["HS256"])
-        return SimpleNamespace(**token)
+    def decode(self, token: str) -> dict:
+        return jwt.decode(token, self.secret, algorithms=["HS256"])
 
     def refresh(self, refresh_token: str, username: str) -> dict:
         payload = self.decode(refresh_token)
