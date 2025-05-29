@@ -14,10 +14,10 @@ class LinkRepository(ABC):
 
 	@abstractmethod
 	def get_by_id(self, link_id: int) -> Optional[Link]:
-		"""Возвращает линк по его id"""
+		"""Возвращает линк по id"""
 		pass
 
 	@abstractmethod
 	def get_by_alias(self, alias: str) -> Optional[Link]:
-		"""Возвращает линк по его alias"""
+		"""Возвращает линк по alias"""
 		pass

@@ -11,7 +11,7 @@ class UserRepository(ABC):
 
     @abstractmethod
     def get_by_email(self, email: str) -> Optional[User]:
-        """Возвращает пользователя по его id"""
+        """Возвращает пользователя по его почте"""
         pass
 
     @abstractmethod

@@ -11,10 +11,7 @@ class LinkService:
 
 	def add_link(self, url: str, owner_id: UUID = None, alias: str = None) -> Optional[Link]:
 		link = Link(original_url=url, owner_id=owner_id, alias=alias)
-		saved = self.repo.create(link)
-		if alias:
-			return saved.alias
-		return saved
+		return self.repo.create(link)
 
 	def get_url_by_short_code(self, identifier: str) -> Optional[Link]:
 		try:

@@ -40,11 +40,6 @@ class UserService:
 
 		return user
 
-	def get_user_id(self, email: str, password: str) -> Optional[UUID]:
-		user = self.authenticate(email, password)
-		return user.id if user else None
-
 	def create_user_link(self, email: str, password: str, alias: str, original_url: str) -> Optional[Link]:
 		user = self.authenticate(email=email, password=password)
-		link_user = self.link_service.add_link(owner_id=user.id, url=original_url, alias=alias)
-		return link_user
+		return self.link_service.add_link(owner_id=user.id, url=original_url, alias=alias)
