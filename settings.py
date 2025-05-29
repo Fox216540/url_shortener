@@ -14,4 +14,4 @@ DB_CONFIG = {
 POOL_SIZE = int(os.getenv("POOL_SIZE", 10))
 POOL_MAX_SIZE = int(os.getenv("POOL_MAX_SIZE", 20))
 
-URL = 'http://127.0.0.1:8000/'
+URL = os.getenv("WEB_DOMAIN")

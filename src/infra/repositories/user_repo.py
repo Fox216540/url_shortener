@@ -36,5 +36,13 @@ class UserRepositoryImpl(UserRepository):
             ).scalar()
         return bool(exists)
 
+    def exists_by_username(self, username: str) -> Optional[bool]:
+        with get_session() as session:
+            exists = session.query(
+                session.query(UserORM)
+                .filter(UserORM.username == username)
+                .exists()
+            ).scalar()
+        return bool(exists)
 
 

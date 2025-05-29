@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.logger import status_logger
 from fastapi.middleware.gzip import GZipMiddleware
 
-
+#TODO: Сделать субдомен
 @asynccontextmanager
 async def app_logger(application):
     status_logger.info("Starting my new application")
@@ -28,7 +28,7 @@ async def app_logger(application):
 app = FastAPI(lifespan=app_logger)#docs_url=None, redoc_url=None
 app.add_middleware(
     CORSMiddleware,# type: ignore
-    allow_origins=['*'],#["http://127.0.0.1:8000"],  # Разрешаем все домены, например, ["http://localhost:3000", "http://127.0.0.1:8000"]
+    allow_origins=["http://127.0.0.1:8000"],  # Разрешаем все домены, например, ["http://localhost:3000", "http://127.0.0.1:8000"]
     allow_credentials=True,
     allow_methods=["GET", "POST"],  # Разрешаем все методы HTTP (GET, POST, PUT, DELETE и т.д.)
     allow_headers=["Content-Type"],  # Разрешаем все заголовки

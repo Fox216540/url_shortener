@@ -10,7 +10,7 @@ class CreateUserRequest(BaseModel):
 
 
 class CreateUserResponse(BaseModel):
-    uuid: Optional[UUID]
+    username: Optional[str]
     message: Optional[str]
 
 
@@ -26,7 +26,7 @@ class GetUuidOfUserResponse(BaseModel):
 class CreateUserLinkRequest(BaseModel):
     email: Optional[str]
     password: Optional[str]
-    alias: Optional[str]
+    alias: Optional[str] = None
     original_url: Optional[str]
 
 

@@ -21,10 +21,11 @@ router = APIRouter(tags=["User"])
 @router.post("/reg", response_model=CreateUserResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
 	user = service.register_user(**request.dict())
-	return CreateUserResponse(uuid=user.id, message=success_message_create_user)
+	return CreateUserResponse(username=user.username, message=success_message_create_user)
 
 
 @router.post("/create_link", response_model=CreateUserLinkResponse)
 def create_link(request: CreateUserLinkRequest, service: UserService = Depends(get_user_service)):
 	link = service.create_user_link(**request.dict())
-	return CreateUserLinkResponse(url_short=URL + link.alias)
+	short_identifier = link.alias or link.short_code
+	return CreateUserLinkResponse(url_short=f"{URL}/{short_identifier}")

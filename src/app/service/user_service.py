@@ -17,6 +17,8 @@ class UserService:
 	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[User]:
 		if self.repo.exists_by_email(email):
 			return None
+		elif self.repo.exists_by_username(username):
+			return None
 		hash_password = self.hasher.hash(password)
 		user = User(
 			email=email,
@@ -40,6 +42,6 @@ class UserService:
 
 		return user
 
-	def create_user_link(self, email: str, password: str, alias: str, original_url: str) -> Optional[Link]:
+	def create_user_link(self, email: str, password: str, original_url: str, alias: str = None) -> Optional[Link]:
 		user = self.authenticate(email=email, password=password)
 		return self.link_service.add_link(owner_id=user.id, url=original_url, alias=alias)

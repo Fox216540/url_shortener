@@ -18,3 +18,9 @@ class UserRepository(ABC):
     def exists_by_email(self, email: str) -> Optional[bool]:
         """Проверяет существование пользователя с указанным email"""
         pass
+
+    @abstractmethod
+    def exists_by_username(self, username: str) -> Optional[bool]:
+        """Проверяет существование пользователя с указанным username"""
+        pass
+
