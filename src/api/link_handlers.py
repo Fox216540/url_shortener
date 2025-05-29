@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 
 from src.app.service.link_service import LinkService
-from src.app.dtos.link_dto import (GetUrlOriginResponse,
+from src.api.dtos.link_dto import (GetUrlOriginResponse,
                                    CreateLinkResponse,
                                    CreateLinkRequest
                                    )
 from fastapi import Depends
-from src.app.di.di import get_link_service
+from src.di.di import get_link_service
 from settings import URL
 from fastapi.responses import RedirectResponse
 #from app.logger import logger

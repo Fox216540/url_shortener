@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from uuid import UUID
 
+
 class CreateUserRequest(BaseModel):
     name: Optional[str]
     email: Optional[str]
@@ -11,6 +12,8 @@ class CreateUserRequest(BaseModel):
 
 class CreateUserResponse(BaseModel):
     username: Optional[str]
+    access_token: Optional[str]
+    refresh_token: Optional[str]
     message: Optional[str]
 
 
@@ -24,8 +27,6 @@ class GetUuidOfUserResponse(BaseModel):
 
 
 class CreateUserLinkRequest(BaseModel):
-    email: Optional[str]
-    password: Optional[str]
     alias: Optional[str] = None
     original_url: Optional[str]
 

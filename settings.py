@@ -15,3 +15,5 @@ POOL_SIZE = int(os.getenv("POOL_SIZE", 10))
 POOL_MAX_SIZE = int(os.getenv("POOL_MAX_SIZE", 20))
 
 URL = os.getenv("WEB_DOMAIN")
+
+ACCESS_SECRET = os.getenv("ACCESS_SECRET", "supersecretkey")
