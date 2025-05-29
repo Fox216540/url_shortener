@@ -5,7 +5,7 @@ from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
 from src.di.di import get_user_service
-from src.api.success import success_message_create_user
+from src.api.success import *
 from settings import URL
 from src.logger import status_logger
 router = APIRouter(tags=["User"])
@@ -50,7 +50,7 @@ def change_password(
 		username=data.user.username,
 		refresh_token=data.refresh_token,
 		access_token=data.access_token,
-		message=success_message_create_user
+		message=success_message_change_password
 	)
 
 
@@ -70,7 +70,7 @@ def change_username(
 		username=data.user.username,
 		refresh_token=data.refresh_token,
 		access_token=data.access_token,
-		message=success_message_create_user
+		message=success_message_change_username
 	)
 
 
@@ -90,7 +90,7 @@ def change_email(
 		username=data.user.username,
 		refresh_token=data.refresh_token,
 		access_token=data.access_token,
-		message=success_message_create_user
+		message=success_message_change_email
 	)
 
 
@@ -110,5 +110,5 @@ def change_name(
 		username=data.user.username,
 		refresh_token=data.refresh_token,
 		access_token=data.access_token,
-		message=success_message_create_user
+		message=success_message_change_name
 	)
