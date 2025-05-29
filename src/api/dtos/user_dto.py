@@ -1,35 +1,42 @@
-from pydantic import BaseModel
-from typing import Optional, List
-from uuid import UUID
+from typing import Optional
+from pydantic import BaseModel, EmailStr, Field
 
 
 class CreateUserRequest(BaseModel):
-    name: Optional[str]
-    email: Optional[str]
-    username: Optional[str]
-    password: Optional[str]
-
-
-class CreateUserResponse(BaseModel):
-    username: Optional[str]
-    access_token: Optional[str]
-    refresh_token: Optional[str]
-    message: Optional[str]
-
-
-class GetUuidOfUserRequest(BaseModel):
-    mail: Optional[str]
-    password: Optional[str]
-
-
-class GetUuidOfUserResponse(BaseModel):
-    uuid: Optional[UUID]
+    name: str = Field(..., min_length=1)
+    email: EmailStr
+    username: str = Field(..., min_length=5, max_length=32)
+    password: str = Field(..., min_length=6)
 
 
 class CreateUserLinkRequest(BaseModel):
     alias: Optional[str] = None
-    original_url: Optional[str]
+    original_url: str
 
 
 class CreateUserLinkResponse(BaseModel):
-    url_short: Optional[str]
+    url_short: str
+
+
+class ChangePasswordRequest(BaseModel):
+    old_password: str = Field(..., min_length=6)
+    new_password: str = Field(..., min_length=6)
+
+
+class ChangeUsernameRequest(BaseModel):
+    username: str = Field(..., min_length=5, max_length=32)
+
+
+class ChangeNameRequest(BaseModel):
+    name: str = Field(..., min_length=1)
+
+
+class ChangeEmailRequest(BaseModel):
+    email: EmailStr
+
+
+class UserResponse(BaseModel):
+    username: str
+    access_token: str
+    refresh_token: str
+    message: str

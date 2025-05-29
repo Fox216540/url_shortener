@@ -2,7 +2,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from src.domain.security.jwt import JWT
 from uuid import UUID
-from types import SimpleNamespace
+
 
 class JWTImpl(JWT):
     def __init__(self, secret: str):

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
 from typing import Optional
@@ -20,9 +22,9 @@ class UserRepositoryImpl(UserRepository):
             session.refresh(new_user)
             return User.from_orm(new_user)
 
-    def get_by_email(self, email: str) -> Optional[User]:
+    def get_by_id(self, user_id: UUID) -> Optional[User]:
         with get_session() as session:
-            user = session.query(UserORM).filter(UserORM.email == email).first()
+            user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
             if not user:
                 return None
             return User.from_orm(user)
@@ -45,4 +47,39 @@ class UserRepositoryImpl(UserRepository):
             ).scalar()
         return bool(exists)
 
+    def change_password(self, user_id: UUID, password: str) -> Optional[User]:
+        with get_session() as session:
+            user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
+            if not user:
+                return None
+            user.password = password
+            session.commit()
+            return User.from_orm(user)
+
+    def change_username(self, user_id: UUID, username: str) -> Optional[User]:
+        with get_session() as session:
+            user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
+            if not user:
+                return None
+            user.username = username
+            session.commit()
+            return User.from_orm(user)
+
+    def change_name(self, user_id: UUID, name: str) -> Optional[User]:
+        with get_session() as session:
+            user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
+            if not user:
+                return None
+            user.name = name
+            session.commit()
+            return User.from_orm(user)
+
+    def change_email(self, user_id: UUID, email: str) -> Optional[User]:
+        with get_session() as session:
+            user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
+            if not user:
+                return None
+            user.email = email
+            session.commit()
+            return User.from_orm(user)
 

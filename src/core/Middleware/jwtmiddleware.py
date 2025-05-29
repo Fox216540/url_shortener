@@ -5,7 +5,12 @@ from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 from settings import ACCESS_SECRET
 
-PROTECTED_PATHS = ["/create_link"]  # пути, к которым применяется авторизация "/reg",
+PROTECTED_PATHS = ["/create_link",
+                   "/change_password",
+                   "/change_username",
+                   "/change_email",
+                   "/change_name",
+                   ]  # пути, к которым применяется авторизация "/reg",
 
 
 class JWTMiddleware(BaseHTTPMiddleware):
@@ -34,8 +39,8 @@ class JWTMiddleware(BaseHTTPMiddleware):
 				payload = self.decode_token(token)
 				if not payload:
 					raise HTTPException(status_code=401, detail="Invalid or expired token")
-				request.state.user_id = payload.get("sub")
-				request.state.username = payload.get("username")
+				request.state.user_id = payload["sub"]
+				request.state.username = payload["username"]
 			else:
 				raise HTTPException(status_code=401, detail="Authorization token missing")
 
