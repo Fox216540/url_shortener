@@ -3,7 +3,7 @@ from src.domain.link.repositories.link_repo import LinkRepository
 from typing import Optional
 from src.infra.database import get_session
 from src.infra.repositories.models.link_model import LinkORM
-
+from uuid import UUID
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
@@ -19,16 +19,16 @@ class LinkRepositoryImpl(LinkRepository):
 			session.refresh(new_link)
 			return Link.from_orm(new_link)
 
-	def get_by_id(self, link_id) -> Optional[Link]:
+	def get_by_id(self, link_id, user_id: UUID = None) -> Optional[Link]:
 		with get_session() as session:
-			link = session.query(LinkORM).filter(LinkORM.id == link_id).first()
+			link = session.query(LinkORM).filter(LinkORM.id == link_id, LinkORM.owner_id == user_id).first()
 			if not link:
 				return None
 			return Link.from_orm(link)
 
-	def get_by_alias(self, alias: str) -> Optional[Link]:
+	def get_by_alias(self, alias: str, user_id: UUID = None) -> Optional[Link]:
 		with get_session() as session:
-			link = session.query(LinkORM).filter(LinkORM.alias == alias).first()
+			link = session.query(LinkORM).filter(LinkORM.alias == alias, LinkORM.owner_id == user_id).first()
 			if not link:
 				return None
 			return Link.from_orm(link)

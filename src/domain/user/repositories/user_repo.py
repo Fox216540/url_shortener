@@ -15,6 +15,11 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_username(self, username: str) -> Optional[User]:
+        """Возвращает пользователя по его id"""
+        pass
+
+    @abstractmethod
     def exists_by_email(self, email: str) -> Optional[bool]:
         """Проверяет существование пользователя с указанным email"""
         pass

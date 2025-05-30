@@ -29,6 +29,13 @@ class UserRepositoryImpl(UserRepository):
                 return None
             return User.from_orm(user)
 
+    def get_by_username(self, username: str) -> Optional[User]:
+        with get_session() as session:
+            user = session.query(UserORM).filter(UserORM.username == username).first()
+            if not user:
+                return None
+            return User.from_orm(user)
+
     def exists_by_email(self, email: str) -> Optional[bool]:
         with get_session() as session:
             exists = session.query(
