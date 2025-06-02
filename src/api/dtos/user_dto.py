@@ -48,14 +48,9 @@ class UserResponse(BaseModel):
 	message: Optional[str] = None
 
 
-class ExistEmailResponse(BaseModel):
+class ExistResponse(BaseModel):
 	msg: str
-	email: str
-
-
-class ExistUsernameResponse(BaseModel):
-	msg: str
-	username: str
+	exist: bool
 
 
 class CreateUserLinkResponse(UserResponse):

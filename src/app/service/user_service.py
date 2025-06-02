@@ -99,8 +99,8 @@ class UserService:
 
 		return self._build_auth_response(new_user)
 
-	def exist_email(self, email: str):
-		pass
+	def exist_email(self, email: str) -> bool:
+		return self._repo.exists_by_email(email)
 
-	def exist_username(self, username: str):
-		pass
+	def exist_username(self, username: str) -> bool:
+		return self._repo.exists_by_username(username)

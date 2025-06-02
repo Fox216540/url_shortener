@@ -8,7 +8,8 @@ from src.di.di import get_user_service
 from src.api.dtos.success import *
 from settings import URL
 from src.logger import status_logger
-router = APIRouter(tags=["User"])
+
+router = APIRouter(tags=["User"], prefix='/user')
 
 
 @router.post("/reg", response_model=UserResponse)
@@ -118,19 +119,29 @@ def change_name(
 	)
 
 
-@router.post("/check-username", response_model=ExistUsernameResponse)
+@router.get("/check-username", response_model=ExistResponse)
 def check_username(username: str, service: UserService = Depends(get_user_service)):
 	check = service.exist_username(username)
-	return ExistUsernameResponse(
-		msg=success_message_exist_username,
-		username=username
+	if check:
+		return ExistResponse(
+			msg=success_message_exist_username,
+			exist=check
+		)
+	return ExistResponse(
+		msg=success_message_not_exist_username,
+		exist=check
 	)
 
 
-@router.post("/check-email", response_model=ExistEmailResponse)
+@router.get("/check-email", response_model=ExistResponse)
 def check_email(email: str, service: UserService = Depends(get_user_service)):
-
-	return ExistEmailResponse(
-		msg=success_message_exist_email,
-		email=email
+	check = service.exist_email(email)
+	if check:
+		return ExistResponse(
+			msg=success_message_exist_email,
+			exist=check
+		)
+	return ExistResponse(
+		msg=success_message_not_exist_email,
+		exist=check
 	)
