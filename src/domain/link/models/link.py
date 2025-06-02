@@ -19,6 +19,6 @@ class Link:
 		return cls(
 			id=orm_obj.id,
 			original_url=orm_obj.original_url,
-			owner_id=UUID(orm_obj.owner_id) if orm_obj.owner_id else None,
+			owner_id=orm_obj.owner_id if orm_obj.owner_id else None,
 			alias=orm_obj.alias
 		)

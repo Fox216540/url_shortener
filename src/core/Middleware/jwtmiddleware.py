@@ -5,11 +5,11 @@ from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 from settings import ACCESS_SECRET
 
-PROTECTED_PATHS = ["/create_link",
-                   "/change_password",
-                   "/change_username",
-                   "/change_email",
-                   "/change_name",
+PROTECTED_PATHS = ["/user/create-link",
+                   "/user/change-password",
+                   "/user/change-username",
+                   "/user/change-email",
+                   "/user/change-name",
                    ]  # пути, к которым применяется авторизация "/reg",
 
 

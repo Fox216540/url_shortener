@@ -1,8 +1,8 @@
-"""Initial tables
+"""change owner_id to uuid
 
-Revision ID: eca4bb825fed
+Revision ID: b60fde1a0421
 Revises: 
-Create Date: 2025-05-30 00:54:50.970520
+Create Date: 2025-06-02 21:47:23.658586
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'eca4bb825fed'
+revision: str = 'b60fde1a0421'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,8 +25,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('original_url', sa.String(), nullable=False),
     sa.Column('alias', sa.String(), nullable=True),
-    sa.Column('owner_id', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
+    sa.Column('owner_id', sa.UUID(), nullable=False),
+    sa.PrimaryKeyConstraint('id', 'owner_id'),
+    sa.UniqueConstraint('owner_id'),
     sa.UniqueConstraint('owner_id', 'alias', name='uix_username_alias')
     )
     op.create_table('users',

@@ -5,5 +5,5 @@ venv
 *.iml
 out
 gen
-
+logs
 /.env

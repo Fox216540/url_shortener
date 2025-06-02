@@ -3,6 +3,7 @@ from src.infra.repositories.models.base import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
+
 class UserORM(Base):
     __tablename__ = 'users'
 
