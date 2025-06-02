@@ -22,7 +22,7 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 	)
 
 
-@router.post("/create_link", response_model=CreateUserLinkResponse)
+@router.post("/create-link", response_model=CreateUserLinkResponse)
 def create_link(request: CreateUserLinkRequest, raw_request: Request, service: UserService = Depends(get_user_service)):
 	user_id = UUID(raw_request.state.user_id)
 	username = raw_request.state.username
@@ -34,7 +34,7 @@ def create_link(request: CreateUserLinkRequest, raw_request: Request, service: U
 	return CreateUserLinkResponse(url_short=f"{username}.{URL}/{short_identifier}")
 
 
-@router.post("/change_password", response_model=UserResponse)
+@router.post("/change-password", response_model=UserResponse)
 def change_password(
 		request: ChangePasswordRequest,
 		raw_request: Request,
@@ -54,7 +54,7 @@ def change_password(
 	)
 
 
-@router.post("/change_username", response_model=UserResponse)
+@router.post("/change-username", response_model=UserResponse)
 def change_username(
 		request: ChangeUsernameRequest,
 		raw_request: Request,
@@ -74,7 +74,7 @@ def change_username(
 	)
 
 
-@router.post("/change_email", response_model=UserResponse)
+@router.post("/change-email", response_model=UserResponse)
 def change_email(
 		request: ChangeEmailRequest,
 		raw_request: Request,
@@ -94,7 +94,7 @@ def change_email(
 	)
 
 
-@router.post("/change_name", response_model=UserResponse)
+@router.post("/change-name", response_model=UserResponse)
 def change_name(
 		request: ChangeNameRequest,
 		raw_request: Request,
@@ -112,3 +112,13 @@ def change_name(
 		access_token=data.access_token,
 		message=success_message_change_name
 	)
+
+
+@router.post("/check-username", response_model=...)
+def check_username():
+	pass
+
+
+@router.post("/check-email", response_model=...)
+def check_email():
+	pass
