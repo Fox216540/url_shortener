@@ -21,17 +21,19 @@ class LinkRepositoryImpl(LinkRepository):
 
 	def get_by_id(self, link_id, user_id: UUID = None) -> Optional[Link]:
 		with get_session() as session:
-			link = session.query(LinkORM).filter(LinkORM.id == link_id, LinkORM.owner_id == user_id).first()
-			if not link:
-				return None
-			return Link.from_orm(link)
+			query = session.query(LinkORM).filter(LinkORM.id == link_id)
+			if user_id is not None:
+				query = query.filter(LinkORM.owner_id == user_id)
+			link = query.first()
+			return Link.from_orm(link) if link else None
 
 	def get_by_alias(self, alias: str, user_id: UUID = None) -> Optional[Link]:
 		with get_session() as session:
-			link = session.query(LinkORM).filter(LinkORM.alias == alias, LinkORM.owner_id == user_id).first()
-			if not link:
-				return None
-			return Link.from_orm(link)
+			query = session.query(LinkORM).filter(LinkORM.alias == alias)
+			if user_id is not None:
+				query = query.filter(LinkORM.owner_id == user_id)
+			link = query.first()
+			return Link.from_orm(link) if link else None
 # '''
 # EXAMPLE:
 # '''
