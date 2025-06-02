@@ -5,7 +5,7 @@ from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
 from src.di.di import get_user_service
-from src.api.success import *
+from src.api.dtos.success import *
 from settings import URL
 from src.logger import status_logger
 router = APIRouter(tags=["User"])
@@ -25,13 +25,17 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 @router.post("/create-link", response_model=CreateUserLinkResponse)
 def create_link(request: CreateUserLinkRequest, raw_request: Request, service: UserService = Depends(get_user_service)):
 	user_id = UUID(raw_request.state.user_id)
-	username = raw_request.state.username
-	link = service.create_user_link(
+	data = service.create_user_link(
 		user_id=user_id,
 		**request.dict()
 	)
-	short_identifier = link.alias or link.short_code
-	return CreateUserLinkResponse(url_short=f"{username}.{URL}/{short_identifier}")
+	short_identifier = data.link.alias or data.link.short_code
+	return CreateUserLinkResponse(
+		username=data.user.username,
+		refresh_token=data.refresh_token,
+		access_token=data.access_token,
+		url_short=f"{data.user.username}.{URL}/{short_identifier}"
+	)
 
 
 @router.post("/change-password", response_model=UserResponse)
@@ -114,11 +118,19 @@ def change_name(
 	)
 
 
-@router.post("/check-username", response_model=...)
-def check_username():
-	pass
+@router.post("/check-username", response_model=ExistUsernameResponse)
+def check_username(username: str, service: UserService = Depends(get_user_service)):
+	check = service.exist_username(username)
+	return ExistUsernameResponse(
+		msg=success_message_exist_username,
+		username=username
+	)
 
 
-@router.post("/check-email", response_model=...)
-def check_email():
-	pass
+@router.post("/check-email", response_model=ExistEmailResponse)
+def check_email(email: str, service: UserService = Depends(get_user_service)):
+
+	return ExistEmailResponse(
+		msg=success_message_exist_email,
+		email=email
+	)

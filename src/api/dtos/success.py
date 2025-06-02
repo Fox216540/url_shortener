@@ -3,5 +3,6 @@ success_message_change_password = "Password changed"
 success_message_change_username = "Username changed"
 success_message_change_email = "Email changed"
 success_message_change_name = "Name changed"
-
+success_message_exist_username = "Such username exists"
+success_message_exist_email = "Such email exists"
 # success_message_get_policy = "Policy sent"
