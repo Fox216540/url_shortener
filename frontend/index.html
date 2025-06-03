@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Short.ly | URL Shortening Service</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #6366f1;
@@ -18,14 +18,14 @@
             --success: #22c55e;
             --warning: #f59e0b;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background-color: #f1f5f9;
             color: var(--dark);
@@ -33,23 +33,23 @@
             display: flex;
             flex-direction: column;
         }
-
+        
         /* Layout */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
-
+        
         .app {
             display: none;
             min-height: calc(100vh - 120px);
         }
-
+        
         .app.active {
             display: block;
         }
-
+        
         .card {
             background: white;
             border-radius: 12px;
@@ -57,7 +57,7 @@
             padding: 2rem;
             margin-bottom: 2rem;
         }
-
+        
         /* Header */
         header {
             background: white;
@@ -66,14 +66,14 @@
             top: 0;
             z-index: 100;
         }
-
+        
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 0;
         }
-
+        
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
@@ -83,17 +83,17 @@
             align-items: center;
             gap: 0.5rem;
         }
-
+        
         .logo i {
             font-size: 1.5rem;
         }
-
+        
         .nav-links {
             display: flex;
             gap: 1.5rem;
             align-items: center;
         }
-
+        
         .nav-link {
             color: var(--gray);
             text-decoration: none;
@@ -101,11 +101,11 @@
             transition: color 0.2s;
             padding: 0.5rem;
         }
-
+        
         .nav-link:hover {
             color: var(--primary);
         }
-
+        
         .btn {
             display: inline-block;
             padding: 0.7rem 1.5rem;
@@ -118,53 +118,53 @@
             border: none;
             font-size: 1rem;
         }
-
+        
         .btn-primary {
             background: var(--primary);
             color: white;
         }
-
+        
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
-
+        
         .btn-outline {
             background: transparent;
             border: 1px solid var(--primary);
             color: var(--primary);
         }
-
+        
         .btn-outline:hover {
             background: var(--primary);
             color: white;
         }
-
+        
         .btn-success {
             background: var(--success);
             color: white;
         }
-
+        
         .btn-success:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
-
+        
         .btn-danger {
             background: var(--danger);
             color: white;
         }
-
+        
         .btn-danger:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
-
+        
         .btn-sm {
             padding: 0.4rem 0.8rem;
             font-size: 0.9rem;
         }
-
+        
         /* Home Page */
         .hero {
             text-align: center;
@@ -172,38 +172,38 @@
             max-width: 700px;
             margin: 0 auto;
         }
-
+        
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
             color: var(--dark);
         }
-
+        
         .hero p {
             font-size: 1.1rem;
             color: var(--gray);
             margin-bottom: 2rem;
             line-height: 1.6;
         }
-
+        
         .url-form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-
+        
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-
+        
         .form-group label {
             font-weight: 500;
             color: var(--dark);
         }
-
+        
         .form-control {
             padding: 1rem;
             border: 1px solid var(--light-gray);
@@ -211,13 +211,13 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-
+        
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
-
+        
         .result-container {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -226,12 +226,12 @@
             border: 1px solid #bbf7d0;
             display: none;
         }
-
+        
         .result-container.active {
             display: block;
             animation: fadeIn 0.3s ease;
         }
-
+        
         .short-url {
             font-size: 1.2rem;
             font-weight: 600;
@@ -239,55 +239,55 @@
             margin-bottom: 1rem;
             word-break: break-all;
         }
-
+        
         .action-buttons {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
         }
-
+        
         /* Auth Pages */
         .auth-container {
             max-width: 500px;
             margin: 2rem auto;
         }
-
+        
         .auth-header {
             text-align: center;
             margin-bottom: 2rem;
         }
-
+        
         .auth-header h2 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }
-
+        
         .auth-header p {
             color: var(--gray);
         }
-
+        
         .auth-form {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
-
+        
         .form-footer {
             text-align: center;
             margin-top: 1rem;
             color: var(--gray);
         }
-
+        
         .form-footer a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
         }
-
+        
         .form-footer a:hover {
             text-decoration: underline;
         }
-
+        
         /* Dashboard */
         .dashboard-header {
             display: flex;
@@ -295,17 +295,17 @@
             align-items: center;
             margin-bottom: 1.5rem;
         }
-
+        
         .dashboard-header h2 {
             font-size: 1.8rem;
         }
-
+        
         .links-list {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-
+        
         .link-item {
             display: flex;
             justify-content: space-between;
@@ -315,49 +315,49 @@
             border-radius: 8px;
             transition: all 0.2s;
         }
-
+        
         .link-item:hover {
             border-color: var(--primary);
             box-shadow: 0 2px 4px rgba(99, 102, 241, 0.1);
         }
-
+        
         .link-info {
             flex: 1;
             min-width: 0;
         }
-
+        
         .link-title {
             font-weight: 600;
             margin-bottom: 0.3rem;
             color: var(--primary);
             word-break: break-all;
         }
-
+        
         .link-url {
             color: var(--gray);
             font-size: 0.9rem;
             word-break: break-all;
         }
-
+        
         .link-stats {
             display: flex;
             gap: 1rem;
             margin-top: 0.5rem;
             font-size: 0.9rem;
         }
-
+        
         .stat {
             display: flex;
             align-items: center;
             gap: 0.3rem;
             color: var(--gray);
         }
-
+        
         .link-actions {
             display: flex;
             gap: 0.8rem;
         }
-
+        
         /* Chat Page */
         .chat-header {
             padding: 1.5rem;
@@ -366,11 +366,11 @@
             flex-direction: column;
             gap: 0.5rem;
         }
-
+        
         .chat-header h2 {
             font-size: 1.5rem;
         }
-
+        
         .chat-url {
             display: flex;
             align-items: center;
@@ -378,13 +378,13 @@
             color: var(--primary);
             font-weight: 500;
         }
-
+        
         .chat-container {
             height: 500px;
             display: flex;
             flex-direction: column;
         }
-
+        
         .chat-messages {
             flex: 1;
             padding: 1.5rem;
@@ -394,55 +394,55 @@
             gap: 1.5rem;
             background: #f8fafc;
         }
-
+        
         .message {
             max-width: 80%;
             padding: 1rem;
             border-radius: 12px;
             position: relative;
         }
-
+        
         .message-user {
             background: var(--primary);
             color: white;
             align-self: flex-end;
             border-bottom-right-radius: 4px;
         }
-
+        
         .message-other {
             background: white;
             border: 1px solid var(--light-gray);
             align-self: flex-start;
             border-bottom-left-radius: 4px;
         }
-
+        
         .message-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.5rem;
         }
-
+        
         .message-sender {
             font-weight: 600;
             font-size: 0.9rem;
         }
-
+        
         .message-time {
             font-size: 0.8rem;
             opacity: 0.8;
         }
-
+        
         .message-content {
             line-height: 1.5;
         }
-
+        
         .chat-input {
             padding: 1rem;
             border-top: 1px solid var(--light-gray);
             display: flex;
             gap: 1rem;
         }
-
+        
         .chat-input input {
             flex: 1;
             padding: 0.8rem 1rem;
@@ -450,7 +450,7 @@
             border-radius: 8px;
             font-size: 1rem;
         }
-
+        
         /* Footer */
         footer {
             background: white;
@@ -458,70 +458,70 @@
             margin-top: auto;
             border-top: 1px solid var(--light-gray);
         }
-
+        
         .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .copyright {
             color: var(--gray);
         }
-
+        
         .footer-links {
             display: flex;
             gap: 1.5rem;
         }
-
+        
         .footer-link {
             color: var(--gray);
             text-decoration: none;
         }
-
+        
         .footer-link:hover {
             color: var(--primary);
         }
-
+        
         /* Utility Classes */
         .text-center {
             text-align: center;
         }
-
+        
         .text-primary {
             color: var(--primary);
         }
-
+        
         .mb-1 {
             margin-bottom: 0.5rem;
         }
-
+        
         .mb-2 {
             margin-bottom: 1rem;
         }
-
+        
         .mb-3 {
             margin-bottom: 1.5rem;
         }
-
+        
         .mt-2 {
             margin-top: 1rem;
         }
-
+        
         .mt-3 {
             margin-top: 1.5rem;
         }
-
+        
         .hidden {
             display: none;
         }
-
+        
         .loading {
             display: flex;
             justify-content: center;
             padding: 2rem;
         }
-
+        
         .spinner {
             width: 40px;
             height: 40px;
@@ -530,88 +530,88 @@
             border-top-color: var(--primary);
             animation: spin 1s linear infinite;
         }
-
+        
         .empty-state {
             text-align: center;
             padding: 3rem 0;
             color: var(--gray);
         }
-
+        
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 1rem;
             color: var(--light-gray);
         }
-
+        
         .alert {
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
         }
-
+        
         .alert-error {
             background: #fee2e2;
             color: var(--danger);
             border: 1px solid #fecaca;
         }
-
+        
         .alert-success {
             background: #ecfdf5;
             color: var(--success);
             border: 1px solid #a7f3d0;
         }
-
+        
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
+        
         /* Responsive */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
                 gap: 1rem;
             }
-
+            
             .nav-links {
                 width: 100%;
                 justify-content: center;
             }
-
+            
             .hero h1 {
                 font-size: 2rem;
             }
-
+            
             .action-buttons {
                 flex-direction: column;
             }
-
+            
             .dashboard-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
             }
-
+            
             .link-item {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
             }
-
+            
             .link-actions {
                 align-self: flex-end;
             }
-
+            
             .footer-content {
                 flex-direction: column;
                 gap: 1rem;
             }
-
+            
             .message {
                 max-width: 90%;
             }
@@ -643,7 +643,7 @@
             <div class="hero">
                 <h1>Shorten Your URLs in Seconds</h1>
                 <p>Create short, memorable links and engage in discussions about them. Perfect for sharing and collaboration.</p>
-
+                
                 <div class="card">
                     <div class="url-form">
                         <div class="form-group">
@@ -654,7 +654,7 @@
                             <i class="fas fa-compress-alt"></i> Shorten URL
                         </button>
                     </div>
-
+                    
                     <div id="result-container" class="result-container">
                         <div class="short-url" id="short-url">https://short.ly/abc123</div>
                         <div class="action-buttons">
@@ -671,7 +671,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="card">
                 <h2 class="text-center mb-2">How It Works</h2>
                 <div class="features">
@@ -700,37 +700,37 @@
                     <h2>Create an Account</h2>
                     <p>Join our community to manage your links and discussions</p>
                 </div>
-
+                
                 <div class="card">
                     <form class="auth-form">
                         <div class="form-group">
                             <label for="name">Full Name</label>
                             <input type="text" id="name" class="form-control" placeholder="John Doe">
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" id="email" class="form-control" placeholder="john@example.com">
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" class="form-control" placeholder="johndoe">
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" class="form-control" placeholder="••••••••">
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="confirm-password">Confirm Password</label>
                             <input type="password" id="confirm-password" class="form-control" placeholder="••••••••">
                         </div>
-
+                        
                         <button type="button" class="btn btn-primary" onclick="register()">Register</button>
                     </form>
-
+                    
                     <div class="form-footer mt-3">
                         <p>Already have an account? <a href="#" onclick="showPage('login')">Login here</a></p>
                     </div>
@@ -747,19 +747,19 @@
                     <h2>Welcome Back</h2>
                     <p>Sign in to manage your links and discussions</p>
                 </div>
-
+                
                 <div class="card">
                     <form class="auth-form">
                         <div class="form-group">
                             <label for="login-email">Email or Username</label>
                             <input type="text" id="login-email" class="form-control" placeholder="john@example.com or johndoe">
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="login-password">Password</label>
                             <input type="password" id="login-password" class="form-control" placeholder="••••••••">
                         </div>
-
+                        
                         <div class="form-group">
                             <div class="flex" style="justify-content: space-between; align-items: center;">
                                 <div>
@@ -769,10 +769,10 @@
                                 <a href="#" style="color: var(--primary);">Forgot password?</a>
                             </div>
                         </div>
-
+                        
                         <button type="button" class="btn btn-primary" onclick="login()">Login</button>
                     </form>
-
+                    
                     <div class="form-footer mt-3">
                         <p>Don't have an account? <a href="#" onclick="showPage('register')">Register here</a></p>
                     </div>
@@ -790,87 +790,11 @@
                     <i class="fas fa-plus"></i> Create New
                 </button>
             </div>
-
+            
             <div class="card">
                 <div id="links-container">
-                    <div class="links-list">
-                        <div class="link-item">
-                            <div class="link-info">
-                                <div class="link-title">https://short.ly/abc123</div>
-                                <div class="link-url">https://example.com/very/long/url/that/needs/shortening</div>
-                                <div class="link-stats">
-                                    <div class="stat">
-                                        <i class="fas fa-mouse-pointer"></i> 42 clicks
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-comment"></i> 5 messages
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-calendar"></i> 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="link-actions">
-                                <button class="btn btn-outline btn-sm" onclick="showPage('chat')">
-                                    <i class="fas fa-comment"></i> Discuss
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="link-item">
-                            <div class="link-info">
-                                <div class="link-title">https://short.ly/def456</div>
-                                <div class="link-url">https://another-example.com/long/path/to/some/resource</div>
-                                <div class="link-stats">
-                                    <div class="stat">
-                                        <i class="fas fa-mouse-pointer"></i> 18 clicks
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-comment"></i> 2 messages
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-calendar"></i> 1 week ago
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="link-actions">
-                                <button class="btn btn-outline btn-sm" onclick="showPage('chat')">
-                                    <i class="fas fa-comment"></i> Discuss
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="link-item">
-                            <div class="link-info">
-                                <div class="link-title">https://short.ly/ghi789</div>
-                                <div class="link-url">https://third-example.com/even/longer/path/here</div>
-                                <div class="link-stats">
-                                    <div class="stat">
-                                        <i class="fas fa-mouse-pointer"></i> 7 clicks
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-comment"></i> 0 messages
-                                    </div>
-                                    <div class="stat">
-                                        <i class="fas fa-calendar"></i> 3 weeks ago
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="link-actions">
-                                <button class="btn btn-outline btn-sm" onclick="showPage('chat')">
-                                    <i class="fas fa-comment"></i> Discuss
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
+                    <div class="loading">
+                        <div class="spinner"></div>
                     </div>
                 </div>
             </div>
@@ -885,54 +809,18 @@
                     <h2>Discussion</h2>
                     <div class="chat-url">
                         <i class="fas fa-link"></i>
-                        https://short.ly/abc123
+                        <span id="current-short-url">https://short.ly/abc123</span>
                     </div>
-                    <div class="text-gray">Original URL: https://example.com/very/long/url/that/needs/shortening</div>
+                    <div class="text-gray" id="current-long-url">Original URL: https://example.com/very/long/url/that/needs/shortening</div>
                 </div>
-
+                
                 <div class="chat-container">
-                    <div class="chat-messages">
-                        <div class="message message-other">
-                            <div class="message-header">
-                                <div class="message-sender">John Doe</div>
-                                <div class="message-time">2 hours ago</div>
-                            </div>
-                            <div class="message-content">
-                                This link is super helpful! Thanks for sharing.
-                            </div>
-                        </div>
-
-                        <div class="message message-user">
-                            <div class="message-header">
-                                <div class="message-sender">You</div>
-                                <div class="message-time">1 hour ago</div>
-                            </div>
-                            <div class="message-content">
-                                Glad you found it useful! I've been using this resource for months.
-                            </div>
-                        </div>
-
-                        <div class="message message-other">
-                            <div class="message-header">
-                                <div class="message-sender">Sarah Smith</div>
-                                <div class="message-time">30 minutes ago</div>
-                            </div>
-                            <div class="message-content">
-                                Has anyone tried this with mobile apps? I'm wondering about compatibility.
-                            </div>
-                        </div>
-
-                        <div class="message message-other">
-                            <div class="message-header">
-                                <div class="message-sender">Mike Johnson</div>
-                                <div class="message-time">15 minutes ago</div>
-                            </div>
-                            <div class="message-content">
-                                @Sarah Yes, I've used it in a React Native project. Works great!
-                            </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="loading">
+                            <div class="spinner"></div>
                         </div>
                     </div>
-
+                    
                     <div class="chat-input">
                         <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
                         <button class="btn btn-primary" onclick="sendMessage()">
@@ -961,24 +849,37 @@
     </footer>
 
     <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:8000';
+        let currentUser = null;
+        let currentLinkId = null;
+        let authToken = null;
+
         // Page navigation
         function showPage(pageId) {
             // Hide all pages
             document.querySelectorAll('.app').forEach(page => {
                 page.classList.remove('active');
             });
-
+            
             // Show requested page
             document.getElementById(pageId).classList.add('active');
-
+            
             // Update auth state
             updateAuthState();
+            
+            // Load data for specific pages
+            if (pageId === 'dashboard') {
+                loadUserLinks();
+            } else if (pageId === 'chat') {
+                loadChatMessages();
+            }
         }
-
+        
         // Update auth state in navigation
         function updateAuthState() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            if (isLoggedIn) {
+            const token = localStorage.getItem('authToken');
+            if (token) {
                 document.getElementById('auth-link').textContent = 'Logout';
                 document.getElementById('auth-link').onclick = logout;
                 document.getElementById('register-btn').classList.add('hidden');
@@ -988,23 +889,67 @@
                 document.getElementById('register-btn').classList.remove('hidden');
             }
         }
-
+        
+        // API Request Helper
+        async function apiRequest(endpoint, method = 'GET', body = null, requiresAuth = false) {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (requiresAuth) {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    throw new Error('Authentication required');
+                }
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            const config = {
+                method,
+                headers
+            };
+            
+            if (body) {
+                config.body = JSON.stringify(body);
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'API request failed');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+        
         // URL shortening
-        function shortenUrl() {
+        async function shortenUrl() {
             const longUrl = document.getElementById('long-url').value;
             if (!longUrl) {
                 alert('Please enter a URL');
                 return;
             }
-
-            // Simulate API call
-            setTimeout(() => {
-                const shortUrl = `https://short.ly/${Math.random().toString(36).substring(2, 8)}`;
-                document.getElementById('short-url').textContent = shortUrl;
+            
+            try {
+                const data = await apiRequest('/short', 'POST', { url_origin: longUrl });
+                
+                document.getElementById('short-url').textContent = data.url_short;
                 document.getElementById('result-container').classList.add('active');
-            }, 800);
+                
+                // Store the link ID for chat
+                currentLinkId = data.id;
+            } catch (error) {
+                console.error('Shorten URL error:', error);
+                alert(`Error: ${error.message}`);
+            }
         }
-
+        
         // Copy URL to clipboard
         function copyUrl() {
             const url = document.getElementById('short-url').textContent;
@@ -1012,104 +957,279 @@
                 alert('URL copied to clipboard!');
             });
         }
-
+        
         // Registration
-        function register() {
+        async function register() {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
-
+            
             if (!name || !email || !username || !password || !confirmPassword) {
                 alert('Please fill in all fields');
                 return;
             }
-
+            
             if (password !== confirmPassword) {
                 alert('Passwords do not match');
                 return;
             }
-
-            // Simulate registration
-            localStorage.setItem('isLoggedIn', 'true');
-            alert('Registration successful! You are now logged in.');
-            showPage('dashboard');
+            
+            try {
+                const data = await apiRequest('/auth/register', 'POST', {
+                    name,
+                    email,
+                    username,
+                    password
+                });
+                
+                // Store token and user info
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                alert('Registration successful! You are now logged in.');
+                showPage('dashboard');
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert(`Registration failed: ${error.message}`);
+            }
         }
-
+        
         // Login
-        function login() {
-            const email = document.getElementById('login-email').value;
+        async function login() {
+            const identifier = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-
-            if (!email || !password) {
+            
+            if (!identifier || !password) {
                 alert('Please fill in all fields');
                 return;
             }
-
-            // Simulate login
-            localStorage.setItem('isLoggedIn', 'true');
-            showPage('dashboard');
+            
+            try {
+                const data = await apiRequest('/auth/login', 'POST', {
+                    identifier,
+                    password
+                });
+                
+                // Store token and user info
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                showPage('dashboard');
+            } catch (error) {
+                console.error('Login error:', error);
+                alert(`Login failed: ${error.message}`);
+            }
         }
-
+        
         // Logout
         function logout() {
-            localStorage.setItem('isLoggedIn', 'false');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
             updateAuthState();
             showPage('home');
         }
-
+        
+        // Load user links for dashboard
+        async function loadUserLinks() {
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            
+            try {
+                const links = await apiRequest('/links', 'GET', null, true);
+                
+                if (links.length === 0) {
+                    linksContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-link-slash"></i>
+                            <h3>No Links Found</h3>
+                            <p>You haven't created any short URLs yet.</p>
+                            <button class="btn btn-primary mt-2" onclick="showPage('home')">Create Your First Link</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '<div class="links-list">';
+                
+                links.forEach(link => {
+                    html += `
+                        <div class="link-item">
+                            <div class="link-info">
+                                <div class="link-title">${link.shortUrl}</div>
+                                <div class="link-url">${link.originalUrl}</div>
+                                <div class="link-stats">
+                                    <div class="stat">
+                                        <i class="fas fa-mouse-pointer"></i> ${link.clicks} clicks
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-comment"></i> ${link.messages} messages
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-calendar"></i> ${formatDate(link.createdAt)}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="link-actions">
+                                <button class="btn btn-outline btn-sm" onclick="openChat('${link.id}', '${link.shortUrl}', '${link.originalUrl}')">
+                                    <i class="fas fa-comment"></i> Discuss
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteLink('${link.id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                linksContainer.innerHTML = html;
+            } catch (error) {
+                console.error('Load links error:', error);
+                linksContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Error loading links: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // Delete a link
+        async function deleteLink(linkId) {
+            if (!confirm('Are you sure you want to delete this link? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                await apiRequest(`/links/${linkId}`, 'DELETE', null, true);
+                // Reload links
+                loadUserLinks();
+            } catch (error) {
+                console.error('Delete link error:', error);
+                alert(`Error deleting link: ${error.message}`);
+            }
+        }
+        
+        // Open chat for a specific link
+        function openChat(linkId, shortUrl, originalUrl) {
+            currentLinkId = linkId;
+            document.getElementById('current-short-url').textContent = shortUrl;
+            document.getElementById('current-long-url').textContent = `Original URL: ${originalUrl}`;
+            showPage('chat');
+        }
+        
+        // Load chat messages
+        async function loadChatMessages() {
+            if (!currentLinkId) return;
+            
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            
+            try {
+                const messages = await apiRequest(`/links/${currentLinkId}/messages`, 'GET', null, true);
+                
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-comments"></i>
+                            <h3>No Messages Yet</h3>
+                            <p>Be the first to start the discussion!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                chatMessages.innerHTML = '';
+                
+                messages.forEach(message => {
+                    const isCurrentUser = message.userId === JSON.parse(localStorage.getItem('user')).id;
+                    const messageClass = isCurrentUser ? 'message-user' : 'message-other';
+                    
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `message ${messageClass}`;
+                    messageElement.innerHTML = `
+                        <div class="message-header">
+                            <div class="message-sender">${message.username}</div>
+                            <div class="message-time">${formatTime(message.createdAt)}</div>
+                        </div>
+                        <div class="message-content">${message.text}</div>
+                    `;
+                    
+                    chatMessages.appendChild(messageElement);
+                });
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error('Load messages error:', error);
+                chatMessages.innerHTML = `
+                    <div class="alert alert-error">
+                        Error loading messages: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
         // Send chat message
-        function sendMessage() {
+        async function sendMessage() {
+            if (!currentLinkId) return;
+            
             const messageInput = document.getElementById('message-input');
             const message = messageInput.value.trim();
-
+            
             if (!message) return;
-
-            const chatMessages = document.querySelector('.chat-messages');
-
-            // Create new message element
-            const messageElement = document.createElement('div');
-            messageElement.className = 'message message-user';
-            messageElement.innerHTML = `
-                <div class="message-header">
-                    <div class="message-sender">You</div>
-                    <div class="message-time">Just now</div>
-                </div>
-                <div class="message-content">${message}</div>
-            `;
-
-            // Add to chat
-            chatMessages.appendChild(messageElement);
-
-            // Clear input
-            messageInput.value = '';
-
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            // Simulate reply after delay
-            setTimeout(() => {
-                const replyElement = document.createElement('div');
-                replyElement.className = 'message message-other';
-                replyElement.innerHTML = `
+            
+            try {
+                // Optimistic UI update
+                const chatMessages = document.getElementById('chat-messages');
+                const user = JSON.parse(localStorage.getItem('user'));
+                
+                const tempMessageElement = document.createElement('div');
+                tempMessageElement.className = 'message message-user';
+                tempMessageElement.innerHTML = `
                     <div class="message-header">
-                        <div class="message-sender">Mike Johnson</div>
+                        <div class="message-sender">You</div>
                         <div class="message-time">Just now</div>
                     </div>
-                    <div class="message-content">Thanks for your input! That's helpful.</div>
+                    <div class="message-content">${message}</div>
                 `;
-                chatMessages.appendChild(replyElement);
-
-                // Scroll to bottom again
+                
+                chatMessages.appendChild(tempMessageElement);
+                messageInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 2000);
+                
+                // Send to API
+                await apiRequest(
+                    `/links/${currentLinkId}/messages`, 
+                    'POST', 
+                    { text: message },
+                    true
+                );
+                
+                // Reload messages to get the actual data
+                loadChatMessages();
+            } catch (error) {
+                console.error('Send message error:', error);
+                alert(`Error sending message: ${error.message}`);
+            }
         }
-
+        
+        // Helper functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString();
+        }
+        
+        function formatTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             updateAuthState();
-
+            
             // Enter key in chat
             document.getElementById('message-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
