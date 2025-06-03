@@ -1,13 +1,15 @@
 from fastapi import APIRouter
 from fastapi import Request
 from src.app.service.user_service import UserService
+from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
-from src.di.di import get_user_service
+from src.di.di import get_user_service, get_link_service
 from src.api.dtos.success import *
 from settings import URL
 from src.logger import status_logger
+from typing import List
 
 router = APIRouter(tags=["User"], prefix='/user')
 
@@ -26,16 +28,14 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 @router.post("/create-link", response_model=CreateUserLinkResponse)
 def create_link(request: CreateUserLinkRequest, raw_request: Request, service: UserService = Depends(get_user_service)):
 	user_id = UUID(raw_request.state.user_id)
-	data = service.create_user_link(
+	username = raw_request.state.username
+	link = service.create_user_link(
 		user_id=user_id,
 		**request.dict()
 	)
-	short_identifier = data.link.alias or data.link.short_code
+	short_identifier = link.alias or link.short_code
 	return CreateUserLinkResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
-		url_short=f"{data.user.username}.{URL}/{short_identifier}"
+		url_short=f"{username}.{URL}/{short_identifier}"
 	)
 
 
@@ -44,7 +44,7 @@ def change_password(
 		request: ChangePasswordRequest,
 		raw_request: Request,
 		service: UserService = Depends(get_user_service)
-	):
+):
 	user_id = UUID(raw_request.state.user_id)
 	data = service.change_password(
 		user_id=user_id,
@@ -64,7 +64,7 @@ def change_username(
 		request: ChangeUsernameRequest,
 		raw_request: Request,
 		service: UserService = Depends(get_user_service)
-	):
+):
 	user_id = UUID(raw_request.state.user_id)
 	data = service.change_username(
 		user_id=user_id,
@@ -84,7 +84,7 @@ def change_email(
 		request: ChangeEmailRequest,
 		raw_request: Request,
 		service: UserService = Depends(get_user_service)
-	):
+):
 	user_id = UUID(raw_request.state.user_id)
 	data = service.change_email(
 		user_id=user_id,
@@ -104,7 +104,7 @@ def change_name(
 		request: ChangeNameRequest,
 		raw_request: Request,
 		service: UserService = Depends(get_user_service)
-	):
+):
 	user_id = UUID(raw_request.state.user_id)
 	data = service.change_name(
 		user_id=user_id,
@@ -145,3 +145,15 @@ def check_email(email: str, service: UserService = Depends(get_user_service)):
 		msg=success_message_not_exist_email,
 		exist=check
 	)
+
+
+@router.post("/my-links", response_model=List[UsersLinksResponse])
+def get_all_links(
+		raw_request: Request,
+		service: LinkService = Depends(get_link_service)
+):
+	username = raw_request.state.username
+	user_id = UUID(raw_request.state.user_id)
+	links = service.get_all_links_by_user_id(user_id)
+	return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}",
+	                           link=link.original_url) for link in links]

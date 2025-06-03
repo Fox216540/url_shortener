@@ -53,5 +53,10 @@ class ExistResponse(BaseModel):
 	exist: bool
 
 
-class CreateUserLinkResponse(UserResponse):
+class CreateUserLinkResponse(BaseModel):
 	url_short: str
+
+
+class UsersLinksResponse(BaseModel):
+	url_short: str
+	link: str

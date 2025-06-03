@@ -4,13 +4,15 @@ from typing import Optional
 from src.infra.database import get_session
 from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
+from typing import List
+
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
 		with get_session() as session:
 			new_link = LinkORM(
 				original_url=link.original_url,
-				owner_id=str(link.owner_id) if link.owner_id else None,
+				owner_id=link.owner_id,
 				alias=link.alias,
 			)
 
@@ -34,6 +36,11 @@ class LinkRepositoryImpl(LinkRepository):
 				query = query.filter(LinkORM.owner_id == user_id)
 			link = query.first()
 			return Link.from_orm(link) if link else None
+
+	def get_all_by_owner_id(self, user_id: UUID = None) -> Optional[List[Link]]:
+		with get_session() as session:
+			links = session.query(LinkORM).filter(LinkORM.owner_id == user_id).all()
+			return [Link.from_orm(link) for link in links] if links else None
 # '''
 # EXAMPLE:
 # '''

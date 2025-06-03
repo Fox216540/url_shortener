@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from jose import jwt, JWTError
+from jose import jwt, JWTError, ExpiredSignatureError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
@@ -10,6 +10,7 @@ PROTECTED_PATHS = ["/user/create-link",
                    "/user/change-username",
                    "/user/change-email",
                    "/user/change-name",
+                   "/user/my-links"
                    ]  # пути, к которым применяется авторизация "/reg",
 
 
@@ -26,6 +27,9 @@ class JWTMiddleware(BaseHTTPMiddleware):
 		try:
 			payload = jwt.decode(token, ACCESS_SECRET, algorithms=["HS256"])
 			return payload
+		except ExpiredSignatureError:
+			# ⛔ токен истёк
+			return None
 		except JWTError:
 			return None
 

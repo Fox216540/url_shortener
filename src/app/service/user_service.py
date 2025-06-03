@@ -3,7 +3,8 @@ from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.domain.security.jwt import JWT
 from src.domain.user.models.user import User
-from src.app.dtos.user_dto import UserResult, UserResultWithLink
+from src.domain.link.models.link import Link
+from src.app.dtos.user_dto import UserResult
 from src.domain.user.repositories.user_repo import UserRepository
 from uuid import UUID
 
@@ -38,16 +39,9 @@ class UserService:
 
 		return self._build_auth_response(saved)
 
-	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[UserResultWithLink]:
-		user_data = self._build_auth_response(self._repo.get_by_id(user_id))
+	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[Link]:
 		link = self._link_service.add_link(owner_id=user_id, url=original_url, alias=alias)
-
-		return UserResultWithLink(
-			user=user_data.user,
-			access_token=user_data.access_token,
-			refresh_token=user_data.refresh_token,
-			link=link
-		)
+		return link
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[UserResult]:
 		user = self._repo.get_by_id(user_id)

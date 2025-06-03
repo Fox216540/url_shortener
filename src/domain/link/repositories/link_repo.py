@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from src.domain.link.models.link import Link
 from typing import Optional
 from uuid import UUID
+from typing import List
 
 
 class LinkRepository(ABC):
@@ -18,4 +19,9 @@ class LinkRepository(ABC):
 	@abstractmethod
 	def get_by_alias(self, alias: str, user_id: UUID = None) -> Optional[Link]:
 		"""Возвращает линк по alias"""
+		...
+
+	@abstractmethod
+	def get_all_by_owner_id(self, user_id: UUID = None) -> Optional[List[Link]]:
+		"""Возвращает линки по owner_id"""
 		...

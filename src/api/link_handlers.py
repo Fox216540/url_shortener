@@ -31,5 +31,7 @@ def create_short_link(request: CreateLinkRequest, service: LinkService = Depends
     ).short_code
     return CreateLinkResponse(url_short=f"{URL}/{code}")
 
+
+
 # @router.post('/reg', response_model=)
 

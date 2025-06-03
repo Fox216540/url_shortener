@@ -9,7 +9,3 @@ class UserResult:
 	access_token: str
 	refresh_token: str
 
-
-@dataclass
-class UserResultWithLink(UserResult):
-	link: Link
