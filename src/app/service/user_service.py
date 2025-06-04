@@ -34,6 +34,17 @@ class UserService:
 
 		return self._auth_service.tokens_by_user(saved)
 
+	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
+		user = self._repo.get_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
+
+		if not user:
+			return None
+
+		if not self._hasher.verify(password, user.password):
+			return None
+
+		return self._auth_service.tokens_by_user(user)
+
 	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[Link]:
 		link = self._link_service.add_link(owner_id=user_id, url=original_url, alias=alias)
 		return link

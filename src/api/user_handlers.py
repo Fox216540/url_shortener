@@ -8,23 +8,58 @@ from uuid import UUID
 from src.app.di.di import get_user_service, get_link_service
 from src.api.dtos.success import *
 from settings import URL
-from src.logger import status_logger
 from typing import List
+from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["User"], prefix='/user')
 
-#TODO: Добавить logout и помещение refresh в куки
+
+# TODO: Добавить logout и помещение refresh в куки
 
 
-@router.post("/reg", response_model=UserWithTokensResponse)
+@router.post("/reg", response_model=UserWithAccessTokenResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
 	user = service.register_user(**request.dict())
-	return UserWithTokensResponse(
+
+	response_data = UserWithAccessTokenResponse(
 		username=user.username,
-		refresh_token=user.refresh_token,
 		access_token=user.access_token,
 		message=success_message_create_user
 	)
+
+	response = JSONResponse(content=response_data.dict())
+
+	response.set_cookie(
+		key="refresh_token",
+		value=user.refresh_token,
+		httponly=True,
+		samesite="lax",
+		path="/"
+	)
+	return response
+
+
+@router.post("/log", response_model=UserWithAccessTokenResponse)
+def create_user(request: LoginUserRequest, service: UserService = Depends(get_user_service)):
+	user = service.login_user(**request.dict())
+
+	response_data = UserWithAccessTokenResponse(
+		username=user.username,
+		access_token=user.access_token,
+		message=success_message_create_user
+	)
+
+	response = JSONResponse(content=response_data.dict())
+
+	response.set_cookie(
+		key="refresh_token",
+		value=user.refresh_token,
+		httponly=True,
+		samesite="lax",
+		path="/"
+	)
+
+	return response
 
 
 @router.post("/create-link", response_model=CreateUserLinkResponse)
@@ -89,7 +124,7 @@ def change_email(
 		user_id=user_id,
 		**request.dict()
 	)
-	#status_logger.info(data)
+	# status_logger.info(data)
 	return UserResponse(
 		username=user.username,
 		message=success_message_change_email
@@ -154,16 +189,27 @@ def get_all_links(
 	                           link=link.original_url) for link in links]
 
 
-@router.post("/refresh-tokens", response_model=UserWithTokensResponse)
+@router.post("/refresh-tokens", response_model=UserWithAccessTokenResponse)
 def refresh_tokens(
 		request: Request,
 		service: UserService = Depends(get_user_service)
 ):
 	refresh_token = request.cookies.get("refresh_token")
 	user = service.refresh_tokens(refresh_token)
-	return UserWithTokensResponse(
+	response_data = UserWithAccessTokenResponse(
 		username=user.username,
-		refresh_token=user.refresh_token,
 		access_token=user.access_token,
-		message=success_message_update_tokens
+		message=success_message_create_user
 	)
+
+	response = JSONResponse(content=response_data.dict())
+
+	response.set_cookie(
+		key="refresh_token",
+		value=user.refresh_token,
+		httponly=True,
+		samesite="lax",
+		path="/"
+	)
+
+	return response

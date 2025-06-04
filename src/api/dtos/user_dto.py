@@ -7,6 +7,11 @@ USER REQUEST
 """
 
 
+class LoginUserRequest(BaseModel):
+	email_or_username: str = Field(..., min_length=5)
+	password: str = Field(..., min_length=6)
+
+
 class CreateUserRequest(BaseModel):
 	name: str = Field(..., min_length=1)
 	email: EmailStr
@@ -48,10 +53,6 @@ class UserResponse(BaseModel):
 
 class UserWithAccessTokenResponse(UserResponse):
 	access_token: str
-
-
-class UserWithTokensResponse(UserWithAccessTokenResponse):
-	refresh_token: str
 
 
 class ExistResponse(BaseModel):
