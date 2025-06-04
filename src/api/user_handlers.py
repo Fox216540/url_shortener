@@ -14,13 +14,15 @@ from typing import List
 router = APIRouter(tags=["User"], prefix='/user')
 
 #TODO: Добавить logout и помещение refresh в куки
-@router.post("/reg", response_model=UserResponse)
+
+
+@router.post("/reg", response_model=UserWithTokensResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
-	data = service.register_user(**request.dict())
-	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+	user = service.register_user(**request.dict())
+	return UserWithTokensResponse(
+		username=user.username,
+		refresh_token=user.refresh_token,
+		access_token=user.access_token,
 		message=success_message_create_user
 	)
 
@@ -46,35 +48,32 @@ def change_password(
 		service: UserService = Depends(get_user_service)
 ):
 	user_id = UUID(raw_request.state.user_id)
-	data = service.change_password(
+	user = service.change_password(
 		user_id=user_id,
 		**request.dict()
 	)
 
 	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+		username=user.username,
 		message=success_message_change_password
 	)
 
 
-@router.post("/change-username", response_model=UserResponse)
+@router.post("/change-username", response_model=UserWithAccessTokenResponse)
 def change_username(
 		request: ChangeUsernameRequest,
 		raw_request: Request,
 		service: UserService = Depends(get_user_service)
 ):
 	user_id = UUID(raw_request.state.user_id)
-	data = service.change_username(
+	user = service.change_username(
 		user_id=user_id,
 		**request.dict()
 	)
 
-	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+	return UserWithAccessTokenResponse(
+		username=user.username,
+		access_token=user.access_token,
 		message=success_message_change_username
 	)
 
@@ -86,15 +85,13 @@ def change_email(
 		service: UserService = Depends(get_user_service)
 ):
 	user_id = UUID(raw_request.state.user_id)
-	data = service.change_email(
+	user = service.change_email(
 		user_id=user_id,
 		**request.dict()
 	)
-	status_logger.info(data)
+	#status_logger.info(data)
 	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+		username=user.username,
 		message=success_message_change_email
 	)
 
@@ -106,15 +103,13 @@ def change_name(
 		service: UserService = Depends(get_user_service)
 ):
 	user_id = UUID(raw_request.state.user_id)
-	data = service.change_name(
+	user = service.change_name(
 		user_id=user_id,
 		**request.dict()
 	)
 
 	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+		username=user.username,
 		message=success_message_change_name
 	)
 
@@ -159,16 +154,16 @@ def get_all_links(
 	                           link=link.original_url) for link in links]
 
 
-@router.post("/refresh-tokens", response_model=UserResponse)
+@router.post("/refresh-tokens", response_model=UserWithTokensResponse)
 def refresh_tokens(
 		request: Request,
 		service: UserService = Depends(get_user_service)
 ):
 	refresh_token = request.cookies.get("refresh_token")
-	data = service.refresh_tokens(refresh_token)
-	return UserResponse(
-		username=data.user.username,
-		refresh_token=data.refresh_token,
-		access_token=data.access_token,
+	user = service.refresh_tokens(refresh_token)
+	return UserWithTokensResponse(
+		username=user.username,
+		refresh_token=user.refresh_token,
+		access_token=user.access_token,
 		message=success_message_update_tokens
 	)

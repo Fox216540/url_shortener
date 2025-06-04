@@ -3,7 +3,10 @@ from src.domain.user.models.user import User
 
 
 @dataclass
-class UserResult:
-	user: User
-	access_token: str
-	refresh_token: str
+class UserWithAccessToken(User):
+	access_token: str = None
+
+
+@dataclass
+class UserWithTokens(UserWithAccessToken):
+	refresh_token: str = None

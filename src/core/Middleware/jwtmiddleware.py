@@ -41,7 +41,12 @@ class JWTMiddleware(BaseHTTPMiddleware):
 			if auth_header.startswith("Bearer "):
 				token = auth_header.replace("Bearer ", "")
 				payload = self.decode_token(token)
-				if not payload:
+				if (
+					not payload
+					or payload.get("type") != "access"
+					or "sub" not in payload
+					or "username" not in payload
+				):
 					raise HTTPException(status_code=401, detail="Invalid or expired token")
 				request.state.user_id = payload["sub"]
 				request.state.username = payload["username"]

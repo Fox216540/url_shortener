@@ -43,9 +43,15 @@ USER RESPONSE
 
 class UserResponse(BaseModel):
 	username: str
-	access_token: str
-	refresh_token: str
 	message: Optional[str] = None
+
+
+class UserWithAccessTokenResponse(UserResponse):
+	access_token: str
+
+
+class UserWithTokensResponse(UserWithAccessTokenResponse):
+	refresh_token: str
 
 
 class ExistResponse(BaseModel):

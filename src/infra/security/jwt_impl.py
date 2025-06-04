@@ -9,11 +9,11 @@ class JWTImpl(JWT):
         self.secret = secret
 
     def create_access_token(self, user_id: UUID, username: str) -> str:
-        payload = {"sub": str(user_id), "username": username, "exp": datetime.utcnow() + timedelta(days=7)}
+        payload = {"sub": str(user_id), "type": "access", "username": username, "exp": datetime.utcnow() + timedelta(minutes=10)}
         return jwt.encode(payload, self.secret, algorithm="HS256")
 
     def create_refresh_token(self, user_id: UUID) -> str:
-        payload = {"sub": str(user_id), "exp": datetime.utcnow() + timedelta(days=7)}
+        payload = {"sub": str(user_id), "type": "refresh", "exp": datetime.utcnow() + timedelta(days=7)}
         return jwt.encode(payload, self.secret, algorithm="HS256")
 
     def decode(self, token: str) -> dict:

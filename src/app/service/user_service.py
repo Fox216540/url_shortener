@@ -4,7 +4,7 @@ from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
 from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
-from src.app.dtos.user_dto import UserResult
+from src.app.dtos.user_dto import UserWithTokens,UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
 from uuid import UUID
 
@@ -16,7 +16,7 @@ class UserService:
 		self._link_service = link_service
 		self._auth_service = auth_service
 
-	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserResult]:
+	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserWithTokens]:
 		if self._repo.exists_by_email(email):
 			return None
 		elif self._repo.exists_by_username(username):
@@ -32,13 +32,13 @@ class UserService:
 		if not saved:
 			pass
 
-		return self._auth_service.refresh_tokens_by_user(saved)
+		return self._auth_service.tokens_by_user(saved)
 
 	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[Link]:
 		link = self._link_service.add_link(owner_id=user_id, url=original_url, alias=alias)
 		return link
 
-	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[UserResult]:
+	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:
 		user = self._repo.get_by_id(user_id)
 
 		if not self._hasher.verify(old_password, user.password):
@@ -50,9 +50,9 @@ class UserService:
 		hash_password = self._hasher.hash(new_password)
 		new_user = self._repo.change_password(user_id, hash_password)
 
-		return self._auth_service.refresh_tokens_by_user(new_user)
+		return new_user
 
-	def change_username(self, user_id: UUID, username: str) -> Optional[UserResult]:
+	def change_username(self, user_id: UUID, username: str) -> Optional[UserWithAccessToken]:
 		user = self._repo.get_by_id(user_id)
 
 		if user.username == username:
@@ -63,9 +63,9 @@ class UserService:
 
 		new_user = self._repo.change_username(user_id, username)
 
-		return self._auth_service.refresh_tokens_by_user(new_user)
+		return self._auth_service.access_token_by_user(new_user)
 
-	def change_name(self, user_id: UUID, name: str) -> Optional[UserResult]:
+	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
 		user = self._repo.get_by_id(user_id)
 
 		if user.name == name:
@@ -73,9 +73,9 @@ class UserService:
 
 		new_user = self._repo.change_name(user_id, name)
 
-		return self._auth_service.refresh_tokens_by_user(new_user)
+		return new_user
 
-	def change_email(self, user_id: UUID, email: str) -> Optional[UserResult]:
+	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		user = self._repo.get_by_id(user_id)
 
 		if user.email == email:
@@ -86,7 +86,7 @@ class UserService:
 
 		new_user = self._repo.change_email(user_id, email)
 
-		return self._auth_service.refresh_tokens_by_user(new_user)
+		return new_user
 
 	def exist_email(self, email: str) -> bool:
 		return self._repo.exists_by_email(email)
@@ -94,12 +94,14 @@ class UserService:
 	def exist_username(self, username: str) -> bool:
 		return self._repo.exists_by_username(username)
 
-	def refresh_tokens(self, token: str) -> Optional[UserResult]:
+	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
 		payload = self._auth_service.decode(token)
+		if payload.get("type") != "refresh":
+			return None
 		user_id = UUID(payload["sub"])
 
 		user = self._repo.get_by_id(user_id)
 		if not user:
 			return None
 
-		return self._auth_service.refresh_tokens_by_user(user)
+		return self._auth_service.tokens_by_user(user)
