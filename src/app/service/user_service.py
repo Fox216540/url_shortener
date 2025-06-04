@@ -1,7 +1,7 @@
 from typing import Optional
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
-from src.domain.security.jwt import JWT
+from src.app.service.auth_service import AuthService
 from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserResult
@@ -10,16 +10,11 @@ from uuid import UUID
 
 
 class UserService:
-	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, jwt: JWT):
+	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, auth_service: AuthService):
 		self._repo = repo
 		self._hasher = hasher
 		self._link_service = link_service
-		self._jwt = jwt
-
-	def _build_auth_response(self, user: User) -> UserResult:
-		refresh = self._jwt.create_refresh_token(user.id)
-		access = self._jwt.create_access_token(user.id, user.username)
-		return UserResult(user=user, refresh_token=refresh, access_token=access)
+		self._auth_service = auth_service
 
 	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserResult]:
 		if self._repo.exists_by_email(email):
@@ -37,7 +32,7 @@ class UserService:
 		if not saved:
 			pass
 
-		return self._build_auth_response(saved)
+		return self._auth_service.refresh_tokens_by_user(saved)
 
 	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[Link]:
 		link = self._link_service.add_link(owner_id=user_id, url=original_url, alias=alias)
@@ -55,7 +50,7 @@ class UserService:
 		hash_password = self._hasher.hash(new_password)
 		new_user = self._repo.change_password(user_id, hash_password)
 
-		return self._build_auth_response(new_user)
+		return self._auth_service.refresh_tokens_by_user(new_user)
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[UserResult]:
 		user = self._repo.get_by_id(user_id)
@@ -68,7 +63,7 @@ class UserService:
 
 		new_user = self._repo.change_username(user_id, username)
 
-		return self._build_auth_response(new_user)
+		return self._auth_service.refresh_tokens_by_user(new_user)
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[UserResult]:
 		user = self._repo.get_by_id(user_id)
@@ -78,7 +73,7 @@ class UserService:
 
 		new_user = self._repo.change_name(user_id, name)
 
-		return self._build_auth_response(new_user)
+		return self._auth_service.refresh_tokens_by_user(new_user)
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[UserResult]:
 		user = self._repo.get_by_id(user_id)
@@ -91,10 +86,20 @@ class UserService:
 
 		new_user = self._repo.change_email(user_id, email)
 
-		return self._build_auth_response(new_user)
+		return self._auth_service.refresh_tokens_by_user(new_user)
 
 	def exist_email(self, email: str) -> bool:
 		return self._repo.exists_by_email(email)
 
 	def exist_username(self, username: str) -> bool:
 		return self._repo.exists_by_username(username)
+
+	def refresh_tokens(self, token: str) -> Optional[UserResult]:
+		payload = self._auth_service.decode(token)
+		user_id = UUID(payload["sub"])
+
+		user = self._repo.get_by_id(user_id)
+		if not user:
+			return None
+
+		return self._auth_service.refresh_tokens_by_user(user)

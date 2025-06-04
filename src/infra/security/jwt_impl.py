@@ -18,9 +18,3 @@ class JWTImpl(JWT):
 
     def decode(self, token: str) -> dict:
         return jwt.decode(token, self.secret, algorithms=["HS256"])
-
-    def refresh(self, refresh_token: str, username: str) -> dict:
-        payload = self.decode(refresh_token)
-        new_access = self.create_access_token(payload["sub"], username)
-        new_refresh = self.create_refresh_token(UUID(payload["sub"]))
-        return {"access_token": new_access, "refresh_token": new_refresh}

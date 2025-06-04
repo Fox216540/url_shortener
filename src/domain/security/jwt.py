@@ -24,11 +24,3 @@ class JWT(ABC):
         Расшифровывает и верифицирует любой токен.
         """
         pass
-
-    @abstractmethod
-    def refresh(self, refresh_token: str, username: str) -> Dict[str, str]:
-        """
-        Принимает действительный refresh-токен и действительный username
-        и возвращает (new_access_token, new_refresh_token).
-        """
-        pass

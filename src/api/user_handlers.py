@@ -5,7 +5,7 @@ from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
-from src.di.di import get_user_service, get_link_service
+from src.app.di.di import get_user_service, get_link_service
 from src.api.dtos.success import *
 from settings import URL
 from src.logger import status_logger
@@ -13,7 +13,7 @@ from typing import List
 
 router = APIRouter(tags=["User"], prefix='/user')
 
-
+#TODO: Добавить logout и помещение refresh в куки
 @router.post("/reg", response_model=UserResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
 	data = service.register_user(**request.dict())
@@ -157,3 +157,18 @@ def get_all_links(
 	links = service.get_all_links_by_user_id(user_id)
 	return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}",
 	                           link=link.original_url) for link in links]
+
+
+@router.post("/refresh-tokens", response_model=UserResponse)
+def refresh_tokens(
+		request: Request,
+		service: UserService = Depends(get_user_service)
+):
+	refresh_token = request.cookies.get("refresh_token")
+	data = service.refresh_tokens(refresh_token)
+	return UserResponse(
+		username=data.user.username,
+		refresh_token=data.refresh_token,
+		access_token=data.access_token,
+		message=success_message_update_tokens
+	)
