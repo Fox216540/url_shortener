@@ -35,7 +35,7 @@ class UserService:
 		return self._auth_service.tokens_by_user(saved)
 
 	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
-		user = self._repo.get_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
+		user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
 
 		if not user:
 			return None
@@ -50,7 +50,7 @@ class UserService:
 		return link
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:
-		user = self._repo.get_by_id(user_id)
+		user = self.get_user_by_id(user_id)
 
 		if not self._hasher.verify(old_password, user.password):
 			return None
@@ -64,7 +64,7 @@ class UserService:
 		return new_user
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[UserWithAccessToken]:
-		user = self._repo.get_by_id(user_id)
+		user = self.get_user_by_id(user_id)
 
 		if user.username == username:
 			return None
@@ -77,7 +77,7 @@ class UserService:
 		return self._auth_service.access_token_by_user(new_user)
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
-		user = self._repo.get_by_id(user_id)
+		user = self.get_user_by_id(user_id)
 
 		if user.name == name:
 			return None
@@ -87,7 +87,7 @@ class UserService:
 		return new_user
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
-		user = self._repo.get_by_id(user_id)
+		user = self.get_user_by_id(user_id)
 
 		if user.email == email:
 			return None
@@ -105,6 +105,9 @@ class UserService:
 	def exists_username(self, username: str) -> bool:
 		return self._repo.exists_by_username(username)
 
+	def get_user_by_id(self, user_id: UUID) -> Optional[User]:
+		return self._repo.get_by_id(user_id)
+
 	def get_user_by_username(self, username: str) -> Optional[User]:
 		return self._repo.get_by_username(username)
 
@@ -117,7 +120,7 @@ class UserService:
 		if not jti or not self._auth_service.exists_refresh(jti):
 			return None
 
-		user = self._repo.get_by_id(UUID(payload["sub"]))
+		user = self.get_user_by_id(UUID(payload["sub"]))
 		if not user:
 			return None
 
@@ -134,6 +137,9 @@ class UserService:
 			return None
 
 		return self._auth_service.delete_refresh(jti)
+
+	def delete_link_by_user(self, ):
+		...
 
 	# def delete_user(self, user_id: UUID) -> bool | None:
 	# 	status_delete = self._repo
