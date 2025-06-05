@@ -6,6 +6,7 @@ from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens,UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
+from src.logger import status_logger
 from uuid import UUID
 
 
@@ -138,9 +139,9 @@ class UserService:
 
 		return self._auth_service.delete_refresh(jti)
 
-	def delete_link_by_user(self, ):
-		...
+	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
+		status_logger.info(f"{user_id}, {identifier}")
+		return self._link_service.delete_link_by_owner_id(identifier, user_id)
 
-	# def delete_user(self, user_id: UUID) -> bool | None:
-	# 	status_delete = self._repo
-	# 	...
+	def delete_all_user(self, user_id: UUID) -> Optional[bool]:
+		return self._link_service.delete_all_by_owner_id(user_id)

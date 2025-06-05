@@ -13,6 +13,10 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["User"], prefix='/user')
 
+"""
+В планах: logout_all
+"""
+
 
 @router.post("/reg", response_model=UserWithAccessTokenResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
@@ -228,10 +232,16 @@ def refresh_tokens(
 		return response
 
 
-@router.delete("/delete", response_model=UserResponse)
-def delete_user(
-		request: Request,
-		service: UserService = Depends(get_user_service)
+@router.delete("/link/{identifier}", response_model=UserResponse)
+def delete_link(
+		raw_request: Request,
+        identifier: str,
+        service: UserService = Depends(get_user_service)
 ):
-	...
-
+	username = raw_request.state.username
+	user_id = UUID(raw_request.state.user_id)
+	if service.delete_link_by_user(user_id=user_id, identifier=identifier):
+		return UserResponse(
+			username=username,
+			message=success_message_delete_link
+		)
