@@ -8,4 +8,6 @@ success_message_exist_email = "Such email exists"
 success_message_not_exist_username = "Such username not exists"
 success_message_not_exist_email = "Such email not exists"
 success_message_update_tokens = "Tokens have been updated"
+success_message_login_user = "User logged in"
+
 # success_message_get_policy = "Policy sent"

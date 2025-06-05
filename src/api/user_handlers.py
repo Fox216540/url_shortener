@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 router = APIRouter(tags=["User"], prefix='/user')
 
 
-# TODO: Добавить logout и помещение refresh в куки
+# TODO: Добавить logout
 
 
 @router.post("/reg", response_model=UserWithAccessTokenResponse)
@@ -40,13 +40,13 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 
 
 @router.post("/log", response_model=UserWithAccessTokenResponse)
-def create_user(request: LoginUserRequest, service: UserService = Depends(get_user_service)):
+def login_user(request: LoginUserRequest, service: UserService = Depends(get_user_service)):
 	user = service.login_user(**request.dict())
 
 	response_data = UserWithAccessTokenResponse(
 		username=user.username,
 		access_token=user.access_token,
-		message=success_message_create_user
+		message=success_message_login_user
 	)
 
 	response = JSONResponse(content=response_data.dict())
@@ -199,7 +199,7 @@ def refresh_tokens(
 	response_data = UserWithAccessTokenResponse(
 		username=user.username,
 		access_token=user.access_token,
-		message=success_message_create_user
+		message=success_message_update_tokens
 	)
 
 	response = JSONResponse(content=response_data.dict())
