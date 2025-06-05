@@ -11,7 +11,8 @@ PROTECTED_PATHS = ["/user/create-link",
                    "/user/change-email",
                    "/user/change-name",
                    "/user/my-links",
-                   "/user/link/"
+                   "/user/link/",
+                   "/user/links"
                    ]  # пути, к которым применяется авторизация "/reg",
 
 

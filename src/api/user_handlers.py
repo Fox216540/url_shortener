@@ -245,3 +245,17 @@ def delete_link(
 			username=username,
 			message=success_message_delete_link
 		)
+
+
+@router.delete("/links", response_model=UserResponse)
+def delete_link(
+		raw_request: Request,
+        service: UserService = Depends(get_user_service)
+):
+	username = raw_request.state.username
+	user_id = UUID(raw_request.state.user_id)
+	if service.delete_all_user(user_id=user_id):
+		return UserResponse(
+			username=username,
+			message=success_message_delete_links
+		)
