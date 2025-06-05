@@ -7,7 +7,7 @@ from fastapi import Depends
 from uuid import UUID
 from src.app.di.di import get_user_service, get_link_service
 from src.api.dtos.success import *
-from settings import URL
+from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
 
@@ -35,7 +35,8 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 		value=user.refresh_token,
 		httponly=True,
 		samesite="lax",
-		path="/"
+		path="/",
+		max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 	)
 	return response
 
@@ -57,7 +58,8 @@ def login_user(request: LoginUserRequest, service: UserService = Depends(get_use
 		value=user.refresh_token,
 		httponly=True,
 		samesite="lax",
-		path="/"
+		path="/",
+		max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 	)
 
 	return response
@@ -210,7 +212,8 @@ def refresh_tokens(
 		value=user.refresh_token,
 		httponly=True,
 		samesite="lax",
-		path="/"
+		path="/",
+		max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 	)
 
 	return response
