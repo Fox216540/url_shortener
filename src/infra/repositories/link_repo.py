@@ -37,10 +37,39 @@ class LinkRepositoryImpl(LinkRepository):
 			link = query.first()
 			return Link.from_orm(link) if link else None
 
-	def get_all_by_owner_id(self, user_id: UUID = None) -> Optional[List[Link]]:
+	def get_all_by_owner_id(self, user_id: UUID) -> Optional[List[Link]]:
 		with get_session() as session:
 			links = session.query(LinkORM).filter(LinkORM.owner_id == user_id).all()
 			return [Link.from_orm(link) for link in links] if links else None
+
+	def delete_link_by_owner_id_by_link_id(self, link_id: int, user_id: UUID) -> Optional[bool]:
+		with get_session() as session:
+			query = session.query(LinkORM).filter(LinkORM.owner_id == user_id,
+			                                      LinkORM.id == link_id).first()
+			if not query:
+				return None
+			session.delete(query)
+			session.commit()
+			return True
+
+	def delete_link_by_owner_id_by_alias(self, alias: str, user_id: UUID) -> Optional[bool]:
+		with get_session() as session:
+			query = session.query(LinkORM).filter(LinkORM.owner_id == user_id,
+			                                      LinkORM.alias == alias).first()
+			if not query:
+				return None
+			session.delete(query)
+			session.commit()
+			return True
+
+	def delete_all_by_owner_id(self, user_id: UUID) -> Optional[bool]:
+		with get_session() as session:
+			query = session.query(LinkORM).filter(LinkORM.owner_id == user_id).delete(synchronize_session=False)
+			if query == 0:
+				return None
+			session.commit()
+			return True
+
 # '''
 # EXAMPLE:
 # '''

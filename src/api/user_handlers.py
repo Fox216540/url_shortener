@@ -181,7 +181,7 @@ def get_all_links(
 ):
 	username = raw_request.state.username
 	user_id = UUID(raw_request.state.user_id)
-	links = service.get_all_links_by_user_id(user_id)
+	links = service.get_all_links_by_owner_id(user_id)
 	return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}",
 	                           link=link.original_url) for link in links]
 
@@ -226,4 +226,12 @@ def refresh_tokens(
 		response = JSONResponse(content=response_data.dict())
 		response.delete_cookie(key="refresh_token")
 		return response
+
+
+@router.delete("/delete", response_model=UserResponse)
+def delete_user(
+		request: Request,
+		service: UserService = Depends(get_user_service)
+):
+	...
 

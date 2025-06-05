@@ -12,8 +12,7 @@ from settings import ACCESS_SECRET
 
 def get_link_service() -> LinkService:
 	repo = LinkRepositoryImpl()
-	user = UserRepositoryImpl()
-	return LinkService(repo, user)
+	return LinkService(repo)
 
 
 def get_auth_service() -> AuthService:

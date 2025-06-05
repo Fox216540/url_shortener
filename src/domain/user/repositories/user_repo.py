@@ -16,7 +16,7 @@ class UserRepository(ABC):
 
 	@abstractmethod
 	def get_by_username(self, username: str) -> Optional[User]:
-		"""Возвращает пользователя по его id"""
+		"""Возвращает пользователя по его username"""
 		...
 
 	@abstractmethod
@@ -53,3 +53,8 @@ class UserRepository(ABC):
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		"""Меняет username у пользователя"""
 		...
+	# На будущее
+	# @abstractmethod
+	# def delete(self, user_id: UUID) -> Optional[bool]:
+	# 	"""Удаляет пользователя"""
+	# 	...

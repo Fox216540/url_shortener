@@ -22,6 +22,21 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_all_by_owner_id(self, user_id: UUID = None) -> Optional[List[Link]]:
+	def get_all_by_owner_id(self, user_id: UUID) -> Optional[List[Link]]:
 		"""Возвращает линки по owner_id"""
+		...
+
+	@abstractmethod
+	def delete_link_by_owner_id_by_link_id(self, link_id: int, user_id: UUID) -> Optional[bool]:
+		"""Удаление ссылки по id"""
+		...
+
+	@abstractmethod
+	def delete_link_by_owner_id_by_alias(self, alias: str, user_id: UUID) -> Optional[bool]:
+		"""Удаление ссылки по alias"""
+		...
+
+	@abstractmethod
+	def delete_all_by_owner_id(self, user_id: UUID) -> Optional[bool]:
+		"""Удаление всех ссылок"""
 		...

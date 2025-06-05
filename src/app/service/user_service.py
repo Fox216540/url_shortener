@@ -105,6 +105,9 @@ class UserService:
 	def exists_username(self, username: str) -> bool:
 		return self._repo.exists_by_username(username)
 
+	def get_user_by_username(self, username: str) -> Optional[User]:
+		return self._repo.get_by_username(username)
+
 	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
 		payload = self._auth_service.decode(token)
 		if payload.get("type") != "refresh":
@@ -131,3 +134,7 @@ class UserService:
 			return None
 
 		return self._auth_service.delete_refresh(jti)
+
+	# def delete_user(self, user_id: UUID) -> bool | None:
+	# 	status_delete = self._repo
+	# 	...
