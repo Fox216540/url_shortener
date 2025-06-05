@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 router = APIRouter(tags=["User"], prefix='/user')
 
 """
-В планах: logout_all
+В планах: logout_all, delete_user
 """
 
 
