@@ -25,3 +25,6 @@ class AuthService:
 
 	def delete_refresh(self, jti: str) -> bool:
 		return self._token_storage.delete_refresh_token(jti)
+
+	def exists_refresh(self, jti: str) -> bool:
+		return self._token_storage.exists_refresh_token(jti)

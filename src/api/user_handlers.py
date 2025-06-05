@@ -151,7 +151,7 @@ def change_name(
 
 @router.get("/check-username", response_model=ExistResponse)
 def check_username(username: str, service: UserService = Depends(get_user_service)):
-	check = service.exist_username(username)
+	check = service.exists_username(username)
 	if check:
 		return ExistResponse(
 			msg=success_message_exist_username,
@@ -165,7 +165,7 @@ def check_username(username: str, service: UserService = Depends(get_user_servic
 
 @router.get("/check-email", response_model=ExistResponse)
 def check_email(email: str, service: UserService = Depends(get_user_service)):
-	check = service.exist_email(email)
+	check = service.exists_email(email)
 	if check:
 		return ExistResponse(
 			msg=success_message_exist_email,

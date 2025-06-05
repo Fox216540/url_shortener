@@ -99,21 +99,25 @@ class UserService:
 
 		return new_user
 
-	def exist_email(self, email: str) -> bool:
+	def exists_email(self, email: str) -> bool:
 		return self._repo.exists_by_email(email)
 
-	def exist_username(self, username: str) -> bool:
+	def exists_username(self, username: str) -> bool:
 		return self._repo.exists_by_username(username)
 
 	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
 		payload = self._auth_service.decode(token)
 		if payload.get("type") != "refresh":
 			return None
-		user_id = UUID(payload["sub"])
 
-		user = self._repo.get_by_id(user_id)
+		jti = payload.get("jti")
+		if not jti or not self._auth_service.exists_refresh(jti):
+			return None
+
+		user = self._repo.get_by_id(UUID(payload["sub"]))
 		if not user:
 			return None
+
 		self._auth_service.delete_refresh(payload.get("jti"))
 		return self._auth_service.tokens_by_user(user)
 
@@ -121,4 +125,9 @@ class UserService:
 		payload = self._auth_service.decode(token)
 		if payload.get("type") != "refresh":
 			return None
-		return self._auth_service.delete_refresh(payload.get('jti'))
+
+		jti = payload.get("jti")
+		if not jti or not self._auth_service.exists_refresh(jti):
+			return None
+
+		return self._auth_service.delete_refresh(jti)
