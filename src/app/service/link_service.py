@@ -29,7 +29,6 @@ class LinkService:
 		return self._repo.get_all_by_owner_id(owner_id)
 
 	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> Optional[bool]:
-		status_logger.info(f"{identifier}, {owner_id}")
 		link = self._repo.delete_link_by_owner_id_by_alias(identifier, owner_id)
 		if not link:
 			try:

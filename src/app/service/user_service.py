@@ -140,7 +140,6 @@ class UserService:
 		return self._auth_service.delete_refresh(jti)
 
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
-		status_logger.info(f"{user_id}, {identifier}")
 		return self._link_service.delete_link_by_owner_id(identifier, user_id)
 
 	def delete_all_user(self, user_id: UUID) -> Optional[bool]:
