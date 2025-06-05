@@ -114,8 +114,11 @@ class UserService:
 		user = self._repo.get_by_id(user_id)
 		if not user:
 			return None
-
+		self._auth_service.delete_refresh(payload.get("jti"))
 		return self._auth_service.tokens_by_user(user)
 
-	def logout_user(self, token: str) -> bool:
-		return self._auth_service.logout(token)
+	def logout_user(self, token: str) -> bool | None:
+		payload = self._auth_service.decode(token)
+		if payload.get("type") != "refresh":
+			return None
+		return self._auth_service.delete_refresh(payload.get('jti'))
