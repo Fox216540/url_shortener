@@ -47,7 +47,7 @@ USER RESPONSE
 
 
 class UserResponse(BaseModel):
-	username: str
+	username: str = None
 	message: Optional[str] = None
 
 

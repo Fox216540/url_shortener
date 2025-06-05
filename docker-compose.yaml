@@ -18,6 +18,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - my_network
+
 #  pgloader:
 #    image: dimitri/pgloader
 #    env_file:
@@ -95,3 +103,4 @@ networks:
 
 volumes:
   postgres_data:
+  redis_data:

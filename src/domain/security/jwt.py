@@ -9,18 +9,18 @@ class JWT(ABC):
         """
         Генерирует JWT access-token, срок жизни ~10–15 минут.
         """
-        pass
+        ...
 
     @abstractmethod
-    def create_refresh_token(self, user_id: UUID) -> str:
+    def create_refresh_token(self, user_id: UUID) -> tuple:
         """
-        Генерирует JWT refresh-token, срок жизни ~7 дней.
+        Генерирует JWT refresh-token c jti, срок жизни ~7 дней.
         """
-        pass
+        ...
 
     @abstractmethod
     def decode(self, token: str) -> dict:
         """
         Расшифровывает и верифицирует любой токен.
         """
-        pass
+        ...

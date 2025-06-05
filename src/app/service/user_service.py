@@ -116,3 +116,6 @@ class UserService:
 			return None
 
 		return self._auth_service.tokens_by_user(user)
+
+	def logout_user(self, token: str) -> bool:
+		return self._auth_service.logout(token)
