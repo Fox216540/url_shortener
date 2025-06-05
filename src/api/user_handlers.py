@@ -14,9 +14,6 @@ from fastapi.responses import JSONResponse
 router = APIRouter(tags=["User"], prefix='/user')
 
 
-# TODO: Добавить logout
-
-
 @router.post("/reg", response_model=UserWithAccessTokenResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
 	user = service.register_user(**request.dict())
