@@ -39,7 +39,7 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 	return response
 
 
-@router.post("/log", response_model=UserWithAccessTokenResponse)
+@router.post("/login", response_model=UserWithAccessTokenResponse)
 def login_user(request: LoginUserRequest, service: UserService = Depends(get_user_service)):
 	user = service.login_user(**request.dict())
 
