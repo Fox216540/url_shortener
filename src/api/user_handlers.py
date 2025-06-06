@@ -235,6 +235,22 @@ def refresh_tokens(
 		return response
 
 
+@router.post("/logout_all", response_model=UserResponse)
+def refresh_tokens(
+		request: Request,
+		service: UserService = Depends(get_user_service)
+):
+	refresh_token = request.cookies.get("refresh_token")
+	if not refresh_token:
+		pass
+	logout_status = service.logout_all_user(refresh_token)
+	if logout_status:
+		response_data = UserResponse(message=success_message_logout_all_user)
+		response = JSONResponse(content=response_data.dict())
+		response.delete_cookie(key="refresh_token")
+		return response
+
+
 @router.delete("/link/{identifier}", response_model=UserResponse)
 def delete_link(
 		raw_request: Request,

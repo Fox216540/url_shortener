@@ -2,9 +2,9 @@ from jose import jwt
 from datetime import datetime, timedelta
 from src.domain.security.jwt import JWT
 from uuid import UUID
-from uuid import uuid4 as uuid4
+from uuid import uuid4
 from settings import ACCESS_TOKEN_TIME, REFRESH_TOKEN_TIME
-
+from src.logger import status_logger
 
 class JWTImpl(JWT):
     def __init__(self, secret: str):
@@ -18,7 +18,7 @@ class JWTImpl(JWT):
         return jwt.encode(payload, self.secret, algorithm="HS256")
 
     def create_refresh_token(self, user_id: UUID) -> tuple:
-        jti = str(uuid4)
+        jti = str(uuid4())
         payload = {"sub": str(user_id),
                    "jti": jti,
                    "type": "refresh",

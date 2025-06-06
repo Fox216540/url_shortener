@@ -139,6 +139,18 @@ class UserService:
 
 		return self._auth_service.delete_refresh(jti)
 
+	def logout_all_user(self, token: str) -> bool | None:
+		payload = self._auth_service.decode(token)
+		if payload.get("type") != "refresh":
+			return None
+
+		jti = payload.get("jti")
+		user_id = UUID(payload["sub"])
+		if not jti or not self._auth_service.exists_refresh(jti):
+			return None
+
+		return self._auth_service.delete_all_refresh(user_id)
+
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
 		return self._link_service.delete_link_by_owner_id(identifier, user_id)
 
