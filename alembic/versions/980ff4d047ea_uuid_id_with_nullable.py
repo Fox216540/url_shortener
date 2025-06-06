@@ -1,8 +1,8 @@
-"""changed links
+"""uuid_id with nullable
 
-Revision ID: eedeccf3981c
+Revision ID: 980ff4d047ea
 Revises: 
-Create Date: 2025-06-03 19:31:46.453081
+Create Date: 2025-06-07 01:57:01.754943
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'eedeccf3981c'
+revision: str = '980ff4d047ea'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,7 +28,7 @@ def upgrade() -> None:
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id', 'uuid_id'),
+    sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username'),
     sa.UniqueConstraint('uuid_id')

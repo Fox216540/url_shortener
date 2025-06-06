@@ -8,7 +8,7 @@ class UserORM(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uuid_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True)
+    uuid_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     username = Column(String, nullable=False, unique=True)
