@@ -24,8 +24,8 @@ class AuthService:
 	def decode(self, token: str) -> Dict:
 		return self._jwt.decode(token)
 
-	def delete_refresh(self, jti: str) -> bool:
-		return self._token_storage.delete_refresh_token(jti)
+	def delete_refresh(self, jti: str, user_id: UUID) -> bool:
+		return self._token_storage.delete_refresh_token(jti, user_id)
 
 	def delete_all_refresh(self, user_id: UUID) -> bool:
 		return self._token_storage.delete_all_refresh_tokens(user_id)

@@ -112,47 +112,52 @@ class UserService:
 	def get_user_by_username(self, username: str) -> Optional[User]:
 		return self._repo.get_by_username(username)
 
-	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
+	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
 		payload = self._auth_service.decode(token)
 		if payload.get("type") != "refresh":
 			return None
 
 		jti = payload.get("jti")
-		if not jti or not self._auth_service.exists_refresh(jti):
+		sub = payload.get("sub")
+		if not jti or not sub:
 			return None
 
-		user = self.get_user_by_id(UUID(payload["sub"]))
+		user_id = UUID(sub)
+		if not self._auth_service.exists_refresh(jti):
+			return None
+
+		return jti, user_id
+
+	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
+		result = self._validate_refresh_token(token)
+		if not result:
+			return None
+		jti, user_id = result
+
+		user = self.get_user_by_id(user_id)
 		if not user:
 			return None
 
-		self._auth_service.delete_refresh(payload.get("jti"))
+		self._auth_service.delete_refresh(jti, user_id=user.id)
 		return self._auth_service.tokens_by_user(user)
 
 	def logout_user(self, token: str) -> bool | None:
-		payload = self._auth_service.decode(token)
-		if payload.get("type") != "refresh":
+		result = self._validate_refresh_token(token)
+		if not result:
 			return None
-
-		jti = payload.get("jti")
-		if not jti or not self._auth_service.exists_refresh(jti):
-			return None
-
-		return self._auth_service.delete_refresh(jti)
+		jti, user_id = result
+		return self._auth_service.delete_refresh(jti, user_id)
 
 	def logout_all_user(self, token: str) -> bool | None:
-		payload = self._auth_service.decode(token)
-		if payload.get("type") != "refresh":
+		result = self._validate_refresh_token(token)
+		if not result:
 			return None
-
-		jti = payload.get("jti")
-		user_id = UUID(payload["sub"])
-		if not jti or not self._auth_service.exists_refresh(jti):
-			return None
+		jti, user_id = result
 
 		return self._auth_service.delete_all_refresh(user_id)
 
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
 		return self._link_service.delete_link_by_owner_id(identifier, user_id)
 
-	def delete_all_user(self, user_id: UUID) -> Optional[bool]:
+	def delete_all_links_user(self, user_id: UUID) -> Optional[bool]:
 		return self._link_service.delete_all_by_owner_id(user_id)

@@ -273,7 +273,7 @@ def delete_link(
 ):
 	username = raw_request.state.username
 	user_id = UUID(raw_request.state.user_id)
-	if service.delete_all_user(user_id=user_id):
+	if service.delete_all_links_user(user_id=user_id):
 		return UserResponse(
 			username=username,
 			message=success_message_delete_links

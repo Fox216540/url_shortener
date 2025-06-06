@@ -17,9 +17,11 @@ class TokenStorageImpl(TokenStorage):
 		with get_redis() as client:
 			return client.exists(jti) == 1
 
-	def delete_refresh_token(self, jti: str) -> bool:
+	def delete_refresh_token(self, jti: str, user_id: UUID) -> bool:
 		with get_redis() as client:
-			return client.delete(jti) == 1
+			client.delete(jti)
+			removed = client.srem(f"user:{user_id}:refresh_tokens", jti)
+			return bool(removed)
 
 	def delete_all_refresh_tokens(self, user_id: UUID) -> bool:
 		with get_redis() as client:

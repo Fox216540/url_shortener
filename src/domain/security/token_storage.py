@@ -18,9 +18,9 @@ class TokenStorage(ABC):
 		...
 
 	@abstractmethod
-	def delete_refresh_token(self, jti: str) -> bool:
+	def delete_refresh_token(self, jti: str, user_id: UUID) -> bool:
 		"""
-		Удаляет refresh токен с идентификатором jti.
+		Удаляет refresh токен с идентификатором jti и user_id.
 		"""
 		...
 
