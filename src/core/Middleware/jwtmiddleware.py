@@ -12,7 +12,8 @@ PROTECTED_PATHS = ["/user/create-link",
                    "/user/change-name",
                    "/user/my-links",
                    "/user/link/",
-                   "/user/links"
+                   "/user/links",
+                   "/user/"
                    ]  # пути, к которым применяется авторизация "/reg",
 
 
@@ -22,7 +23,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
 	@staticmethod
 	def is_protected_path(path: str) -> bool:
-		return any(path.startswith(p) for p in PROTECTED_PATHS)
+		return path in PROTECTED_PATHS
 
 	@staticmethod
 	def decode_token(token: str):

@@ -13,10 +13,6 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter(tags=["User"], prefix='/user')
 
-"""
-В планах: delete_user
-"""
-
 
 @router.get("/check-username", response_model=ExistResponse)
 def check_username(username: str, service: UserService = Depends(get_user_service)):
@@ -278,3 +274,17 @@ def delete_links(
 			username=username,
 			message=success_message_delete_links
 		)
+
+
+@router.delete("/", response_model=UserResponse)
+def delete_user(
+		raw_request: Request,
+        service: UserService = Depends(get_user_service)
+):
+	user_id = UUID(raw_request.state.user_id)
+	if service.delete_user(user_id=user_id):
+		response_data = UserResponse(message=success_message_delete_user)
+		response = JSONResponse(content=response_data.dict())
+		response.delete_cookie(key="refresh_token")
+		return response
+

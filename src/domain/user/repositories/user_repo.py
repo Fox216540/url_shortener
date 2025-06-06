@@ -53,8 +53,8 @@ class UserRepository(ABC):
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		"""Меняет username у пользователя"""
 		...
-	# На будущее
-	# @abstractmethod
-	# def delete(self, user_id: UUID) -> Optional[bool]:
-	# 	"""Удаляет пользователя"""
-	# 	...
+
+	@abstractmethod
+	def delete(self, user_id: UUID) -> Optional[bool]:
+		"""Удаляет пользователя"""
+		...

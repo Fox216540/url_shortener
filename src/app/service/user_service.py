@@ -161,3 +161,7 @@ class UserService:
 
 	def delete_all_links_user(self, user_id: UUID) -> Optional[bool]:
 		return self._link_service.delete_all_by_owner_id(user_id)
+
+	def delete_user(self, user_id: UUID) -> Optional[bool]:
+		self._auth_service.delete_all_refresh(user_id)
+		return self._repo.delete(user_id)

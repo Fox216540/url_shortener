@@ -97,3 +97,11 @@ class UserRepositoryImpl(UserRepository):
 			session.commit()
 			return User.from_orm(user)
 
+	def delete(self, user_id: UUID) -> Optional[bool]:
+		with get_session() as session:
+			user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
+			if not user:
+				return None
+			session.delete(user)
+			session.commit()
+			return True
