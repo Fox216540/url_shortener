@@ -9,6 +9,7 @@ class LinkORM(Base):
 
 	id = Column(Integer, autoincrement=True, primary_key=True)
 	original_url = Column(String, nullable=False)
+	short_code = Column(String, unique=True, nullable=False)
 	alias = Column(String)
 	owner_id = Column(UUID(as_uuid=True), ForeignKey("users.uuid_id"), nullable=True)
 

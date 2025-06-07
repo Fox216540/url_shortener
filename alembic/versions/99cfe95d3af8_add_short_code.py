@@ -1,8 +1,8 @@
-"""uuid_id with nullable
+"""add short_code
 
-Revision ID: 980ff4d047ea
+Revision ID: 99cfe95d3af8
 Revises: 
-Create Date: 2025-06-07 01:57:01.754943
+Create Date: 2025-06-07 22:39:44.534358
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '980ff4d047ea'
+revision: str = '99cfe95d3af8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -36,11 +36,13 @@ def upgrade() -> None:
     op.create_table('links',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('original_url', sa.String(), nullable=False),
+    sa.Column('short_code', sa.String(), nullable=False),
     sa.Column('alias', sa.String(), nullable=True),
     sa.Column('owner_id', sa.UUID(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['users.uuid_id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('owner_id', 'alias', name='uix_username_alias')
+    sa.UniqueConstraint('owner_id', 'alias', name='uix_username_alias'),
+    sa.UniqueConstraint('short_code')
     )
     # ### end Alembic commands ###
 

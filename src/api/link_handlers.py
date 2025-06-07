@@ -21,14 +21,14 @@ def get_original_link(request: Request,
                       service: LinkService = Depends(get_link_service),
                       user_service: UserService = Depends(get_user_service)):
 	hostname = request.url.hostname
-	username = None
+	user_id = None
 	if hostname and "." in hostname:
 		candidate = hostname.split(".")[0]
 		user = user_service.get_user_by_username(candidate)
-		if user and user.username:
-			username = user.username
-	status_logger.info(username)
-	url = service.get_url_by_short_code(short_code, username).original_url
+		if user and user.id:
+			user_id = user.id
+	status_logger.info(user_id)
+	url = service.get_url_by_short_code(short_code, user_id).original_url
 	return RedirectResponse(url)
 
 

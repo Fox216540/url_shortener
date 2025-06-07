@@ -12,31 +12,37 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_id(self, link_id: int, user_id: UUID = None) -> Optional[Link]:
-		"""Возвращает линк по id"""
+	def check_short_code(self, short_code: str) -> Optional[bool]:
+		"""Проверка на существование"""
 		...
 
 	@abstractmethod
-	def get_by_alias(self, alias: str, user_id: UUID = None) -> Optional[Link]:
+	def get_by_short_code(self, short_code: str) -> Optional[Link]:
+		"""Возвращает линк по short_code"""
+		...
+
+	@abstractmethod
+	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Optional[Link]:
 		"""Возвращает линк по alias"""
 		...
 
 	@abstractmethod
-	def get_all_by_owner_id(self, user_id: UUID) -> Optional[List[Link]]:
+	def get_all_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
 		"""Возвращает линки по owner_id"""
 		...
 
 	@abstractmethod
-	def delete_link_by_owner_id_by_link_id(self, link_id: int, user_id: UUID) -> Optional[bool]:
-		"""Удаление ссылки по id"""
+	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> Optional[bool]:
+		"""Удаление ссылки по short_code"""
 		...
 
 	@abstractmethod
-	def delete_link_by_owner_id_by_alias(self, alias: str, user_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> Optional[bool]:
 		"""Удаление ссылки по alias"""
 		...
 
 	@abstractmethod
-	def delete_all_by_owner_id(self, user_id: UUID) -> Optional[bool]:
+	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
 		"""Удаление всех ссылок"""
 		...
+

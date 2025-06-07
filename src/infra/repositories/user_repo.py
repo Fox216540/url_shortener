@@ -1,5 +1,5 @@
 from uuid import UUID
-
+from sqlalchemy import exists
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
 from typing import Optional
@@ -45,21 +45,15 @@ class UserRepositoryImpl(UserRepository):
 
 	def exists_by_email(self, email: str) -> Optional[bool]:
 		with get_session() as session:
-			exists = session.query(
-				session.query(UserORM)
-				.filter(UserORM.email == email)
-				.exists()
+			return session.query(
+				exists().where(UserORM.email == email)
 			).scalar()
-		return bool(exists)
 
 	def exists_by_username(self, username: str) -> Optional[bool]:
 		with get_session() as session:
-			exists = session.query(
-				session.query(UserORM)
-				.filter(UserORM.username == username)
-				.exists()
+			return session.query(
+				exists().where(UserORM.username == username)
 			).scalar()
-		return bool(exists)
 
 	def change_password(self, user_id: UUID, password: str) -> Optional[User]:
 		with get_session() as session:
