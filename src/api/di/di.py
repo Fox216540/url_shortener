@@ -9,6 +9,7 @@ from src.app.service.auth_service import AuthService
 from src.infra.security.passlib_hasher import PasslibHasher
 from src.infra.security.jwt_impl import JWTImpl
 from src.infra.security.token_storage_impl import TokenStorageImpl
+from src.infra.websocket.connection_manager import ConnectionManager
 from settings import ACCESS_SECRET
 
 
@@ -34,3 +35,10 @@ def get_user_service() -> UserService:
 def get_message_service() -> MessageService:
 	repo = MessageRepositoryImpl()
 	return MessageService(repo)
+
+
+_connection_manager = ConnectionManager()
+
+
+def get_connection_manager() -> ConnectionManager:
+	return _connection_manager

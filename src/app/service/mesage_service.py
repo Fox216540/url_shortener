@@ -20,6 +20,6 @@ class MessageService:
 	def get_messages_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> List[Message]:
 		return self._repo.get_by_date(first_date=first_date, last_date=last_date, room_id=room_id)
 
-	def delete_message(self, content: str, room_id: UUID) -> bool:
-		return self._repo.delete(content=content, room_id=room_id)
+	def delete_message(self, message_id: UUID) -> bool:
+		return self._repo.delete(message_id=message_id)
 

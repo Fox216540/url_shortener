@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from src.api.link_handlers import router as link_router
 from src.api.user_handlers import router as user_router
-from src.api.websocket import router as websocket_router
+from src.api.message_websocket import router as websocket_router
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from src.logger import status_logger

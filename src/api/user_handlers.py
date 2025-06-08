@@ -6,7 +6,7 @@ from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
 from src.api.di.di import get_user_service, get_link_service
-from src.api.dtos.success import *
+from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse

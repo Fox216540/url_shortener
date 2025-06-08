@@ -14,7 +14,7 @@ from src.logger import status_logger
 
 router = APIRouter(tags=["link"])
 
-
+#TODO: Добавить обработку endpoint с /с чтобы передавалось room_id
 @router.get("/{short_code}", response_model=GetUrlOriginResponse)
 def get_original_link(request: Request,
                       short_code: str,

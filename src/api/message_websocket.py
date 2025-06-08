@@ -1,55 +1,19 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
-from typing import Dict, Set
 from uuid import UUID
-from src.api.di.di import get_message_service, get_auth_service
+from src.api.di.di import get_message_service, get_auth_service, get_connection_manager
+from src.infra.websocket.connection_manager import ConnectionManager
 from src.app.service.mesage_service import MessageService
 from src.app.service.auth_service import AuthService
 
 router = APIRouter(tags=["websocket"])
 
 
-class ConnectionManager:
-	def __init__(self):
-		self.active_connections: Dict[UUID, Set[WebSocket]] = {}
-
-	async def connect(self, websocket: WebSocket, room_id: UUID):
-		await websocket.accept()
-		self.active_connections.setdefault(room_id, set()).add(websocket)
-
-	async def disconnect(self, websocket: WebSocket, room_id: UUID):
-		conns = self.active_connections.get(room_id)
-		if not conns:
-			return
-		try:
-			conns.remove(websocket)
-		except ValueError:
-			pass
-		try:
-			await websocket.close()
-		except Exception:
-			pass
-
-		if not conns:
-			self.active_connections.pop(room_id, None)
-
-	async def broadcast(self, data: dict, room_id: UUID):
-		for ws in list(self.active_connections.get(room_id, set())):
-			try:
-				await ws.send_json(data)
-			except WebSocketDisconnect:
-				await self.disconnect(ws, room_id)
-			except Exception:
-				await self.disconnect(ws, room_id)
-
-
-manager = ConnectionManager()
-
-
 @router.websocket("/ws/{room_id}")
 async def websocket_endpoint(websocket: WebSocket,
                              room_id: UUID,
                              service: MessageService = Depends(get_message_service),
-                             auth_service: AuthService = Depends(get_auth_service)
+                             auth_service: AuthService = Depends(get_auth_service),
+                             manager: ConnectionManager = Depends(get_connection_manager)
                              ):
 	await manager.connect(websocket, room_id)
 	try:

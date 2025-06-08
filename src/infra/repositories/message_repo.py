@@ -38,9 +38,9 @@ class MessageRepositoryImpl(MessageRepository):
 			result = session.scalars(stmt).all()
 			return [Message.from_orm(msg) for msg in result] if result else None
 
-	def delete(self, room_id: UUID, content: str) -> Optional[bool]:
+	def delete(self, message_id: UUID) -> Optional[bool]:
 		with get_session() as session:
-			user = session.query(MessageORM).filter(MessageORM.room_id == room_id, MessageORM.content == content).first()
+			user = session.query(MessageORM).filter(MessageORM.id == message_id).first()
 			if not user:
 				return None
 			session.delete(user)
