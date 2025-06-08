@@ -16,11 +16,19 @@ class ConnectionManager:
 		await websocket.accept()
 		self.active_connections.setdefault(room_id, set()).add(websocket)
 
-	def disconnect(self, websocket: WebSocket, room_id: UUID):
+	async def disconnect(self, websocket: WebSocket, room_id: UUID):
 		conns = self.active_connections.get(room_id)
 		if not conns:
 			return
-		conns.discard(websocket)
+		try:
+			conns.remove(websocket)
+		except ValueError:
+			pass
+		try:
+			await websocket.close()
+		except Exception:
+			pass
+
 		if not conns:
 			self.active_connections.pop(room_id, None)
 
@@ -29,11 +37,9 @@ class ConnectionManager:
 			try:
 				await ws.send_json(data)
 			except WebSocketDisconnect:
-				# Клиент отключился «честно»
-				self.disconnect(ws, room_id)
+				await self.disconnect(ws, room_id)
 			except Exception:
-				# Любая другая ошибка — тоже уничтожаем соединение
-				self.disconnect(ws, room_id)
+				await self.disconnect(ws, room_id)
 
 
 manager = ConnectionManager()
@@ -74,4 +80,4 @@ async def websocket_endpoint(websocket: WebSocket,
 					room_id
 				)
 	except WebSocketDisconnect:
-		manager.disconnect(websocket, room_id)
+		await manager.disconnect(websocket, room_id)
