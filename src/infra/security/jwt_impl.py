@@ -6,6 +6,7 @@ from uuid import uuid4
 from settings import ACCESS_TOKEN_TIME, REFRESH_TOKEN_TIME
 from src.logger import status_logger
 
+
 class JWTImpl(JWT):
     def __init__(self, secret: str):
         self.secret = secret
@@ -14,7 +15,7 @@ class JWTImpl(JWT):
         payload = {"sub": str(user_id),
                    "type": "access",
                    "username": username,
-                   "exp": datetime.utcnow() + timedelta(seconds=ACCESS_TOKEN_TIME)}
+                   "exp": datetime.now() + timedelta(seconds=ACCESS_TOKEN_TIME)}
         return jwt.encode(payload, self.secret, algorithm="HS256")
 
     def create_refresh_token(self, user_id: UUID) -> tuple:
@@ -22,7 +23,7 @@ class JWTImpl(JWT):
         payload = {"sub": str(user_id),
                    "jti": jti,
                    "type": "refresh",
-                   "exp": datetime.utcnow() + timedelta(seconds=REFRESH_TOKEN_TIME)}
+                   "exp": datetime.now() + timedelta(seconds=REFRESH_TOKEN_TIME)}
         return jwt.encode(payload, self.secret, algorithm="HS256"), jti
 
     def decode(self, token: str) -> dict:

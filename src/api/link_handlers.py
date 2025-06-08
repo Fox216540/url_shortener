@@ -7,7 +7,7 @@ from src.api.dtos.link_dto import (GetUrlOriginResponse,
                                    CreateLinkRequest
                                    )
 from fastapi import Depends
-from src.app.di.di import get_link_service, get_user_service
+from src.api.di.di import get_link_service, get_user_service
 from settings import URL
 from fastapi.responses import RedirectResponse
 from src.logger import status_logger

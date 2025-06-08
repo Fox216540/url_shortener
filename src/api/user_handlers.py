@@ -5,7 +5,7 @@ from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
 from fastapi import Depends
 from uuid import UUID
-from src.app.di.di import get_user_service, get_link_service
+from src.api.di.di import get_user_service, get_link_service
 from src.api.dtos.success import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List

@@ -11,13 +11,13 @@ class AuthService:
 		self._jwt = jwt
 		self._token_storage = token_storage
 
-	def tokens_by_user(self, user: User) -> UserWithTokens:
+	def create_tokens_by_user(self, user: User) -> UserWithTokens:
 		refresh, jti = self._jwt.create_refresh_token(user.id)
 		access = self._jwt.create_access_token(user.id, user.username)
 		self._token_storage.save_refresh_token(jti=jti, user_id=user.id)
 		return UserWithTokens(refresh_token=refresh, access_token=access, **vars(user))
 
-	def access_token_by_user(self, user: User) -> UserWithAccessToken:
+	def create_access_token_by_user(self, user: User) -> UserWithAccessToken:
 		access = self._jwt.create_access_token(user.id, user.username)
 		return UserWithAccessToken(access_token=access, **vars(user))
 

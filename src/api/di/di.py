@@ -3,6 +3,8 @@ from src.infra.repositories.link_repo import LinkRepositoryImpl
 from src.app.service.link_service import LinkService
 from src.infra.repositories.user_repo import UserRepositoryImpl
 from src.app.service.user_service import UserService
+from src.app.service.mesage_service import MessageService
+from src.infra.repositories.message_repo import MessageRepositoryImpl
 from src.app.service.auth_service import AuthService
 from src.infra.security.passlib_hasher import PasslibHasher
 from src.infra.security.jwt_impl import JWTImpl
@@ -28,3 +30,7 @@ def get_user_service() -> UserService:
 	auth_service = get_auth_service()
 	return UserService(repo, hasher, link_service, auth_service)
 
+
+def get_message_service() -> MessageService:
+	repo = MessageRepositoryImpl()
+	return MessageService(repo)

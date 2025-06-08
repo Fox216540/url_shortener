@@ -34,7 +34,7 @@ class UserService:
 		if not saved:
 			pass
 
-		return self._auth_service.tokens_by_user(saved)
+		return self._auth_service.create_tokens_by_user(saved)
 
 	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
 		user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
@@ -45,7 +45,7 @@ class UserService:
 		if not self._hasher.verify(password, user.password):
 			return None
 
-		return self._auth_service.tokens_by_user(user)
+		return self._auth_service.create_tokens_by_user(user)
 
 	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Optional[Link]:
 		room_id = uuid4() if has_room else None
@@ -80,7 +80,7 @@ class UserService:
 
 		new_user = self._repo.change_username(user_id, username)
 
-		return self._auth_service.access_token_by_user(new_user)
+		return self._auth_service.create_access_token_by_user(new_user)
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
 		user = self.get_user_by_id(user_id)
@@ -144,7 +144,7 @@ class UserService:
 			return None
 
 		self._auth_service.delete_refresh(jti, user_id=user.id)
-		return self._auth_service.tokens_by_user(user)
+		return self._auth_service.create_tokens_by_user(user)
 
 	def logout_user(self, token: str) -> bool | None:
 		result = self._validate_refresh_token(token)
