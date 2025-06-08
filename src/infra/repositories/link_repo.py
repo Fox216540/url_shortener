@@ -16,6 +16,7 @@ class LinkRepositoryImpl(LinkRepository):
 				short_code=link.short_code,
 				owner_id=link.owner_id,
 				alias=link.alias,
+				room_id=link.room_id
 			)
 			session.add(new_link)
 			session.commit()

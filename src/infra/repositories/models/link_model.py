@@ -12,6 +12,7 @@ class LinkORM(Base):
 	short_code = Column(String, unique=True, nullable=False)
 	alias = Column(String)
 	owner_id = Column(UUID(as_uuid=True), ForeignKey("users.uuid_id"), nullable=True)
+	room_id = Column(UUID(as_uuid=True), nullable=True)
 
 	__table_args__ = (
 		UniqueConstraint('owner_id', 'alias', name='uix_username_alias'),

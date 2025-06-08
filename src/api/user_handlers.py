@@ -231,7 +231,8 @@ def create_link(request: CreateUserLinkRequest, raw_request: Request, service: U
 	)
 	short_identifier = link.alias or link.short_code
 	return CreateUserLinkResponse(
-		url_short=f"{username}.{URL}/{short_identifier}"
+		url_short=f"{username}.{URL}/{short_identifier}",
+		web_socket=f"ws://localhost:8000/ws/{link.room_id}" if link.room_id else None
 	)
 
 

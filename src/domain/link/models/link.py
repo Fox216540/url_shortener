@@ -7,6 +7,7 @@ from uuid import UUID
 class Link:
 	original_url: str
 	short_code: Optional[str]
+	room_id: Optional[UUID] = None
 	id: Optional[int] = None
 	alias: Optional[int] = None
 	owner_id: Optional[UUID] = None
@@ -18,5 +19,6 @@ class Link:
 			original_url=orm_obj.original_url,
 			owner_id=orm_obj.owner_id,
 			alias=orm_obj.alias,
-			short_code=orm_obj.short_code
+			short_code=orm_obj.short_code,
+			room_id=orm_obj.room_id
 		)

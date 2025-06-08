@@ -4,10 +4,11 @@ from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
 from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
-from src.app.dtos.user_dto import UserWithTokens,UserWithAccessToken
+from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
-from src.logger import status_logger
 from uuid import UUID
+from src.logger import status_logger
+from uuid import uuid4
 
 
 class UserService:
@@ -46,8 +47,12 @@ class UserService:
 
 		return self._auth_service.tokens_by_user(user)
 
-	def create_user_link(self, user_id: UUID, original_url: str, alias: str = None) -> Optional[Link]:
-		link = self._link_service.add_link(owner_id=user_id, url=original_url, alias=alias)
+	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Optional[Link]:
+		room_id = uuid4() if has_room else None
+		link = self._link_service.add_link(owner_id=user_id,
+		                                   url=original_url,
+		                                   alias=alias,
+		                                   room_id=room_id)
 		return link
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:

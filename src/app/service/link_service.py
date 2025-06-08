@@ -4,6 +4,7 @@ from typing import Optional
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from uuid import UUID
+from src.logger import status_logger
 from typing import List
 
 
@@ -16,7 +17,7 @@ class LinkService:
 		alphabet = string.ascii_letters + string.digits
 		return ''.join(secrets.choice(alphabet) for _ in range(length))
 
-	def add_link(self, url: str, owner_id: UUID = None, alias: str = None) -> Optional[Link]:
+	def add_link(self, url: str, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Optional[Link]:
 		max_attempts = 10
 		short_code = None
 		for _ in range(max_attempts):
@@ -29,7 +30,8 @@ class LinkService:
 			original_url=url,
 			owner_id=owner_id,
 			alias=alias,
-			short_code=short_code
+			short_code=short_code,
+			room_id=room_id
 		)
 		return self._repo.create(link)
 

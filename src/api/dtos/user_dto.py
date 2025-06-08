@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
-
+from uuid import UUID
 
 """
 USER REQUEST
@@ -39,6 +39,7 @@ class ChangePasswordRequest(BaseModel):
 class CreateUserLinkRequest(BaseModel):
 	alias: Optional[str] = None
 	original_url: str
+	has_room: Optional[bool] = None
 
 
 """
@@ -62,6 +63,7 @@ class ExistResponse(BaseModel):
 
 class CreateUserLinkResponse(BaseModel):
 	url_short: str
+	web_socket: Optional[str] = None
 
 
 class UsersLinksResponse(BaseModel):
