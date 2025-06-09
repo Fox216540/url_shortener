@@ -40,7 +40,7 @@ class MessageRepositoryImpl(MessageRepository):
 
 	def delete(self, message_id: UUID) -> Optional[bool]:
 		with get_session() as session:
-			user = session.query(MessageORM).filter(MessageORM.id == message_id).first()
+			user = session.query(MessageORM).filter(MessageORM.uuid_id == message_id).first()
 			if not user:
 				return None
 			session.delete(user)

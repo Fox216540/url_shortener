@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 import asyncio
 from uuid import UUID
 from src.app.service.mesage_service import MessageService
-from src.infra.websocket.connection_manager import ConnectionManager
+from src.app.service.websocket_service import WebsocketService
 from src.api.dtos.message_dto import DeleteMessageResponse, DeleteMessageRequest
 from fastapi import Depends
 from src.api.di.di import get_message_service, get_connection_manager
@@ -12,20 +12,18 @@ router = APIRouter(tags=["message"], prefix="/m")
 
 
 @router.delete("/{room_id}/{message_id}", response_model=DeleteMessageResponse)
-def get_original_link(message_id: UUID,
-                      room_id: UUID,
-                      service: MessageService = Depends(get_message_service),
-                      web_socket: ConnectionManager = Depends(get_connection_manager)
-                      ):
+async def get_original_link(
+		message_id: UUID,
+        room_id: UUID,
+        service: MessageService = Depends(get_message_service),
+        web_socket: WebsocketService = Depends(get_connection_manager)
+):
 	delete = service.delete_message(message_id=message_id)
 	if not delete:
 		pass
-	loop = asyncio.get_running_loop()
-	loop.create_task(
-		web_socket.broadcast(
-			{"action": "delete", "message_id": str(message_id)},
-			room_id=room_id
-		)
+	await web_socket.broadcast(
+		{"action": "delete", "message_id": str(message_id)},
+		room_id=room_id
 	)
 
 	return DeleteMessageResponse(

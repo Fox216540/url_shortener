@@ -1,7 +1,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from uuid import UUID
 from src.api.di.di import get_message_service, get_auth_service, get_connection_manager
-from src.infra.websocket.connection_manager import ConnectionManager
+from src.app.service.websocket_service import WebsocketService
 from src.app.service.mesage_service import MessageService
 from src.app.service.auth_service import AuthService
 
@@ -13,7 +13,7 @@ async def websocket_endpoint(websocket: WebSocket,
                              room_id: UUID,
                              service: MessageService = Depends(get_message_service),
                              auth_service: AuthService = Depends(get_auth_service),
-                             manager: ConnectionManager = Depends(get_connection_manager)
+                             manager: WebsocketService = Depends(get_connection_manager)
                              ):
 	await manager.connect(websocket, room_id)
 	try:
