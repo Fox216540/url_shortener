@@ -51,7 +51,6 @@ def get_history_of_chat(
 	]
 
 
-# TODO: Поменять на изменение сообщения и добавить история
 #
 # @router.post("/short", response_model=CreateLinkResponse)
 # def create_short_link(request: CreateLinkRequest, service: LinkService = Depends(get_link_service)):
