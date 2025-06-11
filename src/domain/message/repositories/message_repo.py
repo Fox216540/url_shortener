@@ -17,6 +17,6 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete(self, message_id: UUID) -> Optional[bool]:
-		"""Удаляет сообщение по message_id"""
+	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
+		"""Удаляет сообщение по message_id и sender"""
 		...

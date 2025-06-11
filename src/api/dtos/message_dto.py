@@ -1,16 +1,20 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 from uuid import UUID
+from datetime import datetime
 
 
 class DeleteMessageResponse(BaseModel):
-    message: Optional[str]
+	message: Optional[str]
 
 
 class DeleteMessageRequest(BaseModel):
-    message_id: Optional[UUID]
-    room_id: Optional[UUID]
+	message_id: Optional[UUID]
+	room_id: Optional[UUID]
 
 
-# class GetUrlOriginResponse(BaseModel):
-#     url_origin: Optional[str]
+class MessageResponse(BaseModel):
+	id: Optional[UUID]
+	content: Optional[str]
+	sender: Optional[str]
+	created_at: Optional[datetime]

@@ -33,17 +33,20 @@ class MessageRepositoryImpl(MessageRepository):
 					MessageORM.created_at >= first_date,
 					MessageORM.created_at <= last_date
 				)
-				.order_by(MessageORM.sent_at.asc())
+				.order_by(MessageORM.created_at.asc())
 			)
 			result = session.scalars(stmt).all()
 			return [Message.from_orm(msg) for msg in result] if result else None
 
-	def delete(self, message_id: UUID) -> Optional[bool]:
+	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
 		with get_session() as session:
-			user = session.query(MessageORM).filter(MessageORM.uuid_id == message_id).first()
-			if not user:
+			message = session.query(MessageORM).filter(MessageORM.uuid_id == message_id,
+			                                        MessageORM.sender == sender,
+			                                        MessageORM.room_id == room_id
+			                                        ).first()
+			if not message:
 				return None
-			session.delete(user)
+			session.delete(message)
 			session.commit()
 			return True
 

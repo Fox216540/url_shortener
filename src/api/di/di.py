@@ -35,7 +35,8 @@ def get_user_service() -> UserService:
 
 def get_message_service() -> MessageService:
 	repo = MessageRepositoryImpl()
-	return MessageService(repo)
+	user_service = get_user_service()
+	return MessageService(repo, user_service)
 
 
 _connection_manager = ConnectionManager()
