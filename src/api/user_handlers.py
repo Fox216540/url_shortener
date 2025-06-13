@@ -10,6 +10,9 @@ from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
+# TODO: Дописать getattr в каждую функцию где токен
+#  user_id_from_state = getattr(raw_request.state, "user_id", None)
+# 	if user_id_from_state:
 
 router = APIRouter(tags=["User"], prefix='/user')
 

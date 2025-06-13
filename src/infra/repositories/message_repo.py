@@ -40,13 +40,26 @@ class MessageRepositoryImpl(MessageRepository):
 
 	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
 		with get_session() as session:
-			message = session.query(MessageORM).filter(MessageORM.uuid_id == message_id,
-			                                        MessageORM.sender == sender,
-			                                        MessageORM.room_id == room_id
-			                                        ).first()
+			message = session.query(MessageORM).filter(
+				MessageORM.uuid_id == message_id,
+				MessageORM.sender == sender,
+				MessageORM.room_id == room_id
+			).first()
 			if not message:
 				return None
 			session.delete(message)
 			session.commit()
 			return True
 
+	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Optional[Message]:
+		with get_session() as session:
+			message = session.query(MessageORM).filter(
+				MessageORM.uuid_id == message_id,
+				MessageORM.sender == sender,
+				MessageORM.room_id == room_id
+			).first()
+			if not message:
+				return None
+			message.content = new_content
+			session.commit()
+			return Message.from_orm(message)

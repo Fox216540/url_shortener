@@ -40,7 +40,8 @@ def get_message_service() -> MessageService:
 
 
 _connection_manager = ConnectionManager()
+_websocket_service = WebsocketService(connect=_connection_manager)
 
 
 def get_connection_manager() -> WebsocketService:
-	return WebsocketService(connect=_connection_manager)
+	return _websocket_service

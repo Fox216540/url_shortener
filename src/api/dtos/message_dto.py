@@ -8,6 +8,10 @@ class DeleteMessageResponse(BaseModel):
 	message: Optional[str]
 
 
+class ChangeMessageResponse(BaseModel):
+	message: Optional[str]
+
+
 class DeleteMessageRequest(BaseModel):
 	message_id: Optional[UUID]
 	room_id: Optional[UUID]

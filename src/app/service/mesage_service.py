@@ -33,3 +33,6 @@ class MessageService:
 			return user.username if user else "anon"
 		except Exception:
 			return "anon"
+
+	def change_message(self, user_id: str, room_id: UUID, message_id: UUID, new_content: str) -> Message:
+		return self._repo.change_text(sender=user_id, room_id=room_id, message_id=message_id, new_content=new_content)
