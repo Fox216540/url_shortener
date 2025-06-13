@@ -18,7 +18,6 @@ async def websocket_endpoint(websocket: WebSocket,
                              manager: WebsocketService = Depends(get_connection_manager),
                              user_service: UserService = Depends(get_user_service)
                              ):
-	status_logger.info("началось")
 	await manager.connect(websocket, room_id)
 	try:
 		while True:
