@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Request
-
+from fastapi import APIRouter, Request, HTTPException
 from src.app.service.link_service import LinkService
 from src.app.service.user_service import UserService
 from src.api.dtos.link_dto import (GetUrlOriginResponse,
@@ -10,6 +9,7 @@ from fastapi import Depends
 from src.api.di.di import get_link_service, get_user_service
 from settings import URL
 from fastapi.responses import RedirectResponse
+from src.infra.repositories.exceptions.link import InvalidCreateLink
 from src.logger import status_logger
 
 router = APIRouter(tags=["link"])
@@ -34,9 +34,12 @@ def get_original_link(request: Request,
 
 @router.post("/short", response_model=CreateLinkResponse)
 def create_short_link(request: CreateLinkRequest, service: LinkService = Depends(get_link_service)):
-	code = service.add_link(
-		request.url_origin,
-	).short_code
-	return CreateLinkResponse(url_short=f"{URL}/{code}")
+	try:
+		code = service.add_link(
+			request.url_origin,
+		).short_code
+		return CreateLinkResponse(url_short=f"{URL}/{code}")
+	except InvalidCreateLink as e:
+		return HTTPException(status_code=400, detail=str(e))
 
 # @router.post('/reg', response_model=)

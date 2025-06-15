@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi import Request
+from fastapi import APIRouter, HTTPException, Request
 from src.app.service.user_service import UserService
 from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
@@ -10,6 +9,8 @@ from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
+from src.infra.repositories.exceptions.user_exception import InvalidCreateUser
+
 # TODO: Дописать getattr в каждую функцию где токен
 #  user_id_from_state = getattr(raw_request.state, "user_id", None)
 # 	if user_id_from_state:
@@ -47,25 +48,28 @@ def check_email(email: str, service: UserService = Depends(get_user_service)):
 
 @router.post("/reg", response_model=UserWithAccessTokenResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
-	user = service.register_user(**request.model_dump())
+	try:
+		user = service.register_user(**request.model_dump())
 
-	response_data = UserWithAccessTokenResponse(
-		username=user.username,
-		access_token=user.access_token,
-		message=success_message_create_user
-	)
+		response_data = UserWithAccessTokenResponse(
+			username=user.username,
+			access_token=user.access_token,
+			message=success_message_create_user
+		)
 
-	response = JSONResponse(content=response_data.model_dump())
+		response = JSONResponse(content=response_data.model_dump())
 
-	response.set_cookie(
-		key="refresh_token",
-		value=user.refresh_token,
-		httponly=True,
-		samesite="lax",
-		path="/",
-		max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
-	)
-	return response
+		response.set_cookie(
+			key="refresh_token",
+			value=user.refresh_token,
+			httponly=True,
+			samesite="lax",
+			path="/",
+			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
+		)
+		return response
+	except InvalidCreateUser as e:
+		raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/login", response_model=UserWithAccessTokenResponse)

@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import uuid4
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
@@ -7,8 +8,7 @@ from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
 from uuid import UUID
-from src.logger import status_logger
-from uuid import uuid4
+from src.infra.repositories.exceptions.user_exception import ERRORS_ALL as errors_repo
 
 
 class UserService:
@@ -19,35 +19,41 @@ class UserService:
 		self._auth_service = auth_service
 
 	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserWithTokens]:
-		if self._repo.exists_by_email(email):
-			return None
-		elif self._repo.exists_by_username(username):
-			return None
-		hash_password = self._hasher.hash(password)
-		user = User(
-			email=email,
-			name=name,
-			password=hash_password,
-			username=username
-		)
-		saved = self._repo.save(user)
-		if not saved:
-			pass
+		try:
+			if self._repo.exists_by_email(email):
+				raise
+			elif self._repo.exists_by_username(username):
+				raise
+			hash_password = self._hasher.hash(password)
+			user = User(
+				email=email,
+				name=name,
+				password=hash_password,
+				username=username
+			)
+			saved = self._repo.save(user)
 
-		return self._auth_service.create_tokens_by_user(saved)
+			return self._auth_service.create_tokens_by_user(saved)
+		except errors_repo as e:
+			raise e
+		#TODO: Добавить ошибку у register_user
+		except Exception as e:
+			raise e
 
 	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
-		user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
+		try:
+			user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
 
-		if not user:
-			return None
-
-		if not self._hasher.verify(password, user.password):
-			return None
-
-		return self._auth_service.create_tokens_by_user(user)
+			#TODO: Дописать ошибку сюда
+			if not self._hasher.verify(password, user.password):
+				return None
+			#TODO: Дописать ошибку сюда
+			return self._auth_service.create_tokens_by_user(user)
+		except errors_repo as e:
+			raise e
 
 	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Optional[Link]:
+		#TODO: Дописать у Link ошибки
 		room_id = uuid4() if has_room else None
 		link = self._link_service.add_link(owner_id=user_id,
 		                                   url=original_url,
@@ -56,68 +62,94 @@ class UserService:
 		return link
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:
-		user = self.get_user_by_id(user_id)
+		try:
+			user = self.get_user_by_id(user_id)
 
-		if not self._hasher.verify(old_password, user.password):
-			return None
+			if not self._hasher.verify(old_password, user.password):
+				return None
 
-		if self._hasher.verify(new_password, user.password):
-			return None
+			if self._hasher.verify(new_password, user.password):
+				return None
 
-		hash_password = self._hasher.hash(new_password)
-		new_user = self._repo.change_password(user_id, hash_password)
+			hash_password = self._hasher.hash(new_password)
+			new_user = self._repo.change_password(user_id, hash_password)
 
-		return new_user
+			return new_user
+		except errors_repo as e:
+			raise e
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[UserWithAccessToken]:
-		user = self.get_user_by_id(user_id)
+		try:
+			user = self.get_user_by_id(user_id)
 
-		if user.username == username:
-			return None
+			if user.username == username:
+				return None
 
-		if self._repo.exists_by_username(username):
-			return None
+			if self._repo.exists_by_username(username):
+				return None
 
-		new_user = self._repo.change_username(user_id, username)
+			new_user = self._repo.change_username(user_id, username)
 
-		return self._auth_service.create_access_token_by_user(new_user)
+			return self._auth_service.create_access_token_by_user(new_user)
+		except errors_repo as e:
+			raise e
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
-		user = self.get_user_by_id(user_id)
+		try:
+			user = self.get_user_by_id(user_id)
 
-		if user.name == name:
-			return None
+			if user.name == name:
+				return None
 
-		new_user = self._repo.change_name(user_id, name)
+			new_user = self._repo.change_name(user_id, name)
 
-		return new_user
+			return new_user
+		except errors_repo as e:
+			raise e
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
-		user = self.get_user_by_id(user_id)
+		try:
+			user = self.get_user_by_id(user_id)
 
-		if user.email == email:
-			return None
+			#TODO: Дописать ошибки service
+			if user.email == email:
+				return None
 
-		if self._repo.exists_by_email(email):
-			return None
+			if self._repo.exists_by_email(email):
+				return None
 
-		new_user = self._repo.change_email(user_id, email)
+			new_user = self._repo.change_email(user_id, email)
 
-		return new_user
+			return new_user
+		except errors_repo as e:
+			raise e
 
 	def exists_email(self, email: str) -> bool:
-		return self._repo.exists_by_email(email)
+		try:
+			return self._repo.exists_by_email(email)
+		except errors_repo as e:
+			raise e
 
 	def exists_username(self, username: str) -> bool:
-		return self._repo.exists_by_username(username)
+		try:
+			return self._repo.exists_by_username(username)
+		except errors_repo as e:
+			raise e
 
 	def get_user_by_id(self, user_id: UUID) -> Optional[User]:
-		return self._repo.get_by_id(user_id)
+		try:
+			return self._repo.get_by_id(user_id)
+		except errors_repo as e:
+			raise e
 
 	def get_user_by_username(self, username: str) -> Optional[User]:
-		return self._repo.get_by_username(username)
+		try:
+			return self._repo.get_by_username(username)
+		except errors_repo as e:
+			raise e
 
 	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
+		#TODO: Дописать на каждый
 		payload = self._auth_service.decode(token)
 		if payload.get("type") != "refresh":
 			return None
@@ -134,39 +166,51 @@ class UserService:
 		return jti, user_id
 
 	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
-		result = self._validate_refresh_token(token)
-		if not result:
-			return None
-		jti, user_id = result
+		try:
+			result = self._validate_refresh_token(token)
+			# TODO: Дописать сюда
+			if not result:
+				return None
+			jti, user_id = result
 
-		user = self.get_user_by_id(user_id)
-		if not user:
-			return None
+			user = self.get_user_by_id(user_id)
 
-		self._auth_service.delete_refresh(jti, user_id=user.id)
-		return self._auth_service.create_tokens_by_user(user)
+			# TODO: Дописать сюда
+			self._auth_service.delete_refresh(jti, user_id=user.id)
+
+			# TODO: Дописать сюда
+			return self._auth_service.create_tokens_by_user(user)
+		except errors_repo as e:
+			raise e
 
 	def logout_user(self, token: str) -> bool | None:
+		# TODO: Дописать сюда
 		result = self._validate_refresh_token(token)
 		if not result:
 			return None
 		jti, user_id = result
+		# TODO: Дописать сюда
 		return self._auth_service.delete_refresh(jti, user_id)
 
 	def logout_all_user(self, token: str) -> bool | None:
+		# TODO: Дописать сюда
 		result = self._validate_refresh_token(token)
 		if not result:
 			return None
 		jti, user_id = result
 
+		# TODO: Дописать сюда
 		return self._auth_service.delete_all_refresh(user_id)
 
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
+		# TODO: Дописать сюда
 		return self._link_service.delete_link_by_owner_id(identifier, user_id)
 
 	def delete_all_links_user(self, user_id: UUID) -> Optional[bool]:
+		# TODO: Дописать сюда
 		return self._link_service.delete_all_by_owner_id(user_id)
 
 	def delete_user(self, user_id: UUID) -> Optional[bool]:
+		# TODO: Дописать сюда
 		self._auth_service.delete_all_refresh(user_id)
 		return self._repo.delete(user_id)

@@ -4,7 +4,8 @@ from typing import Optional
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from uuid import UUID
-from src.logger import status_logger
+
+from src.infra.repositories.exceptions.link import InvalidCreateLink
 from typing import List
 
 
@@ -33,7 +34,10 @@ class LinkService:
 			short_code=short_code,
 			room_id=room_id
 		)
-		return self._repo.create(link)
+		try:
+			return self._repo.create(link)
+		except InvalidCreateLink as e:
+			raise e
 
 	def get_url_by_short_code(self, identifier: str, owner_id: UUID = None) -> Optional[Link]:
 		link = self._repo.get_by_alias(identifier, owner_id)

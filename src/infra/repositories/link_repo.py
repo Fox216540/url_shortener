@@ -2,6 +2,7 @@ from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from typing import Optional
 from src.infra.database import get_session
+from src.infra.repositories.exceptions.link import InvalidCreateLink
 from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
@@ -11,17 +12,20 @@ from sqlalchemy import exists
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
 		with get_session() as session:
-			new_link = LinkORM(
-				original_url=link.original_url,
-				short_code=link.short_code,
-				owner_id=link.owner_id,
-				alias=link.alias,
-				room_id=link.room_id
-			)
-			session.add(new_link)
-			session.commit()
-			session.refresh(new_link)
-			return Link.from_orm(new_link)
+			try:
+				new_link = LinkORM(
+					original_url=link.original_url,
+					short_code=link.short_code,
+					owner_id=link.owner_id,
+					alias=link.alias,
+					room_id=link.room_id
+				)
+				session.add(new_link)
+				session.commit()
+				session.refresh(new_link)
+				return Link.from_orm(new_link)
+			except Exception as e:
+				raise InvalidCreateLink()
 
 	def check_short_code(self, short_code: str) -> Optional[bool]:
 		with get_session() as session:
@@ -74,22 +78,3 @@ class LinkRepositoryImpl(LinkRepository):
 				return None
 			session.commit()
 			return True
-
-# '''
-# EXAMPLE:
-# '''
-#
-# class Figure(ABC):
-#     square: float
-#
-#     @abstractmethod
-#     def calc_square(self):
-#         pass
-#
-# class Rectangle(Figure):
-#     def calc_square(self):
-#         pass
-#
-# class Triangle(Figure):
-#     def calc_square(self):
-#         pass
