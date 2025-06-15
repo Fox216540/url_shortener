@@ -47,7 +47,7 @@ def check_email(email: str, service: UserService = Depends(get_user_service)):
 
 @router.post("/reg", response_model=UserWithAccessTokenResponse)
 def create_user(request: CreateUserRequest, service: UserService = Depends(get_user_service)):
-	user = service.register_user(**request.dict())
+	user = service.register_user(**request.model_dump())
 
 	response_data = UserWithAccessTokenResponse(
 		username=user.username,
@@ -55,7 +55,7 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 		message=success_message_create_user
 	)
 
-	response = JSONResponse(content=response_data.dict())
+	response = JSONResponse(content=response_data.model_dump())
 
 	response.set_cookie(
 		key="refresh_token",
@@ -70,7 +70,8 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 
 @router.post("/login", response_model=UserWithAccessTokenResponse)
 def login_user(request: LoginUserRequest, service: UserService = Depends(get_user_service)):
-	user = service.login_user(**request.dict())
+	user = service.login_user(**request.model_dump())
+
 
 	response_data = UserWithAccessTokenResponse(
 		username=user.username,
@@ -78,7 +79,7 @@ def login_user(request: LoginUserRequest, service: UserService = Depends(get_use
 		message=success_message_login_user
 	)
 
-	response = JSONResponse(content=response_data.dict())
+	response = JSONResponse(content=response_data.model_dump())
 
 	response.set_cookie(
 		key="refresh_token",
@@ -103,9 +104,10 @@ def logout_user(
 	logout_status = service.logout_user(refresh_token)
 	if logout_status:
 		response_data = UserResponse(message=success_message_logout_user)
-		response = JSONResponse(content=response_data.dict())
+		response = JSONResponse(content=response_data.model_dump())
 		response.delete_cookie(key="refresh_token")
 		return response
+	return None
 
 
 @router.post("/logout_all", response_model=UserResponse)
@@ -119,9 +121,10 @@ def logout_all_user(
 	logout_status = service.logout_all_user(refresh_token)
 	if logout_status:
 		response_data = UserResponse(message=success_message_logout_all_user)
-		response = JSONResponse(content=response_data.dict())
+		response = JSONResponse(content=response_data.model_dump())
 		response.delete_cookie(key="refresh_token")
 		return response
+	return None
 
 
 @router.post("/change-password", response_model=UserResponse)
@@ -133,7 +136,7 @@ def change_password(
 	user_id = UUID(raw_request.state.user_id)
 	user = service.change_password(
 		user_id=user_id,
-		**request.dict()
+		**request.model_dump()
 	)
 
 	return UserResponse(
@@ -151,7 +154,7 @@ def change_username(
 	user_id = UUID(raw_request.state.user_id)
 	user = service.change_username(
 		user_id=user_id,
-		**request.dict()
+		**request.model_dump()
 	)
 
 	return UserWithAccessTokenResponse(
@@ -170,7 +173,7 @@ def change_email(
 	user_id = UUID(raw_request.state.user_id)
 	user = service.change_email(
 		user_id=user_id,
-		**request.dict()
+		**request.model_dump()
 	)
 	# status_logger.info(data)
 	return UserResponse(
@@ -188,7 +191,7 @@ def change_name(
 	user_id = UUID(raw_request.state.user_id)
 	user = service.change_name(
 		user_id=user_id,
-		**request.dict()
+		**request.model_dump()
 	)
 
 	return UserResponse(
@@ -210,7 +213,7 @@ def refresh_tokens(
 		message=success_message_update_tokens
 	)
 
-	response = JSONResponse(content=response_data.dict())
+	response = JSONResponse(content=response_data.model_dump())
 
 	response.set_cookie(
 		key="refresh_token",
@@ -230,7 +233,7 @@ def create_link(request: CreateUserLinkRequest, raw_request: Request, service: U
 	username = raw_request.state.username
 	link = service.create_user_link(
 		user_id=user_id,
-		**request.dict()
+		**request.model_dump()
 	)
 	short_identifier = link.alias or link.short_code
 	return CreateUserLinkResponse(
@@ -264,6 +267,7 @@ def delete_link(
 			username=username,
 			message=success_message_delete_link
 		)
+	return None
 
 
 @router.delete("/links", response_model=UserResponse)
@@ -278,6 +282,7 @@ def delete_links(
 			username=username,
 			message=success_message_delete_links
 		)
+	return None
 
 
 @router.delete("/", response_model=UserResponse)
@@ -288,7 +293,8 @@ def delete_user(
 	user_id = UUID(raw_request.state.user_id)
 	if service.delete_user(user_id=user_id):
 		response_data = UserResponse(message=success_message_delete_user)
-		response = JSONResponse(content=response_data.dict())
+		response = JSONResponse(content=response_data.model_dump())
 		response.delete_cookie(key="refresh_token")
 		return response
+	return None
 
