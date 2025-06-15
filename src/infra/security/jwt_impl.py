@@ -5,6 +5,7 @@ from uuid import UUID
 from uuid import uuid4
 from settings import ACCESS_TOKEN_TIME, REFRESH_TOKEN_TIME
 from src.logger import status_logger
+import time
 
 class JWTImpl(JWT):
     def __init__(self, secret: str):

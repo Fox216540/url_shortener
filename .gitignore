@@ -1,4 +1,5 @@
 # IntelliJ project files
+.gitignore
 .idea
 venv
 .venv
