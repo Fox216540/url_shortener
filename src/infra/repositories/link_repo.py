@@ -7,7 +7,7 @@ from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
 from sqlalchemy import exists
-#TODO: Исправить get_all_by_owner_id
+
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
@@ -68,9 +68,9 @@ class LinkRepositoryImpl(LinkRepository):
 			with get_session() as session:
 				links = session.query(LinkORM).filter(LinkORM.owner_id == owner_id).all()
 				if not links:
-					raise link_exception.InfraLinkNotExists()
+					raise link_exception.InfraLinksNotExist()
 				return [Link.from_orm(link) for link in links]
-		except link_exception.InfraLinkNotExists as e:
+		except link_exception.InfraLinksNotExist as e:
 			raise e
 		except Exception as e:
 			raise link_exception.InfraInvalidGetAllLinks() from e
