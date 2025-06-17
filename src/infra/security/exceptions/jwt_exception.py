@@ -1,30 +1,27 @@
-from src.domain.security.exceptions.jwt_exception import JwtException
+from src.domain.security.exceptions.jwt_exception import (
+InvalidCreateAccessToken,
+InvalidCreateRefreshToken,
+InvalidDecode
+)
 
 LAYER  = "Infra/security/jwt"
 
 
-class InvalidCreateAccessToken(JwtException):
+class InfraInvalidCreateAccessToken(InvalidCreateAccessToken):
 	"""Invalid Create Access Token"""
 	message = "Invalid Create Access Token"
 	def __init__(self):
 		super().__init__(layer=LAYER , message=self.message)
 
-class InvalidCreateRefreshToken(JwtException):
+class InfraInvalidCreateRefreshToken(InvalidCreateRefreshToken):
 	"""Invalid Create Refresh Token"""
 	message = "Invalid Create Refresh Token"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-class InvalidDecode(JwtException):
+class InfraInvalidDecode(InvalidDecode):
 	"""Invalid Decode"""
 	message = "Invalid Decode"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-ERRORS_SERVER = [
-	InvalidCreateAccessToken,
-	InvalidCreateRefreshToken,
-	InvalidDecode
-]
-
-ERRORS_ALL = ERRORS_SERVER

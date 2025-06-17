@@ -21,7 +21,7 @@ class JWTImpl(JWT):
 			return jwt.encode(payload, self.secret, algorithm="HS256")
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise jwt_exception.InvalidCreateAccessToken() from e
+			raise jwt_exception.InfraInvalidCreateAccessToken() from e
 
 	def create_refresh_token(self, user_id: UUID) -> tuple:
 		try:
@@ -33,11 +33,11 @@ class JWTImpl(JWT):
 			return jwt.encode(payload, self.secret, algorithm="HS256"), jti
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise jwt_exception.InvalidCreateRefreshToken() from e
+			raise jwt_exception.InfraInvalidCreateRefreshToken() from e
 
 	def decode(self, token: str) -> dict:
 		try:
 			return jwt.decode(token, self.secret, algorithms=["HS256"])
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise jwt_exception.InvalidDecode() from e
+			raise jwt_exception.InfraInvalidDecode() from e

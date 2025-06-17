@@ -23,11 +23,3 @@ class InvalidBroadcast(Error):
 	def __init__(self):
 		super().__init__(get_message(message=self.message))
 
-
-ERRORS_SERVER = [
-	InvalidConnect,
-	InvalidBroadcast,
-	InvalidDisconnect,
-]
-
-ERRORS_ALL = ERRORS_SERVER
