@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from src.domain.user.models.user import User
 from typing import Optional
 from uuid import UUID
-#TODO: Изменить описание, подробнее
+
 class UserRepository(ABC):
 	@abstractmethod
 	def save(self, user: User) -> Optional[User]:
@@ -10,7 +10,7 @@ class UserRepository(ABC):
 	    Добавляет пользователя.
 
 	    :param user: User
-	    :raise InvalidCreateUser: Если не удалось создать пользователя
+	    :raise InvalidCreateUser: Если не удалось добавить пользователя
         """
 		...
 
@@ -20,7 +20,7 @@ class UserRepository(ABC):
 		Возвращает пользователя по его id
 
 		:param user_id: UUID : ID Пользователя
-		:raise InvalidGetUserById: Если возникли проблемы
+		:raise InvalidGetUserById: Если не удалось вернуть пользователя по id
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -28,10 +28,10 @@ class UserRepository(ABC):
 	@abstractmethod
 	def get_by_username(self, username: str) -> Optional[User]:
 		"""
-		Возвращает пользователя по его id
+		Возвращает пользователя по его username
 
 		:param username: str : username Пользователя
-		:raise InvalidGetUserByUsername: Если возникли проблемы
+		:raise InvalidGetUserByUsername: Если не удалось вернуть пользователя по username
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -42,7 +42,7 @@ class UserRepository(ABC):
 		Возвращает пользователя по его id
 
 		:param email: str
-		:raise InvalidGetUserByEmail: Если возникли проблемы
+		:raise InvalidGetUserByEmail: Если не удалось вернуть пользователя email
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -53,7 +53,7 @@ class UserRepository(ABC):
 		Проверяет существование пользователя с указанным email
 
 		:param email: str
-		:raise InvalidExistingUser: Если возникли проблемы
+		:raise InvalidExistingUser: Если не удалось проверить существование по email
 		"""
 		...
 
@@ -63,7 +63,7 @@ class UserRepository(ABC):
 		Проверяет существование пользователя с указанным username
 
 		:param username: str
-		:raise InvalidExistingUser: Если возникли проблемы
+		:raise InvalidExistingUser: Если не удалось проверить существование по username
 		"""
 		...
 
@@ -74,7 +74,7 @@ class UserRepository(ABC):
 
 		:param user_id: UUID
 		:param password: str
-		:raise InvalidChangePassword: Если возникли проблемы
+		:raise InvalidChangePassword: Если не удалось поменять пароль
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -86,7 +86,7 @@ class UserRepository(ABC):
 
 		:param user_id: UUID
 		:param username: str
-		:raise InvalidChangeUsername: Если возникли проблемы
+		:raise InvalidChangeUsername: Если не удалось поменять username
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -98,7 +98,7 @@ class UserRepository(ABC):
 
 		:param user_id: UUID
 		:param name: str
-		:raise InvalidChangeName: Если возникли проблемы
+		:raise InvalidChangeName: Если не удалось поменять имя
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -110,7 +110,7 @@ class UserRepository(ABC):
 
 		:param user_id: UUID
 		:param email: str
-		:raise InvalidChangeEmail: Если возникли проблемы
+		:raise InvalidChangeEmail: Если не удалось поменять email
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
@@ -121,7 +121,7 @@ class UserRepository(ABC):
 		Удаляет пользователя
 
 		:param user_id: UUID
-		:raise InvalidDelete: Если возникли проблемы
+		:raise InvalidDelete: Если не удалось удалить пользователя
 		:raise UserNotExists: Если пользователь не найден
 		"""
 		...
