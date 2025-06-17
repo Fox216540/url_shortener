@@ -3,7 +3,6 @@ from src.domain.message.models.message import Message
 from typing import Optional, List
 from datetime import datetime
 from uuid import UUID
-#TODO: Добавить полное описание
 
 class MessageRepository(ABC):
 	@abstractmethod

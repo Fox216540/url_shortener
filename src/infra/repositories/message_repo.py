@@ -9,7 +9,6 @@ from src.infra.database import get_session
 from src.infra.repositories.models.message_model import MessageORM
 from src.infra.repositories.exceptions import message_exception
 from src.logger import error_logger
-#TODO: в delete change поменть ошибки
 
 class MessageRepositoryImpl(MessageRepository):
 	def save(self, message: Message) -> Optional[Message]:
@@ -61,11 +60,11 @@ class MessageRepositoryImpl(MessageRepository):
 					MessageORM.room_id == room_id
 				).first()
 				if not message:
-					raise message_exception.InfraMessagesNotExist()
+					raise message_exception.InfraMessageNotExists()
 				session.delete(message)
 				session.commit()
 				return True
-		except message_exception.InfraMessagesNotExist as e:
+		except message_exception.InfraMessageNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -80,11 +79,11 @@ class MessageRepositoryImpl(MessageRepository):
 					MessageORM.room_id == room_id
 				).first()
 				if not message:
-					raise message_exception.InfraMessagesNotExist()
+					raise message_exception.InfraMessageNotExists()
 				message.content = new_content
 				session.commit()
 				return Message.from_orm(message)
-		except message_exception.InfraMessagesNotExist as e:
+		except message_exception.InfraMessageNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
