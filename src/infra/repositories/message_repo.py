@@ -9,7 +9,7 @@ from src.infra.database import get_session
 from src.infra.repositories.models.message_model import MessageORM
 from src.infra.repositories.exceptions import message_exception
 from src.logger import error_logger
-
+#TODO: в delete change поменть ошибки
 
 class MessageRepositoryImpl(MessageRepository):
 	def save(self, message: Message) -> Optional[Message]:

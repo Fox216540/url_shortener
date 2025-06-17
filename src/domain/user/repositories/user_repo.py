@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from src.domain.user.models.user import User
 from typing import Optional
 from uuid import UUID
-
+#TODO: Изменить описание, подробнее
 class UserRepository(ABC):
 	@abstractmethod
 	def save(self, user: User) -> Optional[User]:
