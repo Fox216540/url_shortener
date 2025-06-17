@@ -9,7 +9,7 @@ from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
-from src.infra.repositories.exceptions.user_exception import InvalidCreateUser
+from src.infra.repositories.exceptions.user_exception import InfraInvalidCreateUser
 
 # TODO: Дописать getattr в каждую функцию где токен
 #  user_id_from_state = getattr(raw_request.state, "user_id", None)
@@ -68,7 +68,7 @@ def create_user(request: CreateUserRequest, service: UserService = Depends(get_u
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 		)
 		return response
-	except InvalidCreateUser as e:
+	except InfraInvalidCreateUser as e:
 		raise HTTPException(status_code=400, detail=str(e))
 
 

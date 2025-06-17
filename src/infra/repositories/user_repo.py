@@ -26,46 +26,46 @@ class UserRepositoryImpl(UserRepository):
 				return User.from_orm(new_user)
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidCreateUser()
+			raise user_exception.InfraInvalidCreateUser() from e
 
 	def get_by_id(self, user_id: UUID) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidGetUserById()
+			raise user_exception.InfraInvalidGetUserById() from e
 
 	def get_by_username(self, username: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.username == username).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidGetUserByUsername()
+			raise user_exception.InfraInvalidGetUserByUsername() from e
 
 	def get_by_email(self, email: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.email == email).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidGetUserByEmail()
+			raise user_exception.InfraInvalidGetUserByEmail() from e
 
 	def exists_by_email(self, email: str) -> Optional[bool]:
 		try:
@@ -74,7 +74,8 @@ class UserRepositoryImpl(UserRepository):
 					exists().where(UserORM.email == email)
 				).scalar()
 		except Exception as e:
-			raise user_exception.InvalidExistingUser()
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise user_exception.InfraInvalidExistingUser() from e
 
 	def exists_by_username(self, username: str) -> Optional[bool]:
 		try:
@@ -83,80 +84,81 @@ class UserRepositoryImpl(UserRepository):
 					exists().where(UserORM.username == username)
 				).scalar()
 		except Exception as e:
-			raise user_exception.InvalidExistingUser()
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise user_exception.InfraInvalidExistingUser() from e
 
 	def change_password(self, user_id: UUID, password: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				user.password = password
 				session.commit()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangePassword() from e
+			raise user_exception.InfraInvalidChangePassword() from e
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				user.username = username
 				session.commit()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeUsername() from e
+			raise user_exception.InfraInvalidChangeUsername() from e
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				user.name = name
 				session.commit()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeName() from e
+			raise user_exception.InfraInvalidChangeName() from e
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				user.email = email
 				session.commit()
 				return User.from_orm(user)
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeEmail() from e
+			raise user_exception.InfraInvalidChangeEmail() from e
 
 	def delete(self, user_id: UUID) -> Optional[bool]:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
-					raise user_exception.UserNotExists()
+					raise user_exception.InfraUserNotExists()
 				session.delete(user)
 				session.commit()
 				return True
-		except user_exception.UserNotExists as e:
+		except user_exception.InfraUserNotExists as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidDelete() from e
+			raise user_exception.InfraInvalidDelete() from e
 
