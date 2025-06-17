@@ -17,7 +17,7 @@ class TokenStorageImpl(TokenStorage):
 				)
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise token_storage_exception.InvalidSaveRefreshToken() from e
+			raise token_storage_exception.InfraInvalidSaveRefreshToken() from e
 
 
 	def exists_refresh_token(self, jti: str) -> bool:
@@ -26,7 +26,7 @@ class TokenStorageImpl(TokenStorage):
 				return client.exists(jti) == 1
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise token_storage_exception.InvalidExistsRefreshToken() from e
+			raise token_storage_exception.InfraInvalidExistsRefreshToken() from e
 
 	def delete_refresh_token(self, jti: str, user_id: UUID) -> bool:
 		try:
@@ -36,7 +36,7 @@ class TokenStorageImpl(TokenStorage):
 				return bool(removed)
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise token_storage_exception.InvalidDeleteRefreshToken() from e
+			raise token_storage_exception.InfraInvalidDeleteRefreshToken() from e
 
 	def delete_all_refresh_tokens(self, user_id: UUID) -> bool:
 		try:
@@ -50,4 +50,4 @@ class TokenStorageImpl(TokenStorage):
 				return True
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise token_storage_exception.InvalidDeleteAllRefreshTokens() from e
+			raise token_storage_exception.InfraInvalidDeleteAllRefreshTokens() from e
