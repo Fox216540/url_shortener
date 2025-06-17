@@ -1,9 +1,18 @@
-from src.domain.link.exceptions.link_exceptions import LinkException
+from src.domain.link.exceptions.link_exceptions import (
+InvalidCreateLink,
+InvalidCheckShortCode,
+InvalidGetLink,
+InvalidGetAllLinks,
+InvalidDeleteLink,
+InvalidDeleteAllLinks,
+LinkNotExists,
+LinksNotExist,
+)
 
 LAYER = "Infra/repositories/link"
 
 
-class InvalidCreateLink(LinkException):
+class InfraInvalidCreateLink(InvalidCreateLink):
 	"""Invalid Create Link"""
 	message = "Invalid Create Link"
 
@@ -11,7 +20,7 @@ class InvalidCreateLink(LinkException):
 		super().__init__(layer=LAYER, message=self.message)
 
 
-class InvalidCheckShortCode(LinkException):
+class InfraInvalidCheckShortCode(InvalidCheckShortCode):
 	"""Invalid Check Short Code"""
 	message = "Invalid Check Short Code"
 
@@ -19,7 +28,7 @@ class InvalidCheckShortCode(LinkException):
 		super().__init__(layer=LAYER, message=self.message)
 
 
-class InvalidGetLink(LinkException):#get_by_alias
+class InfraInvalidGetLink(InvalidGetLink):#get_by_alias
 	"""Invalid Get Link"""
 	message = "Invalid Get Link"
 
@@ -27,7 +36,7 @@ class InvalidGetLink(LinkException):#get_by_alias
 		super().__init__(layer=LAYER, message=self.message)
 
 
-class InvalidGetAllLinks(LinkException):
+class InfraInvalidGetAllLinks(InvalidGetAllLinks):
 	"""Invalid Get All Links"""
 	message = "Invalid Get All Links"
 
@@ -35,7 +44,7 @@ class InvalidGetAllLinks(LinkException):
 		super().__init__(layer=LAYER, message=self.message)
 
 
-class InvalidDeleteLink(LinkException):
+class InfraInvalidDeleteLink(InvalidDeleteLink):
 	"""Invalid Delete Link"""
 	message = "Invalid Delete Link"
 
@@ -43,38 +52,22 @@ class InvalidDeleteLink(LinkException):
 		super().__init__(layer=LAYER, message=self.message)
 
 
-class InvalidDeleteAllLinks(LinkException):
+class InfraInvalidDeleteAllLinks(InvalidDeleteAllLinks):
 	"""Invalid Delete All Links"""
 	message = "Invalid Delete All Links"
 
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-class LinkNotExists(LinkException):
+class InfraLinkNotExists(LinkNotExists):
 	"""Link Doesn't Exist"""
 	message = "Link Doesn't Exist"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-class LinksNotExist(LinkException):
+class InfraLinksNotExist(LinksNotExist):
 	"""Links Don't Exist"""
 	message = "Links Don't Exist"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-
-ERRORS_SERVER = [
-	InvalidCreateLink,
-	InvalidCheckShortCode,
-	InvalidGetLink,
-	InvalidGetAllLinks,
-	InvalidDeleteLink,
-	InvalidDeleteAllLinks,
-]
-
-ERRORS_NOT_FOUND = [
-	LinkNotExists,
-	LinksNotExist,
-]
-
-ERRORS_ALL = ERRORS_SERVER + ERRORS_NOT_FOUND

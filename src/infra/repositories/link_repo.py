@@ -25,7 +25,7 @@ class LinkRepositoryImpl(LinkRepository):
 				session.refresh(new_link)
 				return Link.from_orm(new_link)
 		except Exception as e:
-			raise link_exception.InvalidCreateLink()
+			raise link_exception.InfraInvalidCreateLink()
 
 	def check_short_code(self, short_code: str) -> Optional[bool]:
 		try:
@@ -34,19 +34,19 @@ class LinkRepositoryImpl(LinkRepository):
 					exists().where(LinkORM.short_code == short_code)
 				).scalar()
 		except Exception as e:
-			raise link_exception.InvalidCheckShortCode() from e
+			raise link_exception.InfraInvalidCheckShortCode() from e
 
 	def get_by_short_code(self, short_code: str) -> Optional[Link]:
 		try:
 			with get_session() as session:
 				link = session.query(LinkORM).filter(LinkORM.short_code == short_code).first()
 				if not link:
-					raise link_exception.LinkNotExists()
+					raise link_exception.InfraLinkNotExists()
 				return Link.from_orm(link)
-		except link_exception.LinkNotExists as e:
+		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidGetLink() from e
+			raise link_exception.InfraInvalidGetLink() from e
 
 	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Optional[Link]:
 		try:
@@ -56,24 +56,24 @@ class LinkRepositoryImpl(LinkRepository):
 					query = query.filter(LinkORM.owner_id == owner_id)
 				link = query.first()
 				if not link:
-					raise link_exception.LinkNotExists()
+					raise link_exception.InfraLinkNotExists()
 				return Link.from_orm(link)
-		except link_exception.LinkNotExists as e:
+		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidGetLink() from e
+			raise link_exception.InfraInvalidGetLink() from e
 
 	def get_all_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
 		try:
 			with get_session() as session:
 				links = session.query(LinkORM).filter(LinkORM.owner_id == owner_id).all()
 				if not links:
-					raise link_exception.LinkNotExists()
+					raise link_exception.InfraLinkNotExists()
 				return [Link.from_orm(link) for link in links]
-		except link_exception.LinkNotExists as e:
+		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidGetAllLinks() from e
+			raise link_exception.InfraInvalidGetAllLinks() from e
 
 	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> Optional[bool]:
 		try:
@@ -81,14 +81,14 @@ class LinkRepositoryImpl(LinkRepository):
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id,
 				                                      LinkORM.short_code == short_code).first()
 				if not query:
-					raise link_exception.LinkNotExists()
+					raise link_exception.InfraLinkNotExists()
 				session.delete(query)
 				session.commit()
 				return True
-		except link_exception.LinkNotExists as e:
+		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidDeleteLink() from e
+			raise link_exception.InfraInvalidDeleteLink() from e
 
 	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> Optional[bool]:
 		try:
@@ -96,24 +96,24 @@ class LinkRepositoryImpl(LinkRepository):
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id,
 				                                      LinkORM.alias == alias).first()
 				if not query:
-					raise link_exception.LinkNotExists()
+					raise link_exception.InfraLinkNotExists()
 				session.delete(query)
 				session.commit()
 				return True
-		except link_exception.LinkNotExists as e:
+		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidDeleteLink() from e
+			raise link_exception.InfraInvalidDeleteLink() from e
 
 	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
 		try:
 			with get_session() as session:
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id).delete(synchronize_session=False)
 				if query == 0:
-					raise link_exception.LinksNotExist()
+					raise link_exception.InfraLinksNotExist()
 				session.commit()
 				return True
-		except link_exception.LinksNotExist as e:
+		except link_exception.InfraLinksNotExist as e:
 			raise e
 		except Exception as e:
-			raise link_exception.InvalidDeleteAllLinks() from e
+			raise link_exception.InfraInvalidDeleteAllLinks() from e
