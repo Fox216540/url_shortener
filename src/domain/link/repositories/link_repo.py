@@ -3,7 +3,6 @@ from src.domain.link.models.link import Link
 from typing import Optional
 from uuid import UUID
 from typing import List
-#TODO: Добавить полное описание
 
 class LinkRepository(ABC):
 	@abstractmethod
@@ -11,7 +10,8 @@ class LinkRepository(ABC):
 		"""
 		Добавляет линк
 
-
+		:param link: Link
+		:raise InvalidCreateLink: Если не удалось добавить
 		"""
 		...
 
@@ -20,7 +20,8 @@ class LinkRepository(ABC):
 		"""
 		Проверка на существование
 
-
+		:param short_code: str
+		:raise InvalidCheckShortCode: Если не удалось проверить
 		"""
 		...
 
@@ -29,7 +30,9 @@ class LinkRepository(ABC):
 		"""
 		Возвращает линк по short_code
 
-
+		:param short_code: str
+		:raise InvalidGetLink: Если не удалось вернуть ссылку
+		:raise LinkNotExists: Если ссылка не найдена
 		"""
 		...
 
@@ -38,14 +41,21 @@ class LinkRepository(ABC):
 		"""
 		Возвращает линк по alias
 
+		:param alias: str
+		:param owner_id: UUID = None
+		:raise InvalidGetLink: Если не удалось вернуть ссылку
+		:raise LinkNotExists: Если ссылка не найдена
 		"""
 		...
 
 	@abstractmethod
 	def get_all_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
 		"""
-		Возвращает линки по owner_id
+		Возвращает все ссылки по owner_id
 
+		:param owner_id: UUID
+		:raise InvalidGetAllLinks: Если не удалось вернуть все ссылки
+		:raise LinksNotExist: Если ссылки не найдены
 		"""
 		...
 
@@ -54,6 +64,10 @@ class LinkRepository(ABC):
 		"""
 		Удаление ссылки по short_code
 
+		:param short_code: str
+		:param owner_id: UUID
+		:raise InvalidGetUserById: Если не удалось удалить ссылку
+		:raise LinkNotExists: Если ссылка не найдена
 		"""
 		...
 
@@ -62,6 +76,10 @@ class LinkRepository(ABC):
 		"""
 		Удаление ссылки по alias
 
+		:param alias: str
+		:param owner_id: UUID
+		:raise InvalidDeleteLink: Если не удалось удалить ссылку
+		:raise LinkNotExists: Если ссылка не найдена
 		"""
 		...
 
@@ -70,6 +88,9 @@ class LinkRepository(ABC):
 		"""
 		Удаление всех ссылок
 
+		:param owner_id: UUID
+		:raise InvalidDeleteAllLinks: Если не удалось удалить все ссылки
+		:raise LinksNotExist: Если ссылки не найдены
 		"""
 		...
 

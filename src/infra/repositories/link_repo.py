@@ -7,7 +7,7 @@ from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
 from sqlalchemy import exists
-
+#TODO: Исправить get_all_by_owner_id
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
