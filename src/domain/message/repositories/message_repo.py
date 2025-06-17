@@ -38,7 +38,7 @@ class MessageRepository(ABC):
 		:param sender: str
 		:param room_id: UUID
 		:raise MessageNotExists: Если нет сообщения
-	    :raise InvalidCreateUser: Если не удалось удалить сообщение
+	    :raise InvalidDelete: Если не удалось удалить сообщение
 		"""
 		...
 
@@ -52,6 +52,6 @@ class MessageRepository(ABC):
 		:param room_id: UUID
 		:param new_content: str
 	    :raise MessageNotExists: Если нет сообщения
-	    :raise InvalidCreateUser: Если не удалось удалить поменять текст сообщения
+	    :raise InvalidChangeText: Если не удалось поменять текст сообщения
 		"""
 		...
