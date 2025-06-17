@@ -13,7 +13,7 @@ from src.domain.user.exceptions.user_exceptions import (
 )
 
 LAYER  = "Infra/repositories/user"
-
+#TODO: Убрать комменты
 
 class InfraInvalidCreateUser(InvalidCreateUser):
 	"""Invalid Create User"""

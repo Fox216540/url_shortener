@@ -12,11 +12,11 @@ class PasslibHasher(PasswordHasher):
             return pwd_context.hash(plain)
         except Exception as e:
             error_logger.error(f"{str(e)}", exc_info=True)
-            raise passlib_hasher_exception.InvalidHash() from e
+            raise passlib_hasher_exception.InfraInvalidHash() from e
 
     def verify(self, plain: str, hashed: str) -> bool:
         try:
             return pwd_context.verify(plain, hashed)
         except Exception as e:
             error_logger.error(f"{str(e)}", exc_info=True)
-            raise passlib_hasher_exception.InvalidVerify() from e
+            raise passlib_hasher_exception.InfraInvalidVerify() from e
