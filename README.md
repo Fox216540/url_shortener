@@ -2,818 +2,300 @@
 Url shortener
 
 <!-- DOCS_START -->
-```yaml
-openapi: 3.1.0
-info:
-  title: FastAPI
-  version: 0.1.0
-paths:
-  /{short_code}:
-    get:
-      tags:
-      - link
-      summary: Get Original Link
-      operationId: get_original_link__short_code__get
-      parameters:
-      - name: short_code
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Short Code
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUrlOriginResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /short:
-    post:
-      tags:
-      - link
-      summary: Create Short Link
-      operationId: create_short_link_short_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateLinkRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateLinkResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/check-username:
-    get:
-      tags:
-      - User
-      summary: Check Username
-      operationId: check_username_user_check_username_get
-      parameters:
-      - name: username
-        in: query
-        required: true
-        schema:
-          type: string
-          title: Username
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExistResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/check-email:
-    get:
-      tags:
-      - User
-      summary: Check Email
-      operationId: check_email_user_check_email_get
-      parameters:
-      - name: email
-        in: query
-        required: true
-        schema:
-          type: string
-          title: Email
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExistResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/reg:
-    post:
-      tags:
-      - User
-      summary: Create User
-      operationId: create_user_user_reg_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUserRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserWithAccessTokenResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/login:
-    post:
-      tags:
-      - User
-      summary: Login User
-      operationId: login_user_user_login_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginUserRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserWithAccessTokenResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/logout:
-    post:
-      tags:
-      - User
-      summary: Logout User
-      operationId: logout_user_user_logout_post
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-  /user/logout_all:
-    post:
-      tags:
-      - User
-      summary: Logout All User
-      operationId: logout_all_user_user_logout_all_post
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-  /user/change-password:
-    post:
-      tags:
-      - User
-      summary: Change Password
-      operationId: change_password_user_change_password_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangePasswordRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/change-username:
-    post:
-      tags:
-      - User
-      summary: Change Username
-      operationId: change_username_user_change_username_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeUsernameRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserWithAccessTokenResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/change-email:
-    post:
-      tags:
-      - User
-      summary: Change Email
-      operationId: change_email_user_change_email_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeEmailRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/change-name:
-    post:
-      tags:
-      - User
-      summary: Change Name
-      operationId: change_name_user_change_name_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeNameRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/refresh-tokens:
-    post:
-      tags:
-      - User
-      summary: Refresh Tokens
-      operationId: refresh_tokens_user_refresh_tokens_post
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserWithAccessTokenResponse'
-  /user/create-link:
-    post:
-      tags:
-      - User
-      summary: Create Link
-      operationId: create_link_user_create_link_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUserLinkRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateUserLinkResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/my-links:
-    post:
-      tags:
-      - User
-      summary: Get All Links
-      operationId: get_all_links_user_my_links_post
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/UsersLinksResponse'
-                type: array
-                title: Response Get All Links User My Links Post
-  /user/link/{identifier}:
-    delete:
-      tags:
-      - User
-      summary: Delete Link
-      operationId: delete_link_user_link__identifier__delete
-      parameters:
-      - name: identifier
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Identifier
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /user/links:
-    delete:
-      tags:
-      - User
-      summary: Delete Links
-      operationId: delete_links_user_links_delete
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-  /user/:
-    delete:
-      tags:
-      - User
-      summary: Delete User
-      operationId: delete_user_user__delete
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-  /m/{room_id}/{message_id}:
-    delete:
-      tags:
-      - message
-      summary: Delete Message
-      operationId: delete_message_m__room_id___message_id__delete
-      parameters:
-      - name: message_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Message Id
-      - name: room_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Room Id
-      - name: user_id
-        in: query
-        required: false
-        schema:
-          type: string
-          title: User Id
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeleteMessageResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-    post:
-      tags:
-      - message
-      summary: Change Message
-      operationId: change_message_m__room_id___message_id__post
-      parameters:
-      - name: message_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Message Id
-      - name: room_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Room Id
-      - name: new_content
-        in: query
-        required: true
-        schema:
-          type: string
-          title: New Content
-      - name: user_id
-        in: query
-        required: false
-        schema:
-          type: string
-          title: User Id
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChangeMessageResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /m/{room_id}:
-    get:
-      tags:
-      - message
-      summary: Get History Of Chat
-      operationId: get_history_of_chat_m__room_id__get
-      parameters:
-      - name: room_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Room Id
-      - name: first_date
-        in: query
-        required: true
-        schema:
-          type: string
-          format: date-time
-          title: First Date
-      - name: last_date
-        in: query
-        required: true
-        schema:
-          type: string
-          format: date-time
-          title: Last Date
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MessageResponse'
-                title: Response Get History Of Chat M  Room Id  Get
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-components:
-  schemas:
-    ChangeEmailRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-      type: object
-      required:
-      - email
-      title: ChangeEmailRequest
-    ChangeMessageResponse:
-      properties:
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      required:
-      - message
-      title: ChangeMessageResponse
-    ChangeNameRequest:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-      type: object
-      required:
-      - name
-      title: ChangeNameRequest
-    ChangePasswordRequest:
-      properties:
-        old_password:
-          type: string
-          minLength: 6
-          title: Old Password
-        new_password:
-          type: string
-          minLength: 6
-          title: New Password
-      type: object
-      required:
-      - old_password
-      - new_password
-      title: ChangePasswordRequest
-    ChangeUsernameRequest:
-      properties:
-        username:
-          type: string
-          maxLength: 32
-          minLength: 5
-          title: Username
-      type: object
-      required:
-      - username
-      title: ChangeUsernameRequest
-    CreateLinkRequest:
-      properties:
-        url_origin:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url Origin
-      type: object
-      required:
-      - url_origin
-      title: CreateLinkRequest
-    CreateLinkResponse:
-      properties:
-        url_short:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url Short
-      type: object
-      required:
-      - url_short
-      title: CreateLinkResponse
-    CreateUserLinkRequest:
-      properties:
-        alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Alias
-        original_url:
-          type: string
-          title: Original Url
-        has_room:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Has Room
-      type: object
-      required:
-      - original_url
-      title: CreateUserLinkRequest
-    CreateUserLinkResponse:
-      properties:
-        url_short:
-          type: string
-          title: Url Short
-        web_socket:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Web Socket
-      type: object
-      required:
-      - url_short
-      title: CreateUserLinkResponse
-    CreateUserRequest:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-        email:
-          type: string
-          format: email
-          title: Email
-        username:
-          type: string
-          maxLength: 32
-          minLength: 5
-          title: Username
-        password:
-          type: string
-          minLength: 6
-          title: Password
-      type: object
-      required:
-      - name
-      - email
-      - username
-      - password
-      title: CreateUserRequest
-    DeleteMessageResponse:
-      properties:
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      required:
-      - message
-      title: DeleteMessageResponse
-    ExistResponse:
-      properties:
-        msg:
-          type: string
-          title: Msg
-        exist:
-          type: boolean
-          title: Exist
-      type: object
-      required:
-      - msg
-      - exist
-      title: ExistResponse
-    GetUrlOriginResponse:
-      properties:
-        url_origin:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url Origin
-      type: object
-      required:
-      - url_origin
-      title: GetUrlOriginResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    LoginUserRequest:
-      properties:
-        email_or_username:
-          type: string
-          minLength: 5
-          title: Email Or Username
-        password:
-          type: string
-          minLength: 6
-          title: Password
-      type: object
-      required:
-      - email_or_username
-      - password
-      title: LoginUserRequest
-    MessageResponse:
-      properties:
-        id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Id
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        sender:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sender
-        created_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Created At
-      type: object
-      required:
-      - id
-      - content
-      - sender
-      - created_at
-      title: MessageResponse
-    UserResponse:
-      properties:
-        username:
-          type: string
-          title: Username
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      title: UserResponse
-    UserWithAccessTokenResponse:
-      properties:
-        username:
-          type: string
-          title: Username
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        access_token:
-          type: string
-          title: Access Token
-      type: object
-      required:
-      - access_token
-      title: UserWithAccessTokenResponse
-    UsersLinksResponse:
-      properties:
-        url_short:
-          type: string
-          title: Url Short
-        link:
-          type: string
-          title: Link
-      type: object
-      required:
-      - url_short
-      - link
-      title: UsersLinksResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-```
+# 📘 API Documentation
+
+**Title:** FastAPI
+
+**Version:** 0.1.0
+
+**Description:** 
+
+---
+
+## `GET /{short_code}`
+
+**Summary:** Get Original Link
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| short_code | path | string | True |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /short`
+
+**Summary:** Create Short Link
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `GET /user/check-username`
+
+**Summary:** Check Username
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| username | query | string | True |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `GET /user/check-email`
+
+**Summary:** Check Email
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| email | query | string | True |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/reg`
+
+**Summary:** Create User
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/login`
+
+**Summary:** Login User
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/logout`
+
+**Summary:** Logout User
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `POST /user/logout_all`
+
+**Summary:** Logout All User
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `POST /user/change-password`
+
+**Summary:** Change Password
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/change-username`
+
+**Summary:** Change Username
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/change-email`
+
+**Summary:** Change Email
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/change-name`
+
+**Summary:** Change Name
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/refresh-tokens`
+
+**Summary:** Refresh Tokens
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `POST /user/create-link`
+
+**Summary:** Create Link
+
+**Request Body:**
+
+Content-Type: `application/json`
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /user/my-links`
+
+**Summary:** Get All Links
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `DELETE /user/link/{identifier}`
+
+**Summary:** Delete Link
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| identifier | path | string | True |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `DELETE /user/links`
+
+**Summary:** Delete Links
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `DELETE /user/`
+
+**Summary:** Delete User
+
+**Responses:**
+
+- **200**: Successful Response
+---
+
+## `DELETE /m/{room_id}/{message_id}`
+
+**Summary:** Delete Message
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| message_id | path | string | True |  |
+| room_id | path | string | True |  |
+| user_id | query | string | False |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `POST /m/{room_id}/{message_id}`
+
+**Summary:** Change Message
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| message_id | path | string | True |  |
+| room_id | path | string | True |  |
+| new_content | query | string | True |  |
+| user_id | query | string | False |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+## `GET /m/{room_id}`
+
+**Summary:** Get History Of Chat
+
+**Parameters:**
+
+| Name | In | Type | Required | Description |
+|------|----|------|----------|-------------|
+| room_id | path | string | True |  |
+| first_date | query | string | True |  |
+| last_date | query | string | True |  |
+
+**Responses:**
+
+- **200**: Successful Response
+- **422**: Validation Error
+---
+
+
 <!-- DOCS_END -->
