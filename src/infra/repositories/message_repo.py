@@ -8,6 +8,7 @@ from src.domain.message.repositories.message_repo import MessageRepository
 from src.infra.database import get_session
 from src.infra.repositories.models.message_model import MessageORM
 from src.infra.repositories.exceptions import message_exception
+from src.logger import error_logger
 
 
 class MessageRepositoryImpl(MessageRepository):
@@ -24,7 +25,8 @@ class MessageRepositoryImpl(MessageRepository):
 				session.refresh(new_message)
 				return Message.from_orm(new_message)
 		except Exception as e:
-			raise message_exception.InvalidSave() from e
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise message_exception.InfraInvalidSave() from e
 
 	def get_by_date(
 			self, first_date: datetime, last_date: datetime, room_id: UUID
@@ -42,12 +44,13 @@ class MessageRepositoryImpl(MessageRepository):
 				)
 				result = session.scalars(stmt).all()
 				if not result:
-					raise message_exception.MessagesNotExist()
+					raise message_exception.InfraMessagesNotExist()
 				return [Message.from_orm(msg) for msg in result]
-		except message_exception.MessagesNotExist as e:
+		except message_exception.InfraMessagesNotExist as e:
 			raise e
 		except Exception as e:
-			raise message_exception.InvalidGetMessagesByDate() from e
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise message_exception.InfraInvalidGetMessagesByDate() from e
 
 	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
 		try:
@@ -58,14 +61,15 @@ class MessageRepositoryImpl(MessageRepository):
 					MessageORM.room_id == room_id
 				).first()
 				if not message:
-					raise message_exception.MessagesNotExist()
+					raise message_exception.InfraMessagesNotExist()
 				session.delete(message)
 				session.commit()
 				return True
-		except message_exception.MessagesNotExist as e:
+		except message_exception.InfraMessagesNotExist as e:
 			raise e
 		except Exception as e:
-			raise message_exception.InvalidDelete() from e
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise message_exception.InfraInvalidDelete() from e
 
 	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Optional[Message]:
 		try:
@@ -76,11 +80,12 @@ class MessageRepositoryImpl(MessageRepository):
 					MessageORM.room_id == room_id
 				).first()
 				if not message:
-					raise message_exception.MessagesNotExist()
+					raise message_exception.InfraMessagesNotExist()
 				message.content = new_content
 				session.commit()
 				return Message.from_orm(message)
-		except message_exception.MessagesNotExist as e:
+		except message_exception.InfraMessagesNotExist as e:
 			raise e
 		except Exception as e:
-			raise message_exception.InvalidChangeText() from e
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise message_exception.InfraInvalidChangeText() from e

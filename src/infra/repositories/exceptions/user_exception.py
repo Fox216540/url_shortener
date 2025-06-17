@@ -82,23 +82,3 @@ class InfraInvalidDelete(InvalidDelete):
 	message = "Invalid Delete"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
-
-
-ERRORS_SERVER = [
-	InfraInvalidCreateUser,
-	InfraInvalidGetUserById,
-	InfraInvalidGetUserByEmail,
-	InfraInvalidGetUserByUsername,
-	InfraInvalidChangePassword,
-	InfraInvalidChangeUsername,
-	InfraInvalidChangeEmail,
-	InfraInvalidChangeName,
-	InfraInvalidDelete,
-	InfraInvalidExistingUser
-]
-
-ERRORS_NOT_FOUND = [
-	InfraUserNotExists
-]
-
-ERRORS_ALL = ERRORS_SERVER + ERRORS_NOT_FOUND
