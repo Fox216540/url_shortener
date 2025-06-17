@@ -33,7 +33,11 @@ class TokenStorageImpl(TokenStorage):
 			with get_redis() as client:
 				client.delete(jti)
 				removed = client.srem(f"user:{user_id}:refresh_tokens", jti)
-				return bool(removed)
+				if not removed:
+					raise token_storage_exception.InfraRefreshTokenNotExists()
+				return removed
+		except token_storage_exception.InfraRefreshTokenNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise token_storage_exception.InfraInvalidDeleteRefreshToken() from e
@@ -43,11 +47,12 @@ class TokenStorageImpl(TokenStorage):
 			with get_redis() as client:
 				jtis = client.smembers(f"user:{user_id}:refresh_tokens")
 				if not jtis:
-					return False
-
+					raise token_storage_exception.InfraRefreshTokensNotExist()
 				keys_to_delete = list(jtis) + [f"user:{user_id}:refresh_tokens"]
 				client.delete(*keys_to_delete)
 				return True
+		except token_storage_exception.RefreshTokensNotExist as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise token_storage_exception.InfraInvalidDeleteAllRefreshTokens() from e

@@ -21,3 +21,11 @@ class InvalidDeleteAllRefreshTokens(TokenStorageException):
 	"""Invalid Delete All Refresh Tokens"""
 	...
 
+class RefreshTokensNotExist(TokenStorageException):
+	"""Refresh Tokens Don't Exist"""
+	...
+
+class RefreshTokenNotExists(TokenStorageException):
+	"""Refresh Token Doesn't Exist"""
+	...
+

@@ -3,6 +3,8 @@ InvalidSaveRefreshToken,
 InvalidDeleteRefreshToken,
 InvalidDeleteAllRefreshTokens,
 InvalidExistsRefreshToken,
+RefreshTokensNotExist,
+RefreshTokenNotExists
 )
 
 LAYER  = "Infra/security/token_storage"
@@ -28,3 +30,12 @@ class InfraInvalidDeleteAllRefreshTokens(InvalidDeleteAllRefreshTokens):
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
+class InfraRefreshTokensNotExist(RefreshTokensNotExist):
+	message = "Refresh Tokens Not Exist"
+	def __init__(self):
+		super().__init__(layer=LAYER, message=self.message)
+
+class InfraRefreshTokenNotExists(RefreshTokenNotExists):
+	message = "Refresh Token Not Exists"
+	def __init__(self):
+		super().__init__(layer=LAYER, message=self.message)
