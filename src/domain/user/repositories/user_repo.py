@@ -19,7 +19,7 @@ class UserRepository(ABC):
 		"""
 		Возвращает пользователя по его id
 
-		:param user_id: UUID : ID Пользователя
+		:param user_id: UUID
 		:raise InvalidGetUserById: Если не удалось вернуть пользователя по id
 		:raise UserNotExists: Если пользователь не найден
 		"""
@@ -30,7 +30,7 @@ class UserRepository(ABC):
 		"""
 		Возвращает пользователя по его username
 
-		:param username: str : username Пользователя
+		:param username: str
 		:raise InvalidGetUserByUsername: Если не удалось вернуть пользователя по username
 		:raise UserNotExists: Если пользователь не найден
 		"""
