@@ -9,7 +9,7 @@ from fastapi import Depends
 from src.api.di.di import get_link_service, get_user_service
 from settings import URL
 from fastapi.responses import RedirectResponse
-from src.infra.repositories.exceptions.link import InvalidCreateLink
+from src.infra.repositories.exceptions.link_exception import InvalidCreateLink
 from src.logger import status_logger
 
 router = APIRouter(tags=["link"])

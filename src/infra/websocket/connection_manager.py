@@ -1,6 +1,8 @@
 from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict, Set
 from uuid import UUID
+from src.infra.websocket.exceptions import conn_manager_exception
+from src.logger import error_logger
 
 
 class ConnectionManager:
@@ -8,30 +10,34 @@ class ConnectionManager:
 		self.active_connections: Dict[UUID, Set[WebSocket]] = {}
 
 	async def connect(self, websocket: WebSocket, room_id: UUID):
-		await websocket.accept()
-		self.active_connections.setdefault(room_id, set()).add(websocket)
+		try:
+			await websocket.accept()
+			self.active_connections.setdefault(room_id, set()).add(websocket)
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise conn_manager_exception.InvalidConnect() from e
 
 	async def disconnect(self, websocket: WebSocket, room_id: UUID):
-		conns = self.active_connections.get(room_id)
-		if not conns:
-			return
 		try:
-			conns.remove(websocket)
-		except ValueError:
-			pass
-		try:
+			conns = self.active_connections.get(room_id)
+			if conns and websocket in conns:
+				conns.remove(websocket)
+				if not conns:
+					self.active_connections.pop(room_id)
 			await websocket.close()
-		except Exception:
-			pass
-
-		if not conns:
-			self.active_connections.pop(room_id, None)
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise conn_manager_exception.InvalidDisconnect() from e
 
 	async def broadcast(self, data: dict, room_id: UUID):
-		for ws in list(self.active_connections.get(room_id, set())):
-			try:
-				await ws.send_json(data)
-			except WebSocketDisconnect:
-				await self.disconnect(ws, room_id)
-			except Exception:
-				await self.disconnect(ws, room_id)
+		try:
+			for ws in list(self.active_connections.get(room_id, set())):
+				try:
+					await ws.send_json(data)
+				except WebSocketDisconnect:
+					await self.disconnect(ws, room_id)
+				except Exception:
+					await self.disconnect(ws, room_id)
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise conn_manager_exception.InvalidBroadcast() from e

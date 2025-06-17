@@ -3,7 +3,7 @@ from src.domain.link.models.link import Link
 from typing import Optional
 from uuid import UUID
 from typing import List
-
+#TODO: Добавить полное описание
 
 class LinkRepository(ABC):
 	@abstractmethod

@@ -6,7 +6,7 @@ from src.app.service.user_service import UserService
 from src.app.service.mesage_service import MessageService
 from src.infra.repositories.message_repo import MessageRepositoryImpl
 from src.app.service.auth_service import AuthService
-from src.infra.security.passlib_hasher import PasslibHasher
+from src.infra.security.passlib_hasher_impl import PasslibHasher
 from src.infra.security.jwt_impl import JWTImpl
 from src.infra.security.token_storage_impl import TokenStorageImpl
 from src.infra.websocket.connection_manager import ConnectionManager

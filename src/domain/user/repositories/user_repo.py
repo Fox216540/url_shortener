@@ -53,6 +53,7 @@ class UserRepository(ABC):
 		Проверяет существование пользователя с указанным email
 
 		:param email: str
+		:raise InvalidExistingUser: Если возникли проблемы
 		"""
 		...
 
@@ -62,6 +63,7 @@ class UserRepository(ABC):
 		Проверяет существование пользователя с указанным username
 
 		:param username: str
+		:raise InvalidExistingUser: Если возникли проблемы
 		"""
 		...
 

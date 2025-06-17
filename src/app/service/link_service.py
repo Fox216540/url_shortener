@@ -4,8 +4,7 @@ from typing import Optional
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from uuid import UUID
-
-from src.infra.repositories.exceptions.link import InvalidCreateLink
+from src.infra.repositories.exceptions.link_exception import InvalidCreateLink
 from typing import List
 
 

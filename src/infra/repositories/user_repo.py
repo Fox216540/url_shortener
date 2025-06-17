@@ -35,6 +35,8 @@ class UserRepositoryImpl(UserRepository):
 				if not user:
 					raise user_exception.UserNotExists()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InvalidGetUserById()
@@ -46,6 +48,8 @@ class UserRepositoryImpl(UserRepository):
 				if not user:
 					raise user_exception.UserNotExists()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InvalidGetUserByUsername()
@@ -57,21 +61,29 @@ class UserRepositoryImpl(UserRepository):
 				if not user:
 					raise user_exception.UserNotExists()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InvalidGetUserByEmail()
 
 	def exists_by_email(self, email: str) -> Optional[bool]:
-		with get_session() as session:
-			return session.query(
-				exists().where(UserORM.email == email)
-			).scalar()
+		try:
+			with get_session() as session:
+				return session.query(
+					exists().where(UserORM.email == email)
+				).scalar()
+		except Exception as e:
+			raise user_exception.InvalidExistingUser()
 
 	def exists_by_username(self, username: str) -> Optional[bool]:
-		with get_session() as session:
-			return session.query(
-				exists().where(UserORM.username == username)
-			).scalar()
+		try:
+			with get_session() as session:
+				return session.query(
+					exists().where(UserORM.username == username)
+				).scalar()
+		except Exception as e:
+			raise user_exception.InvalidExistingUser()
 
 	def change_password(self, user_id: UUID, password: str) -> Optional[User]:
 		try:
@@ -82,9 +94,11 @@ class UserRepositoryImpl(UserRepository):
 				user.password = password
 				session.commit()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangePassword()
+			raise user_exception.InvalidChangePassword() from e
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[User]:
 		try:
@@ -95,9 +109,11 @@ class UserRepositoryImpl(UserRepository):
 				user.username = username
 				session.commit()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeUsername()
+			raise user_exception.InvalidChangeUsername() from e
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
 		try:
@@ -108,9 +124,11 @@ class UserRepositoryImpl(UserRepository):
 				user.name = name
 				session.commit()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeName()
+			raise user_exception.InvalidChangeName() from e
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		try:
@@ -121,9 +139,11 @@ class UserRepositoryImpl(UserRepository):
 				user.email = email
 				session.commit()
 				return User.from_orm(user)
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidChangeEmail()
+			raise user_exception.InvalidChangeEmail() from e
 
 	def delete(self, user_id: UUID) -> Optional[bool]:
 		try:
@@ -134,7 +154,9 @@ class UserRepositoryImpl(UserRepository):
 				session.delete(user)
 				session.commit()
 				return True
+		except user_exception.UserNotExists as e:
+			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
-			raise user_exception.InvalidDelete()
+			raise user_exception.InvalidDelete() from e
 

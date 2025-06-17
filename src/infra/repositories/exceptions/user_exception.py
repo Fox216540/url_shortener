@@ -1,17 +1,23 @@
 from src.domain.user.exceptions.user_exceptions import UserException
 
-LAYER  = "Infra/repositories"
+LAYER  = "Infra/repositories/user"
 
 
 class InvalidCreateUser(UserException):
-	"""Invalid User"""
-	message = "Invalid User"
+	"""Invalid Create User"""
+	message = "Invalid Create User"
 	def __init__(self):
 		super().__init__(layer=LAYER , message=self.message)
 
 class UserNotExists(UserException):
-	"""User not exists"""
-	message = "User not found"
+	"""User Doesn't exist"""
+	message = "User Doesn't Exist"
+	def __init__(self):
+		super().__init__(layer=LAYER, message=self.message)
+		
+class InvalidExistingUser(UserException):
+	"""Invalid Existing User"""
+	message = "Invalid Existing User"
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
@@ -76,6 +82,7 @@ ERRORS_SERVER = [
 	InvalidChangeEmail,
 	InvalidChangeName,
 	InvalidDelete,
+	InvalidExistingUser
 ]
 
 ERRORS_NOT_FOUND = [

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
-
+#TODO: Добавить полное описание
 
 class TokenStorage(ABC):
 	@abstractmethod
