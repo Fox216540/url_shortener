@@ -1,7 +1,7 @@
 from src.domain.security.exceptions.jwt_exception import (
 InvalidCreateAccessToken,
 InvalidCreateRefreshToken,
-InvalidDecode
+InvalidDecodeToken
 )
 
 LAYER  = "Infra/security/jwt"
@@ -19,7 +19,7 @@ class InfraInvalidCreateRefreshToken(InvalidCreateRefreshToken):
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
-class InfraInvalidDecode(InvalidDecode):
+class InfraInvalidDecode(InvalidDecodeToken):
 	"""Invalid Decode"""
 	message = "Invalid Decode"
 	def __init__(self):

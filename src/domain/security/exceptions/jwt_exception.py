@@ -13,7 +13,7 @@ class InvalidCreateRefreshToken(JwtException):
 	"""Invalid Create Refresh Token"""
 	...
 
-class InvalidDecode(JwtException):
+class InvalidDecodeToken(JwtException):
 	"""Invalid Decode"""
 	...
 

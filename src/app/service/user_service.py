@@ -8,8 +8,10 @@ from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
 from uuid import UUID
-from src.infra.repositories.exceptions.user_exception import ERRORS_ALL as errors_repo
-
+from src.app.dtos.user_dto import ERRORS_SERVER_REPO as errors_repo
+from src.app.dtos.link_dto import ERRORS_SERVER_REPO as errors_link
+from src.app.dtos.auth_dto import ERRORS_SERVER_ALL as errors_auth
+from src.app.dtos.user_dto import ERRORS_SERVER_HASHER as errors_hasher
 
 class UserService:
 	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, auth_service: AuthService):
@@ -21,9 +23,9 @@ class UserService:
 	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserWithTokens]:
 		try:
 			if self._repo.exists_by_email(email):
-				raise
+				raise #TODO: ошибка сервиса
 			elif self._repo.exists_by_username(username):
-				raise
+				raise #TODO: ошибка сервиса
 			hash_password = self._hasher.hash(password)
 			user = User(
 				email=email,
@@ -36,30 +38,39 @@ class UserService:
 			return self._auth_service.create_tokens_by_user(saved)
 		except errors_repo as e:
 			raise e
-		#TODO: Добавить ошибку у register_user
-		except Exception as e:
+		except errors_hasher as e:
+			raise e
+		except errors_auth as e:
+			raise e
+		except Exception as e:#TODO: ошибка сервиса
 			raise e
 
 	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
 		try:
 			user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
-
-			#TODO: Дописать ошибку сюда
-			if not self._hasher.verify(password, user.password):
-				return None
-			#TODO: Дописать ошибку сюда
+			self._hasher.verify(password, user.password)
 			return self._auth_service.create_tokens_by_user(user)
 		except errors_repo as e:
 			raise e
+		except errors_hasher as e:
+			raise e
+		except errors_auth as e:
+			raise e
+		except Exception as e:#TODO: ошибка сервиса
+			raise e
 
 	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Optional[Link]:
-		#TODO: Дописать у Link ошибки
-		room_id = uuid4() if has_room else None
-		link = self._link_service.add_link(owner_id=user_id,
-		                                   url=original_url,
-		                                   alias=alias,
-		                                   room_id=room_id)
-		return link
+		try:
+			room_id = uuid4() if has_room else None
+			link = self._link_service.add_link(owner_id=user_id,
+			                                   url=original_url,
+			                                   alias=alias,
+			                                   room_id=room_id)
+			return link
+		except errors_link as e:
+			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:
 		try:
@@ -77,6 +88,8 @@ class UserService:
 			return new_user
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def change_username(self, user_id: UUID, username: str) -> Optional[UserWithAccessToken]:
 		try:
@@ -93,6 +106,8 @@ class UserService:
 			return self._auth_service.create_access_token_by_user(new_user)
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
 		try:
@@ -106,12 +121,12 @@ class UserService:
 			return new_user
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
 		try:
 			user = self.get_user_by_id(user_id)
-
-			#TODO: Дописать ошибки service
 			if user.email == email:
 				return None
 
@@ -123,11 +138,15 @@ class UserService:
 			return new_user
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def exists_email(self, email: str) -> bool:
 		try:
 			return self._repo.exists_by_email(email)
 		except errors_repo as e:
+			raise e
+		except Exception as e: #TODO: ошибка сервиса
 			raise e
 
 	def exists_username(self, username: str) -> bool:
@@ -135,11 +154,15 @@ class UserService:
 			return self._repo.exists_by_username(username)
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def get_user_by_id(self, user_id: UUID) -> Optional[User]:
 		try:
 			return self._repo.get_by_id(user_id)
 		except errors_repo as e:
+			raise e
+		except Exception as e: #TODO: ошибка сервиса
 			raise e
 
 	def get_user_by_username(self, username: str) -> Optional[User]:
@@ -147,70 +170,90 @@ class UserService:
 			return self._repo.get_by_username(username)
 		except errors_repo as e:
 			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
-		#TODO: Дописать на каждый
-		payload = self._auth_service.decode(token)
-		if payload.get("type") != "refresh":
-			return None
+		try:
+			payload = self._auth_service.decode(token)
+			if payload.get("type") != "refresh":
+				return None
 
-		jti = payload.get("jti")
-		sub = payload.get("sub")
-		if not jti or not sub:
-			return None
+			jti = payload.get("jti")
+			sub = payload.get("sub")
+			if not jti or not sub:
+				return None
 
-		user_id = UUID(sub)
-		if not self._auth_service.exists_refresh(jti):
-			return None
+			user_id = UUID(sub)
+			self._auth_service.exists_refresh(jti)
 
-		return jti, user_id
+			return jti, user_id
+		except errors_auth as e:
+			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
 		try:
 			result = self._validate_refresh_token(token)
-			# TODO: Дописать сюда
-			if not result:
-				return None
 			jti, user_id = result
 
 			user = self.get_user_by_id(user_id)
 
-			# TODO: Дописать сюда
 			self._auth_service.delete_refresh(jti, user_id=user.id)
 
-			# TODO: Дописать сюда
 			return self._auth_service.create_tokens_by_user(user)
 		except errors_repo as e:
 			raise e
+		except errors_hasher as e:
+			raise e
+		except errors_auth as e:
+			raise e
+		except Exception as e: #TODO: ошибка сервиса
+			raise e
 
 	def logout_user(self, token: str) -> bool | None:
-		# TODO: Дописать сюда
-		result = self._validate_refresh_token(token)
-		if not result:
-			return None
-		jti, user_id = result
-		# TODO: Дописать сюда
-		return self._auth_service.delete_refresh(jti, user_id)
+		try:
+			result = self._validate_refresh_token(token)
+			jti, user_id = result
+			return self._auth_service.delete_refresh(jti, user_id)
+		except errors_auth as e:
+			raise e
+		except Exception as e:  #TODO: ошибка сервиса
+			raise e
+
 
 	def logout_all_user(self, token: str) -> bool | None:
-		# TODO: Дописать сюда
-		result = self._validate_refresh_token(token)
-		if not result:
-			return None
-		jti, user_id = result
-
-		# TODO: Дописать сюда
-		return self._auth_service.delete_all_refresh(user_id)
+		try:
+			result = self._validate_refresh_token(token)
+			jti, user_id = result
+			return self._auth_service.delete_all_refresh(user_id)
+		except errors_auth as e:
+			raise e
+		except Exception as e:  #TODO: ошибка сервиса
+			raise e
 
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
-		# TODO: Дописать сюда
-		return self._link_service.delete_link_by_owner_id(identifier, user_id)
+		try:
+			return self._link_service.delete_link_by_owner_id(identifier, user_id)
+		except errors_link as e:
+			raise e
+		except Exception as e:      #TODO: ошибка сервиса
+			raise e
 
 	def delete_all_links_user(self, user_id: UUID) -> Optional[bool]:
-		# TODO: Дописать сюда
-		return self._link_service.delete_all_by_owner_id(user_id)
+		try:
+			return self._link_service.delete_all_by_owner_id(user_id)
+		except errors_link as e:
+			raise e
+		except Exception as e:      #TODO: ошибка сервиса
+			raise e
 
 	def delete_user(self, user_id: UUID) -> Optional[bool]:
-		# TODO: Дописать сюда
-		self._auth_service.delete_all_refresh(user_id)
-		return self._repo.delete(user_id)
+		try:
+			self._auth_service.delete_all_refresh(user_id)
+			return self._repo.delete(user_id)
+		except errors_auth as e:
+			raise e
+		except Exception as e:  #TODO: ошибка сервиса
+			raise e
