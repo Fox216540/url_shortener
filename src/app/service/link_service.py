@@ -1,12 +1,11 @@
 import secrets
 import string
 from typing import Optional
+from typing import List
+from uuid import UUID
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
-from uuid import UUID
-from src.app.dtos.link_dto import ERRORS_SERVER_REPO
-from typing import List
-
+from src.domain.link.exceptions.link_error_list import ERRORS_REPO
 
 class LinkService:
 	def __init__(self, repo: LinkRepository):
@@ -35,7 +34,7 @@ class LinkService:
 				room_id=room_id
 			)
 			return self._repo.create(link)
-		except ERRORS_SERVER_REPO as e:
+		except ERRORS_REPO as e:
 			raise e
 		except Exception as e:
 			raise e
@@ -46,7 +45,7 @@ class LinkService:
 			if not link:
 				link = self._repo.get_by_short_code(identifier)
 			return link
-		except ERRORS_SERVER_REPO as e:
+		except ERRORS_REPO as e:
 			raise e
 		except Exception as e:
 			raise e
@@ -54,7 +53,7 @@ class LinkService:
 	def get_all_links_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
 		try:
 			return self._repo.get_all_by_owner_id(owner_id)
-		except ERRORS_SERVER_REPO as e:
+		except ERRORS_REPO as e:
 			raise e
 		except Exception as e:
 			raise e
@@ -65,7 +64,7 @@ class LinkService:
 			if not link:
 				link = self._repo.delete_link_by_owner_id_by_link_short_code(identifier, owner_id)
 			return link
-		except ERRORS_SERVER_REPO as e:
+		except ERRORS_REPO as e:
 			raise e
 		except Exception as e:
 			raise e
@@ -73,7 +72,7 @@ class LinkService:
 	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
 		try:
 			return self._repo.delete_all_by_owner_id(owner_id)
-		except ERRORS_SERVER_REPO as e:
+		except ERRORS_REPO as e:
 			raise e
 		except Exception as e:
 			raise e

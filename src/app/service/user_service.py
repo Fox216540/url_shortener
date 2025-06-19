@@ -1,5 +1,6 @@
 from typing import Optional
 from uuid import uuid4
+from uuid import UUID
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
@@ -7,11 +8,12 @@ from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
-from uuid import UUID
-from src.app.dtos.user_dto import ERRORS_SERVER_REPO as errors_repo
-from src.app.dtos.link_dto import ERRORS_SERVER_REPO as errors_link
-from src.app.dtos.auth_dto import ERRORS_SERVER_ALL as errors_auth
-from src.app.dtos.user_dto import ERRORS_SERVER_HASHER as errors_hasher
+from src.domain.user.exceptions.user_error_list import ERRORS_REPO as errors_repo
+from src.domain.link.exceptions.link_error_list import ERRORS_REPO as errors_link
+from src.domain.security.exceptions.jwt_error_list import ERRORS_JWT as errors_jwt
+from src.domain.security.exceptions.token_error_list import ERRORS_TOKEN_STORAGE as errors_token
+from src.domain.security.exceptions.password_error_list import ERRORS_PASSWORD_HASHER as errors_hasher
+
 
 class UserService:
 	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, auth_service: AuthService):
@@ -40,7 +42,9 @@ class UserService:
 			raise e
 		except errors_hasher as e:
 			raise e
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e:#TODO: ошибка сервиса
 			raise e
@@ -54,7 +58,9 @@ class UserService:
 			raise e
 		except errors_hasher as e:
 			raise e
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e:#TODO: ошибка сервиса
 			raise e
@@ -86,6 +92,8 @@ class UserService:
 			new_user = self._repo.change_password(user_id, hash_password)
 
 			return new_user
+		except errors_hasher as e:
+			raise e
 		except errors_repo as e:
 			raise e
 		except Exception as e: #TODO: ошибка сервиса
@@ -104,6 +112,8 @@ class UserService:
 			new_user = self._repo.change_username(user_id, username)
 
 			return self._auth_service.create_access_token_by_user(new_user)
+		except errors_jwt as e:
+			raise e
 		except errors_repo as e:
 			raise e
 		except Exception as e: #TODO: ошибка сервиса
@@ -188,7 +198,9 @@ class UserService:
 			self._auth_service.exists_refresh(jti)
 
 			return jti, user_id
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e: #TODO: ошибка сервиса
 			raise e
@@ -207,7 +219,9 @@ class UserService:
 			raise e
 		except errors_hasher as e:
 			raise e
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e: #TODO: ошибка сервиса
 			raise e
@@ -217,7 +231,9 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_refresh(jti, user_id)
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e:  #TODO: ошибка сервиса
 			raise e
@@ -228,7 +244,9 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_all_refresh(user_id)
-		except errors_auth as e:
+		except errors_jwt as e:
+			raise e
+		except errors_token as e:
 			raise e
 		except Exception as e:  #TODO: ошибка сервиса
 			raise e
@@ -253,7 +271,7 @@ class UserService:
 		try:
 			self._auth_service.delete_all_refresh(user_id)
 			return self._repo.delete(user_id)
-		except errors_auth as e:
+		except errors_token as e:
 			raise e
 		except Exception as e:  #TODO: ошибка сервиса
 			raise e
