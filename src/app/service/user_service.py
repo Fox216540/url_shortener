@@ -8,8 +8,8 @@ from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
-from src.domain.user.exceptions.user_error_list import ERRORS_REPO as errors_repo
-from src.domain.link.exceptions.link_error_list import ERRORS_REPO as errors_link
+from src.domain.user.exceptions.user_error_list import ERRORS_USER_REPO as errors_repo
+from src.domain.link.exceptions.link_error_list import ERRORS_LINK_REPO as errors_link
 from src.domain.security.exceptions.jwt_error_list import ERRORS_JWT as errors_jwt
 from src.domain.security.exceptions.token_error_list import ERRORS_TOKEN_STORAGE as errors_token
 from src.domain.security.exceptions.password_error_list import ERRORS_PASSWORD_HASHER as errors_hasher
