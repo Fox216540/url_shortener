@@ -38,22 +38,26 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
 	async def dispatch(self, request: StarletteRequest, call_next):
 		path = request.url.path
+		auth_header = request.headers.get("Authorization", "")
+		token = None
 
-		if self.is_protected_path(path):
-			auth_header = request.headers.get("Authorization", "")
-			if auth_header.startswith("Bearer "):
-				token = auth_header.replace("Bearer ", "")
-				payload = self.decode_token(token)
-				if (
-					not payload
-					or payload.get("type") != "access"
-					or "sub" not in payload
-					or "username" not in payload
-				):
-					raise HTTPException(status_code=401, detail="Invalid or expired token")
+		if auth_header.startswith("Bearer "):
+			token = auth_header.replace("Bearer ", "")
+
+		if token:
+			payload = self.decode_token(token)
+			if (
+					payload
+					and payload.get("type") == "access"
+					and "sub" in payload
+					and "username" in payload
+			):
 				request.state.user_id = payload["sub"]
 				request.state.username = payload["username"]
-			else:
-				raise HTTPException(status_code=401, detail="Authorization token missing")
+			elif self.is_protected_path(path):
+				raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+		elif self.is_protected_path(path):
+			raise HTTPException(status_code=401, detail="Authorization token missing")
 
 		return await call_next(request)

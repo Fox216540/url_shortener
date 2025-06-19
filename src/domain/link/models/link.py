@@ -9,7 +9,7 @@ class Link:
 	short_code: Optional[str]
 	room_id: Optional[UUID] = None
 	id: Optional[int] = None
-	alias: Optional[int] = None
+	alias: Optional[str] = None
 	owner_id: Optional[UUID] = None
 
 	@classmethod

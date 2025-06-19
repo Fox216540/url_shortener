@@ -28,6 +28,7 @@ config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 import src.infra.repositories.models.link_model
 import src.infra.repositories.models.user_model
+import src.infra.repositories.models.message_model
 
 from src.infra.repositories.models.base import Base
 

@@ -1,0 +1,23 @@
+name: Update Swagger Docs in README
+
+on:
+  push:
+    paths:
+      - 'docs.yaml'
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml
+      - run: python update_readme.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "update README from docs.yaml"
+          git push
