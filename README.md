@@ -25,7 +25,9 @@ Url shortener
 **Responses:**
 
 - **200**: Successful Response
+- **404**: Bad request
 - **422**: Validation Error
+- **500**: Internal Server Error
 ---
 
 ## `POST /short`
