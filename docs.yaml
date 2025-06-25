@@ -10,7 +10,7 @@
         "tags": [
           "link"
         ],
-        "summary": "Ge Original Link",
+        "summary": "Get Original Link",
         "operationId": "get_original_link__short_code__get",
         "parameters": [
           {
