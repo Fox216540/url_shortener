@@ -1,40 +1,49 @@
 from src.core.exceptions.exception import Error
 
 class LinkException(Error):
-	def __init__(self, layer:str, message:str):
-		message = f"Domain: Link\nLayer: {layer}\nMessage: {message}"
+	def __init__(self, layer:str, message:str, error:str):
+		message = f"Domain: Link\nLayer: {layer}\nMessage: {message}\nError: {error}"
 		super().__init__(message)
 
+class LinkServerException(LinkException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Server Error")
 
-class InvalidCreateLink(LinkException):
+
+class LinkNotFoundException(LinkException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Not Found Error")
+
+
+class InvalidCreateLink(LinkServerException):
 	"""Invalid Create Link"""
 	...
 
-class InvalidCheckShortCode(LinkException):
+class InvalidCheckShortCode(LinkServerException):
 	"""Invalid Check Short Code"""
 	...
 
-class InvalidGetLink(LinkException):
+class InvalidGetLink(LinkServerException):
 	"""Invalid Get Link"""
 	...
 
-class InvalidGetAllLinks(LinkException):
+class InvalidGetAllLinks(LinkServerException):
 	"""Invalid Get All Links"""
 	...
 
-class InvalidDeleteLink(LinkException):
+class InvalidDeleteLink(LinkServerException):
 	"""Invalid Delete Link"""
 	...
 
-class InvalidDeleteAllLinks(LinkException):
+class InvalidDeleteAllLinks(LinkServerException):
 	"""Invalid Delete All Links"""
 	...
 
-class LinkNotExists(LinkException):
+class LinkNotExists(LinkNotFoundException):
 	"""Link Doesn't Exist"""
 	...
 
-class LinksNotExist(LinkException):
+class LinksNotExist(LinkNotFoundException):
 	"""Links Don't Exist"""
 	...
 

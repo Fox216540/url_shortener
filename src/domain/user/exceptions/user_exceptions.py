@@ -1,62 +1,71 @@
 from src.core.exceptions.exception import Error
 
 class UserException(Error):
-	def __init__(self, layer:str, message:str):
-		message = f"Domain: User\nLayer: {layer}\nMessage: {message}"
+	def __init__(self, layer:str, message:str, error:str):
+		message = f"Domain: User\nLayer: {layer}\nMessage: {message}\nError: {error}"
 		super().__init__(message)
 
+class UserServerException(UserException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Server Error")
 
-class InvalidCreateUser(UserException):
+class UserNotFoundException(UserException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Not Found Error")
+
+
+
+class InvalidCreateUser(UserServerException):
 	"""Invalid Create User"""
 	...
 
 
-class UserNotExists(UserException):
+class UserNotExists(UserNotFoundException):
 	"""User Doesn't exist"""
 	...
 
 
-class InvalidExistingUser(UserException):
+class InvalidExistingUser(UserServerException):
 	"""Invalid Existing User"""
 	...
 
 
-class InvalidGetUserById(UserException):
+class InvalidGetUserById(UserServerException):
 	"""Invalid Get User By Id"""
 	...
 
 
-class InvalidGetUserByEmail(UserException):
+class InvalidGetUserByEmail(UserServerException):
 	"""Invalid Get User By Email"""
 	...
 
 
-class InvalidGetUserByUsername(UserException):
+class InvalidGetUserByUsername(UserServerException):
 	"""Invalid Get User By Username"""
 	...
 
 
-class InvalidChangePassword(UserException):
+class InvalidChangePassword(UserServerException):
 	"""Invalid Change Password"""
 	...
 
 
-class InvalidChangeUsername(UserException):
+class InvalidChangeUsername(UserServerException):
 	"""Invalid Change Username"""
 	...
 
 
-class InvalidChangeEmail(UserException):
+class InvalidChangeEmail(UserServerException):
 	"""Invalid Change Email"""
 	...
 
 
-class InvalidChangeName(UserException):
+class InvalidChangeName(UserServerException):
 	"""Invalid Change Name"""
 	...
 
 
-class InvalidDelete(UserException):
+class InvalidDelete(UserServerException):
 	"""Invalid Delete"""
 	...
 
