@@ -1,5 +1,34 @@
 import yaml
 
+def parse_schema(schema, indent=0):
+    md = ""
+    prefix = "  " * indent
+    schema_type = schema.get("type", "object")
+
+    if schema_type == "object":
+        properties = schema.get("properties", {})
+        required = schema.get("required", [])
+        for prop, details in properties.items():
+            prop_type = details.get("type", "N/A")
+            prop_desc = details.get("description", details.get("title", ""))
+            req_mark = "**(required)**" if prop in required else ""
+            md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_desc}\n"
+            # Рекурсивно обрабатываем вложенные объекты
+            if details.get("type") == "object":
+                md += parse_schema(details, indent + 1)
+            elif details.get("type") == "array":
+                items = details.get("items", {})
+                md += f"{prefix}  - Array items:\n"
+                md += parse_schema(items, indent + 2)
+    elif schema_type == "array":
+        items = schema.get("items", {})
+        md += f"{prefix}- Array of:\n"
+        md += parse_schema(items, indent + 1)
+    else:
+        md += f"{prefix}- Type: {schema_type}\n"
+
+    return md
+
 with open("docs.yaml", "r") as f:
     spec = yaml.safe_load(f)
 
@@ -44,8 +73,12 @@ for path, methods in paths.items():
             md += "**Request Body:**\n\n"
             content = request_body.get("content", {})
             for mime, c in content.items():
-                example = c.get("example") or (c.get("examples") or {}).get("default", {}).get("value")
                 md += f"Content-Type: `{mime}`\n\n"
+                schema = c.get("schema", {})
+                if schema:
+                    md += parse_schema(schema)
+                    md += "\n"
+                example = c.get("example") or (c.get("examples") or {}).get("default", {}).get("value")
                 if example:
                     md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
 
