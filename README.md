@@ -14,7 +14,7 @@ Url shortener
 
 ## `GET /{short_code}`
 
-**Summary:** Get Original Link
+**Summary:** Ge Original Link
 
 **Parameters:**
 
@@ -37,6 +37,7 @@ Url shortener
 **Request Body:**
 
 Content-Type: `application/json`
+
 
 **Responses:**
 
@@ -84,6 +85,7 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+
 **Responses:**
 
 - **200**: Successful Response
@@ -97,6 +99,7 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
 
 **Responses:**
 
@@ -130,6 +133,7 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+
 **Responses:**
 
 - **200**: Successful Response
@@ -143,6 +147,7 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
 
 **Responses:**
 
@@ -158,6 +163,7 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+
 **Responses:**
 
 - **200**: Successful Response
@@ -171,6 +177,7 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
 
 **Responses:**
 
@@ -194,6 +201,7 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
 
 **Responses:**
 
