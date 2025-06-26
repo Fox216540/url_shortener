@@ -1,10 +1,11 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from uuid import UUID
-from src.api.di.di import get_message_service, get_auth_service, get_connection_manager, get_user_service
+from src.api.di.di import get_message_service, get_auth_service, get_connection_manager, get_user_service, get_error
 from src.app.service.websocket_service import WebsocketService
 from src.app.service.mesage_service import MessageService
 from src.app.service.auth_service import AuthService
 from src.app.service.user_service import UserService
+from src.api.exceptions.error import Error
 from src.logger import status_logger
 
 router = APIRouter(tags=["websocket"])
@@ -16,8 +17,8 @@ async def websocket_endpoint(websocket: WebSocket,
                              service: MessageService = Depends(get_message_service),
                              auth_service: AuthService = Depends(get_auth_service),
                              manager: WebsocketService = Depends(get_connection_manager),
-                             user_service: UserService = Depends(get_user_service)
-                             ):
+                             user_service: UserService = Depends(get_user_service),
+                             error: Error = Depends(get_error)):
 	await manager.connect(websocket, room_id)
 	try:
 		while True:
@@ -40,15 +41,14 @@ async def websocket_endpoint(websocket: WebSocket,
 					user = user_service.get_user_by_id(UUID(sender_uuid))
 					sender = str(user.id)
 					username = user.username
-					if sender_uuid is None:
-						raise Exception
-				except Exception:
+				except Exception as e:
 					await websocket.send_json({"error": "Invalid token."})
-					raise WebSocketDisconnect
+					raise e
 			message = service.save_message(sender=sender, content=content, room_id=room_id)
 			await manager.broadcast(
 					{"sender": username, "message": message.content, "message_id": str(message.id)},
 					room_id
 				)
-	except WebSocketDisconnect:
+	except Exception as e:
+		error.handle(e)
 		await manager.disconnect(websocket, room_id)
