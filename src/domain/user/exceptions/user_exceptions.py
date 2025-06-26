@@ -30,17 +30,17 @@ class InvalidExistingUser(UserServerException):
 	...
 
 
-class InvalidGetUserById(UserServerException):
+class InvalidGetUserById(UserNotFoundException):
 	"""Invalid Get User By Id"""
 	...
 
 
-class InvalidGetUserByEmail(UserServerException):
+class InvalidGetUserByEmail(UserNotFoundException):
 	"""Invalid Get User By Email"""
 	...
 
 
-class InvalidGetUserByUsername(UserServerException):
+class InvalidGetUserByUsername(UserNotFoundException):
 	"""Invalid Get User By Username"""
 	...
 
