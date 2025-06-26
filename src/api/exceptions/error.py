@@ -9,8 +9,7 @@ from src.logger import status_logger
 
 class Error:
     def handle(self, exc: Exception) -> HTTPException:
-        status_logger.info(f"Error occurred: {exc}")
-        status_logger.info(f"Exception type: {type(exc)}")
+        status_logger.info(f"Error occurred: \n{exc}")
         if isinstance(exc, (LinkNotFoundException, UserNotFoundException, MessageNotFoundException, TokenStorageNotFoundException)):
             raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=BadRequestErrorMessage)
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=InternalServerErrorMessage)
