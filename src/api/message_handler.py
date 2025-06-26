@@ -28,12 +28,7 @@ async def delete_message(
 		if user_id_from_state:
 			user_id = user_id_from_state
 
-		if not user_id:
-			raise Exception
-
-		delete = service.delete_message(message_id=message_id, user_id=user_id, room_id=room_id)
-		if not delete:
-			pass
+		service.delete_message(message_id=message_id, user_id=user_id, room_id=room_id)
 		await web_socket.broadcast(
 			{"action": "delete", "message_id": str(message_id)},
 			room_id=room_id
