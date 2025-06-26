@@ -2,24 +2,27 @@ from src.core.exceptions.exception import Error
 
 LAYER  = "Infra/websocket/connection_manager"
 
-def get_message(message: str) -> str:
-	return f"Infra: Websocket\nLayer: {LAYER}\nMessage: {message}"
+class ConnManagerException(Error):
+	def __init__(self, message:str):
+		message = f"Infra: Websocket\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
+		super().__init__(message)
 
-class InvalidConnect(Error):
+
+class InvalidConnect(ConnManagerException):
 	"""Invalid Connect"""
 	message = "Invalid Connect"
 	def __init__(self):
-		super().__init__(get_message(message=self.message))
+		super().__init__(message=self.message)
 
-class InvalidDisconnect(Error):
+class InvalidDisconnect(ConnManagerException):
 	"""Invalid Disconnect"""
 	message = "Invalid Disconnect"
 	def __init__(self):
-		super().__init__(get_message(message=self.message))
+		super().__init__(message=self.message)
 
-class InvalidBroadcast(Error):
+class InvalidBroadcast(ConnManagerException):
 	"""Invalid Broadcast"""
 	message = "Invalid Broadcast"
 	def __init__(self):
-		super().__init__(get_message(message=self.message))
+		super().__init__(message=self.message)
 
