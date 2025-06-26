@@ -8,10 +8,7 @@ from src.domain.message.exceptions.message_exceptions import MessageException
 from src.domain.user.exceptions.user_exceptions import UserException
 from src.app.exceptions.user_exceptions import InvalidGetUserById
 from src.app.exceptions.message_exceptions import (
-	InvalidSaveMessage,
-	InvalidResolveUsername,
-	InvalidGetMessagesByDate,
-	InvalidDeleteMessage,
+	InvalidSaveMessage, InvalidResolveUsername, InvalidGetMessagesByDate, InvalidDeleteMessage,
 	InvalidChangeMessage
 )
 

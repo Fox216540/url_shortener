@@ -1,6 +1,6 @@
 from src.core.exceptions.exception import Error
 
-LAYER  = "app/service/auth_exceptions"
+LAYER  = "app/service/auth_service"
 
 
 class AuthException(Error):

@@ -7,11 +7,8 @@ from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from src.domain.link.exceptions.link_exceptions import LinkException
 from src.app.exceptions.link_exceptions import (
-	InvalidAddLink,
-	InvalidGetUrlByShortCode,
-	InvalidGetAllLinksByOwnerId,
-	InvalidDeleteLinkByOwnerId,
-	InvalidDeleteAllByOwnerId,
+	InvalidAddLink, InvalidGetUrlByShortCode, InvalidGetAllLinksByOwnerId,
+	InvalidDeleteLinkByOwnerId, InvalidDeleteAllByOwnerId,
 )
 
 class LinkService:
@@ -26,7 +23,6 @@ class LinkService:
 	def add_link(self, url: str, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Optional[Link]:
 		try:
 			max_attempts = 10
-			short_code = None
 			for _ in range(max_attempts):
 				short_code = self._generate_short_code()
 				if self._repo.check_short_code(short_code):

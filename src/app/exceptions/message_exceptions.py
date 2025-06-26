@@ -1,11 +1,11 @@
 from src.core.exceptions.exception import Error
 
-LAYER  = "app/service/message_exceptions"
+LAYER  = "app/service/message_service"
 
 
 class MessageException(Error):
 	def __init__(self, message:str):
-		message = f"App: Auth_service\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
+		message = f"App: Message_service\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
 		super().__init__(message)
 
 

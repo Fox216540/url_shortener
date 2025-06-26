@@ -1,6 +1,6 @@
 from src.core.exceptions.exception import Error
 
-LAYER  = "app/service/link_exceptions"
+LAYER  = "app/service/link_service"
 
 
 class LinkException(Error):
