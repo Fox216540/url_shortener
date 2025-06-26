@@ -14,13 +14,13 @@ Url shortener
 
 ## `GET /{short_code}`
 
-**Summary:** Get Original Link
+**Summary:** Ge Original Link
 
 **Parameters:**
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| short_code | path | string | True |  |
+| short_code | path | string | Yes |  |
 
 **Responses:**
 
@@ -38,6 +38,8 @@ Url shortener
 
 Content-Type: `application/json`
 
+- **url_origin** (N/A) **(required)**: Url Origin
+
 **Responses:**
 
 - **200**: Successful Response
@@ -52,7 +54,7 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| username | query | string | True |  |
+| username | query | string | Yes |  |
 
 **Responses:**
 
@@ -68,7 +70,7 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| email | query | string | True |  |
+| email | query | string | Yes |  |
 
 **Responses:**
 
@@ -84,6 +86,11 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+- **name** (string) **(required)**: Name
+- **email** (string) **(required)**: Email
+- **username** (string) **(required)**: Username
+- **password** (string) **(required)**: Password
+
 **Responses:**
 
 - **200**: Successful Response
@@ -97,6 +104,9 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
+- **email_or_username** (string) **(required)**: Email Or Username
+- **password** (string) **(required)**: Password
 
 **Responses:**
 
@@ -130,6 +140,9 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+- **old_password** (string) **(required)**: Old Password
+- **new_password** (string) **(required)**: New Password
+
 **Responses:**
 
 - **200**: Successful Response
@@ -143,6 +156,8 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
+- **username** (string) **(required)**: Username
 
 **Responses:**
 
@@ -158,6 +173,8 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+- **email** (string) **(required)**: Email
+
 **Responses:**
 
 - **200**: Successful Response
@@ -171,6 +188,8 @@ Content-Type: `application/json`
 **Request Body:**
 
 Content-Type: `application/json`
+
+- **name** (string) **(required)**: Name
 
 **Responses:**
 
@@ -195,6 +214,10 @@ Content-Type: `application/json`
 
 Content-Type: `application/json`
 
+- **alias** (N/A) : Alias
+- **original_url** (string) **(required)**: Original Url
+- **has_room** (N/A) : Has Room
+
 **Responses:**
 
 - **200**: Successful Response
@@ -218,7 +241,7 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| identifier | path | string | True |  |
+| identifier | path | string | Yes |  |
 
 **Responses:**
 
@@ -252,9 +275,9 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| message_id | path | string | True |  |
-| room_id | path | string | True |  |
-| user_id | query | string | False |  |
+| message_id | path | string | Yes |  |
+| room_id | path | string | Yes |  |
+| user_id | query | string | No |  |
 
 **Responses:**
 
@@ -270,10 +293,10 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| message_id | path | string | True |  |
-| room_id | path | string | True |  |
-| new_content | query | string | True |  |
-| user_id | query | string | False |  |
+| message_id | path | string | Yes |  |
+| room_id | path | string | Yes |  |
+| new_content | query | string | Yes |  |
+| user_id | query | string | No |  |
 
 **Responses:**
 
@@ -289,9 +312,9 @@ Content-Type: `application/json`
 
 | Name | In | Type | Required | Description |
 |------|----|------|----------|-------------|
-| room_id | path | string | True |  |
-| first_date | query | string | True |  |
-| last_date | query | string | True |  |
+| room_id | path | string | Yes |  |
+| first_date | query | string | Yes |  |
+| last_date | query | string | Yes |  |
 
 **Responses:**
 

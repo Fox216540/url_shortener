@@ -1,36 +1,60 @@
 import yaml
 
-def parse_schema(schema, indent=0):
-    md = ""
-    prefix = "  " * indent
-    schema_type = schema.get("type", "object")
 
-    if schema_type == "object":
-        properties = schema.get("properties", {})
-        required = schema.get("required", [])
-        for prop, details in properties.items():
-            prop_type = details.get("type", "N/A")
-            prop_desc = details.get("description", details.get("title", ""))
-            req_mark = "**(required)**" if prop in required else ""
-            md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_desc}\n"
-            # Рекурсивно обрабатываем вложенные объекты
-            if details.get("type") == "object":
-                md += parse_schema(details, indent + 1)
-            elif details.get("type") == "array":
-                items = details.get("items", {})
-                md += f"{prefix}  - Array items:\n"
-                md += parse_schema(items, indent + 2)
-    elif schema_type == "array":
-        items = schema.get("items", {})
-        md += f"{prefix}- Array of:\n"
-        md += parse_schema(items, indent + 1)
-    else:
-        md += f"{prefix}- Type: {schema_type}\n"
+def resolve_ref(spec, ref):
+	"""Разрешает ссылки в формате $ref"""
+	if not ref.startswith('#'):
+		return {}  # Внешние ссылки не поддерживаются
+	parts = ref.split('/')[1:]
+	current = spec
+	for part in parts:
+		current = current.get(part, {})
+	return current
 
-    return md
+
+def parse_schema(spec, schema, indent=0):
+	"""Рекурсивно парсит схему с поддержкой ссылок"""
+	md = ""
+	prefix = "  " * indent
+
+	# Обработка ссылок
+	if isinstance(schema, dict) and '$ref' in schema:
+		schema = resolve_ref(spec, schema['$ref'])
+
+	schema_type = schema.get("type", "object")
+
+	if schema_type == "object":
+		properties = schema.get("properties", {})
+		required = schema.get("required", [])
+		for prop, details in properties.items():
+			# Обработка ссылок в свойствах
+			if isinstance(details, dict) and '$ref' in details:
+				details = resolve_ref(spec, details['$ref'])
+
+			prop_type = details.get("type", "N/A")
+			prop_desc = details.get("description", details.get("title", ""))
+			req_mark = "**(required)**" if prop in required else ""
+			md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_desc}\n"
+
+			# Рекурсивная обработка вложенных объектов
+			if prop_type == "object":
+				md += parse_schema(spec, details, indent + 1)
+			elif prop_type == "array":
+				items = details.get("items", {})
+				md += f"{prefix}  - Array items:\n"
+				md += parse_schema(spec, items, indent + 2)
+	elif schema_type == "array":
+		items = schema.get("items", {})
+		md += f"{prefix}- Array of:\n"
+		md += parse_schema(spec, items, indent + 1)
+	else:
+		md += f"{prefix}- Type: {schema_type}\n"
+
+	return md
+
 
 with open("docs.yaml", "r") as f:
-    spec = yaml.safe_load(f)
+	spec = yaml.safe_load(f)
 
 info = spec.get("info", {})
 paths = spec.get("paths", {})
@@ -42,64 +66,102 @@ md += f"**Description:** {info.get('description', '')}\n\n"
 md += f"---\n\n"
 
 for path, methods in paths.items():
-    for method, details in methods.items():
-        summary = details.get("summary", "")
-        description = details.get("description", "")
-        parameters = details.get("parameters", [])
-        request_body = details.get("requestBody", {})
-        responses = details.get("responses", {})
+	for method, details in methods.items():
+		summary = details.get("summary", "")
+		description = details.get("description", "")
+		parameters = details.get("parameters", [])
+		request_body = details.get("requestBody", {})
+		responses = details.get("responses", {})
 
-        md += f"## `{method.upper()} {path}`\n\n"
-        md += f"**Summary:** {summary}\n\n"
-        if description:
-            md += f"**Description:** {description}\n\n"
+		md += f"## `{method.upper()} {path}`\n\n"
+		md += f"**Summary:** {summary}\n\n"
+		if description:
+			md += f"**Description:** {description}\n\n"
 
-        # Параметры
-        if parameters:
-            md += "**Parameters:**\n\n"
-            md += "| Name | In | Type | Required | Description |\n"
-            md += "|------|----|------|----------|-------------|\n"
-            for p in parameters:
-                name = p.get("name", "")
-                location = p.get("in", "")
-                ptype = p.get("schema", {}).get("type", "")
-                required = p.get("required", False)
-                desc = p.get("description", "")
-                md += f"| {name} | {location} | {ptype} | {required} | {desc} |\n"
-            md += "\n"
+		# Обработка параметров с поддержкой ссылок
+		if parameters:
+			md += "**Parameters:**\n\n"
+			md += "| Name | In | Type | Required | Description |\n"
+			md += "|------|----|------|----------|-------------|\n"
+			for p in parameters:
+				# Обработка ссылок в параметрах
+				if isinstance(p, dict) and '$ref' in p:
+					p = resolve_ref(spec, p['$ref'])
 
-        # Request body
-        if request_body:
-            md += "**Request Body:**\n\n"
-            content = request_body.get("content", {})
-            for mime, c in content.items():
-                md += f"Content-Type: `{mime}`\n\n"
-                schema = c.get("schema", {})
-                if schema:
-                    md += parse_schema(schema)
-                    md += "\n"
-                example = c.get("example") or (c.get("examples") or {}).get("default", {}).get("value")
-                if example:
-                    md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
+				name = p.get("name", "")
+				location = p.get("in", "")
 
-        # Responses
-        if responses:
-            md += "**Responses:**\n\n"
-            for code, resp in responses.items():
-                desc = resp.get("description", "")
-                md += f"- **{code}**: {desc}\n"
-                content = resp.get("content", {})
-                for mime, c in content.items():
-                    example = c.get("example") or (c.get("examples") or {}).get("default", {}).get("value")
-                    if example:
-                        md += f"\nContent-Type: `{mime}`\n\n"
-                        md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
+				# Обработка ссылок в схеме параметра
+				param_schema = p.get("schema", {})
+				if isinstance(param_schema, dict) and '$ref' in param_schema:
+					param_schema = resolve_ref(spec, param_schema['$ref'])
 
-        md += "---\n\n"
+				ptype = param_schema.get("type", "")
+				required = "Yes" if p.get("required", False) else "No"
+				desc = p.get("description", "")
+				md += f"| {name} | {location} | {ptype} | {required} | {desc} |\n"
+			md += "\n"
+
+		# Обработка тела запроса с поддержкой ссылок
+		if request_body:
+			# Разрешаем ссылки в requestBody
+			if isinstance(request_body, dict) and '$ref' in request_body:
+				request_body = resolve_ref(spec, request_body['$ref'])
+
+			md += "**Request Body:**\n\n"
+			content = request_body.get("content", {})
+			for mime, c in content.items():
+				md += f"Content-Type: `{mime}`\n\n"
+				schema = c.get("schema", {})
+
+				# Обработка ссылок в схеме
+				if isinstance(schema, dict) and '$ref' in schema:
+					schema = resolve_ref(spec, schema['$ref'])
+
+				if schema:
+					md += parse_schema(spec, schema)
+					md += "\n"
+
+				# Извлечение примера
+				example = None
+				if "example" in c:
+					example = c["example"]
+				elif "examples" in c and "default" in c["examples"]:
+					example = c["examples"]["default"].get("value")
+
+				if example:
+					md += "**Example:**\n\n"
+					md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
+
+		# Обработка ответов
+		if responses:
+			md += "**Responses:**\n\n"
+			for code, resp in responses.items():
+				# Обработка ссылок в ответах
+				if isinstance(resp, dict) and '$ref' in resp:
+					resp = resolve_ref(spec, resp['$ref'])
+
+				desc = resp.get("description", "")
+				md += f"- **{code}**: {desc}\n"
+
+				content = resp.get("content", {})
+				for mime, c in content.items():
+					# Извлечение примера
+					example = None
+					if "example" in c:
+						example = c["example"]
+					elif "examples" in c and "default" in c["examples"]:
+						example = c["examples"]["default"].get("value")
+
+					if example:
+						md += f"\nContent-Type: `{mime}`\n\n"
+						md += "**Example:**\n\n"
+						md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
+		md += "---\n\n"
 
 # Обновление README
 with open("README.md", "r") as f:
-    content = f.read()
+	content = f.read()
 
 start_tag = "<!-- DOCS_START -->"
 end_tag = "<!-- DOCS_END -->"
@@ -110,4 +172,4 @@ after = content.split(end_tag)[1]
 new_readme = f"{before}{start_tag}\n{md}\n{end_tag}{after}"
 
 with open("README.md", "w") as f:
-    f.write(new_readme)
+	f.write(new_readme)
