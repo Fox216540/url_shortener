@@ -1,9 +1,11 @@
-from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from starlette.status import HTTP_401_UNAUTHORIZED
 from jose import jwt, JWTError, ExpiredSignatureError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 from settings import ACCESS_SECRET
+from src.logger import status_logger
 
 PROTECTED_PATHS = ["/user/create-link",
                    "/user/change-password",
@@ -55,9 +57,11 @@ class JWTMiddleware(BaseHTTPMiddleware):
 				request.state.user_id = payload["sub"]
 				request.state.username = payload["username"]
 			elif self.is_protected_path(path):
-				raise HTTPException(status_code=401, detail="Invalid or expired token")
+				status_logger.info(f"Invalid or expired token for path: {path}")
+				return JSONResponse(status_code=HTTP_401_UNAUTHORIZED, content={"detail": "Invalid or expired token"})
 
 		elif self.is_protected_path(path):
-			raise HTTPException(status_code=401, detail="Authorization token missing")
+			status_logger.info(f"Authorization token missing for path: {path}")
+			return JSONResponse(status_code=HTTP_401_UNAUTHORIZED, content={"detail": "Authorization token missing"})
 
 		return await call_next(request)
