@@ -33,7 +33,6 @@ from src.app.exceptions.user_exceptions import (
 )
 
 
-
 class UserService:
 	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, auth_service: AuthService):
 		self._repo = repo

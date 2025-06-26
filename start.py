@@ -10,7 +10,8 @@ from src.logger import status_logger
 from fastapi.middleware.gzip import GZipMiddleware
 from src.core.Middleware.jwtmiddleware import JWTMiddleware
 
-
+from prometheus_fastapi_instrumentator import Instrumentator
+from src.core.Middleware.metricsmiddleware import MetricsMiddleware
 
 @asynccontextmanager
 async def app_logger(application):
@@ -30,6 +31,9 @@ async def app_logger(application):
 
 
 app = FastAPI(lifespan=app_logger)#docs_url=None, redoc_url=None
+
+Instrumentator().instrument(app).expose(app)
+
 app.add_middleware(
     CORSMiddleware,     # type: ignore
     allow_origins=["http://localhost:8000", "http://localhost:3000"],  # Разрешаем все домены, например, ["http://localhost:3000", "http://127.0.0.1:8000"]
@@ -39,6 +43,7 @@ app.add_middleware(
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)   # type: ignore
 app.add_middleware(JWTMiddleware)   # type: ignore
+app.add_middleware(MetricsMiddleware)   # custom metrics via prometheus_client
 app.include_router(websocket_router)
 app.include_router(link_router)
 app.include_router(user_router)
