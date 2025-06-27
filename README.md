@@ -330,6 +330,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
@@ -370,6 +375,11 @@ Content-Type: `application/json`
 - **username** (string) **(required)**: Username
 
 **Responses:**
+
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
@@ -413,6 +423,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
@@ -453,6 +468,11 @@ Content-Type: `application/json`
 - **name** (string) **(required)**: Name
 
 **Responses:**
+
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
@@ -523,6 +543,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
@@ -558,6 +583,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
@@ -589,6 +619,11 @@ Content-Type: `application/json`
 | identifier | path | string | Yes |  |
 
 **Responses:**
+
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
@@ -625,6 +660,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
@@ -649,6 +689,11 @@ Content-Type: `application/json`
 **Summary:** Delete User
 
 **Responses:**
+
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
