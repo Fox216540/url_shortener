@@ -42,6 +42,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -58,6 +60,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -74,6 +78,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -93,6 +99,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -110,6 +118,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -120,6 +130,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -129,6 +141,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -145,6 +159,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -161,6 +177,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -177,6 +195,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -193,6 +213,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -203,6 +225,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -220,6 +244,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -230,6 +256,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -245,6 +273,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -255,6 +285,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -264,6 +296,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 ---
 
@@ -281,6 +315,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -300,6 +336,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
@@ -318,6 +356,8 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **500**: Internal Server Error
+- **404**: Bad request
 - **200**: Successful Response
 - **422**: Validation Error
 ---
