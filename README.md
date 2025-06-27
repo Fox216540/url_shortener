@@ -104,6 +104,11 @@ Content-Type: `application/json`
 
 **Responses:**
 
+- **HTTP 401**: Unauthorized
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
+
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
