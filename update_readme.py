@@ -1,5 +1,5 @@
 import yaml
-
+import json
 
 def resolve_ref(spec, ref):
 	"""Разрешает ссылки в формате $ref"""
@@ -34,7 +34,11 @@ def parse_schema(spec, schema, indent=0):
 			prop_type = details.get("type", "N/A")
 			prop_desc = details.get("description", details.get("title", ""))
 			req_mark = "**(required)**" if prop in required else ""
-			md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_desc}\n"
+			if prop_desc:
+				md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_desc}\n"
+			else:
+				prop_example = details.get("example", "N/A")
+				md += f"{prefix}- **{prop}** ({prop_type}) {req_mark}: {prop_example}\n"
 
 			# Рекурсивная обработка вложенных объектов
 			if prop_type == "object":
@@ -137,36 +141,45 @@ for path, methods in paths.items():
 		if responses:
 			md += "**Responses:**\n\n"
 			for code, resp in responses.items():
-				# Обработка ссылок в ответах
+				# Разрешаем ссылки в ответах
 				if isinstance(resp, dict) and '$ref' in resp:
 					resp = resolve_ref(spec, resp['$ref'])
 
 				desc = resp.get("description", "")
-				md += f"- **{code}**: {desc}\n"
+				md += f"- **HTTP {code}**: {desc}\n"  # Добавляем HTTP-код
 
 				content = resp.get("content", {})
 				for mime, c in content.items():
-					md += f"\nContent-Type: `{mime}`\n\n"
+					# Выводим Content-Type
+					md += f"  - **Content-Type**: `{mime}`\n"
 
 					# Обработка схемы ответа
 					schema = c.get("schema", {})
-					if isinstance(schema, dict) and '$ref' in schema:
-						schema = resolve_ref(spec, schema['$ref'])
-
 					if schema:
-						md += parse_schema(spec, schema)
+						md += "  **Schema**:\n"
+						md += parse_schema(spec, schema, indent=2)
 						md += "\n"
 
-					# Извлечение примера
+
+					# Извлечение примера ответа
 					example = None
 					if "example" in c:
 						example = c["example"]
 					elif "examples" in c and "default" in c["examples"]:
 						example = c["examples"]["default"].get("value")
 
+					# Форматированный вывод примера
 					if example:
-						md += "**Example:**\n\n"
-						md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
+						md += "  **Example**:\n"
+						try:
+							# Пытаемся красиво отформатировать JSON
+							formatted_ex = json.dumps(example, indent=2, ensure_ascii=False)
+							md += f"  ```json\n{formatted_ex}\n  ```\n"
+						except:
+							# Если не JSON - используем обычный вывод
+							md += f"  ```\n{example}\n  ```\n"
+
+		md += "\n---\n\n"
 
 # Обновление README
 with open("README.md", "r") as f:

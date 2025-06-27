@@ -24,10 +24,32 @@ Url shortener
 
 **Responses:**
 
-- **200**: Successful Response
-- **404**: Bad request
-- **422**: Validation Error
-- **500**: Internal Server Error
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **url_origin** (N/A) **(required)**: Url Origin
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+
 ---
 
 ## `POST /short`
@@ -38,14 +60,36 @@ Url shortener
 
 Content-Type: `application/json`
 
-- **url_origin** (N/A) **(required)**: Url Origin
+- **url_origin** (string) **(required)**: Url Origin
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **url_short** (N/A) **(required)**: Url Short
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `GET /user/check-username`
@@ -60,10 +104,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **msg** (string) **(required)**: Msg
+    - **exist** (boolean) **(required)**: Exist
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `GET /user/check-email`
@@ -78,10 +145,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **msg** (string) **(required)**: Msg
+    - **exist** (boolean) **(required)**: Exist
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/reg`
@@ -99,10 +189,34 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+    - **access_token** (string) **(required)**: Access Token
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/login`
@@ -118,10 +232,34 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+    - **access_token** (string) **(required)**: Access Token
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/logout`
@@ -130,9 +268,23 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+
 ---
 
 ## `POST /user/logout_all`
@@ -141,9 +293,23 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+
 ---
 
 ## `POST /user/change-password`
@@ -159,10 +325,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/change-username`
@@ -177,10 +366,34 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+    - **access_token** (string) **(required)**: Access Token
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/change-email`
@@ -195,10 +408,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/change-name`
@@ -213,10 +449,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/refresh-tokens`
@@ -225,9 +484,24 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+    - **access_token** (string) **(required)**: Access Token
+
+
 ---
 
 ## `POST /user/create-link`
@@ -244,10 +518,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **url_short** (string) **(required)**: Url Short
+    - **web_socket** (N/A) : Web Socket
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /user/my-links`
@@ -256,9 +553,24 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - Array of:
+      - **url_short** (string) **(required)**: Url Short
+      - **link** (string) **(required)**: Link
+
+
 ---
 
 ## `DELETE /user/link/{identifier}`
@@ -273,10 +585,33 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `DELETE /user/links`
@@ -285,9 +620,23 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+
 ---
 
 ## `DELETE /user/`
@@ -296,9 +645,23 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **username** (string) : Username
+    - **message** (N/A) : Message
+
+
 ---
 
 ## `DELETE /m/{room_id}/{message_id}`
@@ -315,10 +678,32 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **message** (N/A) **(required)**: Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `POST /m/{room_id}/{message_id}`
@@ -336,10 +721,32 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **message** (N/A) **(required)**: Message
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 ## `GET /m/{room_id}`
@@ -356,10 +763,36 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **500**: Internal Server Error
-- **404**: Bad request
-- **200**: Successful Response
-- **422**: Validation Error
+- **HTTP 500**: Internal Server Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : Internal Server Error
+
+- **HTTP 404**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
+
+- **HTTP 200**: Successful Response
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - Array of:
+      - **id** (N/A) **(required)**: Id
+      - **content** (N/A) **(required)**: Content
+      - **sender** (N/A) **(required)**: Sender
+      - **created_at** (N/A) **(required)**: Created At
+
+- **HTTP 422**: Validation Error
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (array) : Detail
+      - Array items:
+        - **loc** (array) **(required)**: Location
+          - Array items:
+        - **msg** (string) **(required)**: Message
+        - **type** (string) **(required)**: Error Type
+
+
 ---
 
 

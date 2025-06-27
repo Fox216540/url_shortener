@@ -1590,14 +1590,7 @@
       "CreateLinkRequest": {
         "properties": {
           "url_origin": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
             "title": "Url Origin"
           }
         },

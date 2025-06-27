@@ -3,7 +3,7 @@ from typing import Optional, List
 
 
 class CreateLinkRequest(BaseModel):
-    url_origin: Optional[str]
+    url_origin: str
 
 
 class CreateLinkResponse(BaseModel):
