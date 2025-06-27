@@ -39,7 +39,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateLinkResponse"
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
                 }
               }
             }
@@ -59,7 +65,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
                 }
               }
             }
@@ -85,6 +97,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -127,6 +171,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -169,6 +245,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -210,6 +318,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -251,6 +391,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -282,6 +454,38 @@
         "summary": "Logout User",
         "operationId": "logout_user_user_logout_post",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -303,6 +507,38 @@
         "summary": "Logout All User",
         "operationId": "logout_all_user_user_logout_all_post",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -334,6 +570,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -375,6 +643,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -416,6 +716,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -457,6 +789,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -488,6 +852,38 @@
         "summary": "Refresh Tokens",
         "operationId": "refresh_tokens_user_refresh_tokens_post",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -519,6 +915,38 @@
           "required": true
         },
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -550,6 +978,38 @@
         "summary": "Get All Links",
         "operationId": "get_all_links_user_my_links_post",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -586,6 +1046,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -617,6 +1109,38 @@
         "summary": "Delete Links",
         "operationId": "delete_links_user_links_delete",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -638,6 +1162,38 @@
         "summary": "Delete User",
         "operationId": "delete_user_user__delete",
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -690,6 +1246,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -759,6 +1347,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
@@ -822,6 +1442,38 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "This is BAD REQUEST"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "Successful Response",
             "content": {
