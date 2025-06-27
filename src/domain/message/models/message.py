@@ -1,16 +1,14 @@
-from dataclasses import dataclass
-from typing import Optional
+from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 
 
-@dataclass
-class Message:
-    room_id: Optional[UUID]
-    sender: Optional[str]
-    content: Optional[str]
-    id: Optional[UUID] = None
-    created_at: Optional[datetime] = None
+class Message(BaseModel):
+    room_id: UUID
+    sender: str
+    content: str
+    id: UUID | None = None
+    created_at: datetime | None = None
 
     @classmethod
     def from_orm(cls, orm_obj):

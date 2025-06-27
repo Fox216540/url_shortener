@@ -7,7 +7,7 @@ from src.app.service.websocket_service import WebsocketService
 from src.api.dtos.message_dto import DeleteMessageResponse, MessageResponse, ChangeMessageResponse
 from fastapi import Depends
 from src.api.di.di import get_message_service, get_connection_manager, get_error
-from src.api.exceptions.error import Error
+from src.api.dtos.exceptions.error import Error
 from src.api.dtos.success_message import *
 
 router = APIRouter(tags=["message"], prefix="/m")

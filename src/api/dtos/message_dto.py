@@ -1,24 +1,23 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
 
 class DeleteMessageResponse(BaseModel):
-	message: Optional[str]
+	message: str
 
 
 class ChangeMessageResponse(BaseModel):
-	message: Optional[str]
+	message: str
 
 
 class DeleteMessageRequest(BaseModel):
-	message_id: Optional[UUID]
-	room_id: Optional[UUID]
+	message_id: UUID
+	room_id: UUID
 
 
 class MessageResponse(BaseModel):
-	id: Optional[UUID]
-	content: Optional[str]
-	sender: Optional[str]
-	created_at: Optional[datetime]
+	id: UUID
+	content: str
+	sender: str
+	created_at: datetime

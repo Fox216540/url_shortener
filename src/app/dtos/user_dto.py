@@ -1,11 +1,7 @@
-from dataclasses import dataclass
 from src.domain.user.models.user import User
 
-@dataclass
 class UserWithAccessToken(User):
-	access_token: str = None
+	access_token: str
 
-
-@dataclass
 class UserWithTokens(UserWithAccessToken):
-	refresh_token: str = None
+	refresh_token: str

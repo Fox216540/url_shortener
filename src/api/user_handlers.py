@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 from src.app.service.user_service import UserService
 from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
@@ -9,9 +9,7 @@ from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
-from src.api.exceptions.error import Error
-from src.infra.repositories.exceptions.user_exception import InfraInvalidCreateUser
-
+from src.api.dtos.exceptions.error import Error
 
 router = APIRouter(tags=["User"], prefix='/user')
 

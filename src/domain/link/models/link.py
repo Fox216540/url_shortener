@@ -1,16 +1,15 @@
-from dataclasses import dataclass
-from typing import Optional
+from pydantic import BaseModel
 from uuid import UUID
 
 
-@dataclass
-class Link:
+class Link(BaseModel):
 	original_url: str
-	short_code: Optional[str]
-	room_id: Optional[UUID] = None
-	id: Optional[int] = None
-	alias: Optional[str] = None
-	owner_id: Optional[UUID] = None
+	short_code: str
+	room_id: UUID | None = None
+	id: int | None = None
+	alias: str | None = None
+	owner_id: UUID | None = None
+
 
 	@classmethod
 	def from_orm(cls, orm_obj):

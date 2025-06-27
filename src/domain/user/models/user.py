@@ -1,15 +1,13 @@
-from dataclasses import dataclass
-from typing import Optional
+from pydantic import BaseModel
 from uuid import UUID
 
 
-@dataclass
-class User:
-    name: Optional[str]
-    email: Optional[str]
-    username: Optional[str]
-    password: Optional[str]
-    id: Optional[UUID] = None
+class User(BaseModel):
+    name: str
+    email: str
+    username: str
+    password: str
+    id: UUID | None = None
 
     @classmethod
     def from_orm(cls, orm_obj):

@@ -1,12 +1,11 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, Depends
 from uuid import UUID
 from src.api.di.di import get_message_service, get_auth_service, get_connection_manager, get_user_service, get_error
 from src.app.service.websocket_service import WebsocketService
 from src.app.service.mesage_service import MessageService
 from src.app.service.auth_service import AuthService
 from src.app.service.user_service import UserService
-from src.api.exceptions.error import Error
-from src.logger import status_logger
+from src.api.dtos.exceptions.error import Error
 
 router = APIRouter(tags=["websocket"])
 
