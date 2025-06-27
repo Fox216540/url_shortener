@@ -146,6 +146,17 @@ for path, methods in paths.items():
 
 				content = resp.get("content", {})
 				for mime, c in content.items():
+					md += f"\nContent-Type: `{mime}`\n\n"
+
+					# Обработка схемы ответа
+					schema = c.get("schema", {})
+					if isinstance(schema, dict) and '$ref' in schema:
+						schema = resolve_ref(spec, schema['$ref'])
+
+					if schema:
+						md += parse_schema(spec, schema)
+						md += "\n"
+
 					# Извлечение примера
 					example = None
 					if "example" in c:
@@ -154,10 +165,8 @@ for path, methods in paths.items():
 						example = c["examples"]["default"].get("value")
 
 					if example:
-						md += f"\nContent-Type: `{mime}`\n\n"
 						md += "**Example:**\n\n"
 						md += "```json\n" + yaml.dump(example, sort_keys=False) + "```\n\n"
-		md += "---\n\n"
 
 # Обновление README
 with open("README.md", "r") as f:
