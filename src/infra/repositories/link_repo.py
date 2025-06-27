@@ -1,6 +1,5 @@
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
-from typing import Optional
 from src.infra.database import get_session
 from src.infra.repositories.exceptions import link_exception
 from src.infra.repositories.models.link_model import LinkORM
@@ -27,7 +26,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidCreateLink()
 
-	def check_short_code(self, short_code: str) -> Optional[bool]:
+	def check_short_code(self, short_code: str) -> bool:
 		try:
 			with get_session() as session:
 				return session.query(
@@ -36,7 +35,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidCheckShortCode() from e
 
-	def get_by_short_code(self, short_code: str) -> Optional[Link]:
+	def get_by_short_code(self, short_code: str) -> Link:
 		try:
 			with get_session() as session:
 				link = session.query(LinkORM).filter(LinkORM.short_code == short_code).first()
@@ -48,7 +47,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidGetLink() from e
 
-	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Optional[Link]:
+	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
 		try:
 			with get_session() as session:
 				query = session.query(LinkORM).filter(LinkORM.alias == alias)
@@ -63,7 +62,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidGetLink() from e
 
-	def get_all_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
+	def get_all_by_owner_id(self, owner_id: UUID) -> List[Link]:
 		try:
 			with get_session() as session:
 				links = session.query(LinkORM).filter(LinkORM.owner_id == owner_id).all()
@@ -75,7 +74,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidGetAllLinks() from e
 
-	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> bool:
 		try:
 			with get_session() as session:
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id,
@@ -105,7 +104,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidDeleteLink() from e
 
-	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
+	def delete_all_by_owner_id(self, owner_id: UUID) -> bool:
 		try:
 			with get_session() as session:
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id).delete(synchronize_session=False)

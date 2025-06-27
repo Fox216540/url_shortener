@@ -2,7 +2,6 @@ from datetime import datetime
 from uuid import UUID
 from typing import List
 from sqlalchemy import select
-from typing import Optional
 from src.domain.message.models.message import Message
 from src.domain.message.repositories.message_repo import MessageRepository
 from src.infra.database import get_session
@@ -11,7 +10,7 @@ from src.infra.repositories.exceptions import message_exception
 from src.logger import error_logger
 
 class MessageRepositoryImpl(MessageRepository):
-	def save(self, message: Message) -> Optional[Message]:
+	def save(self, message: Message) -> Message:
 		try:
 			with get_session() as session:
 				new_message = MessageORM(
@@ -29,7 +28,7 @@ class MessageRepositoryImpl(MessageRepository):
 
 	def get_by_date(
 			self, first_date: datetime, last_date: datetime, room_id: UUID
-	) -> Optional[List[Message]]:
+	) -> List[Message]:
 		try:
 			with get_session() as session:
 				stmt = (
@@ -51,7 +50,7 @@ class MessageRepositoryImpl(MessageRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise message_exception.InfraInvalidGetMessagesByDate() from e
 
-	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
+	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> bool:
 		try:
 			with get_session() as session:
 				message = session.query(MessageORM).filter(
@@ -70,7 +69,7 @@ class MessageRepositoryImpl(MessageRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise message_exception.InfraInvalidDelete() from e
 
-	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Optional[Message]:
+	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Message:
 		try:
 			with get_session() as session:
 				message = session.query(MessageORM).filter(

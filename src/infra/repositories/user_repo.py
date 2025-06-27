@@ -1,6 +1,5 @@
 from uuid import UUID
 from sqlalchemy import exists
-from typing import Optional
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
 from src.infra.database import get_session
@@ -8,9 +7,8 @@ from src.infra.repositories.exceptions import user_exception
 from src.infra.repositories.models.user_model import UserORM
 from src.logger import error_logger
 
-
 class UserRepositoryImpl(UserRepository):
-	def save(self, user: User) -> Optional[User]:
+	def save(self, user: User) -> User:
 		try:
 			with get_session() as session:
 				new_user = UserORM(
@@ -28,7 +26,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidCreateUser() from e
 
-	def get_by_id(self, user_id: UUID) -> Optional[User]:
+	def get_by_id(self, user_id: UUID) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
@@ -41,7 +39,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidGetUserById() from e
 
-	def get_by_username(self, username: str) -> Optional[User]:
+	def get_by_username(self, username: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.username == username).first()
@@ -54,7 +52,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidGetUserByUsername() from e
 
-	def get_by_email(self, email: str) -> Optional[User]:
+	def get_by_email(self, email: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.email == email).first()
@@ -67,7 +65,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidGetUserByEmail() from e
 
-	def exists_by_email(self, email: str) -> Optional[bool]:
+	def exists_by_email(self, email: str) -> bool:
 		try:
 			with get_session() as session:
 				return session.query(
@@ -77,7 +75,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidExistingUser() from e
 
-	def exists_by_username(self, username: str) -> Optional[bool]:
+	def exists_by_username(self, username: str) -> bool:
 		try:
 			with get_session() as session:
 				return session.query(
@@ -87,7 +85,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidExistingUser() from e
 
-	def change_password(self, user_id: UUID, password: str) -> Optional[User]:
+	def change_password(self, user_id: UUID, password: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
@@ -102,7 +100,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidChangePassword() from e
 
-	def change_username(self, user_id: UUID, username: str) -> Optional[User]:
+	def change_username(self, user_id: UUID, username: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
@@ -117,7 +115,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidChangeUsername() from e
 
-	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
+	def change_name(self, user_id: UUID, name: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
@@ -132,7 +130,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidChangeName() from e
 
-	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
+	def change_email(self, user_id: UUID, email: str) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
@@ -147,7 +145,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidChangeEmail() from e
 
-	def delete(self, user_id: UUID) -> Optional[bool]:
+	def delete(self, user_id: UUID) -> bool:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
