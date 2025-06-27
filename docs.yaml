@@ -171,6 +171,22 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "Authorization token missing || Invalid or expired token "
+                    },
+                  },
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -222,7 +238,8 @@
                 }
               }
             }
-          }
+          },
+
         }
       }
     },
