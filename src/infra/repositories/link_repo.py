@@ -89,7 +89,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except Exception as e:
 			raise link_exception.InfraInvalidDeleteLink() from e
 
-	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
 		try:
 			with get_session() as session:
 				query = session.query(LinkORM).filter(LinkORM.owner_id == owner_id,
