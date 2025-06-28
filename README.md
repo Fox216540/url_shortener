@@ -1,5 +1,40 @@
-# url_shortener
-Url shortener
+# 📌 API for a Link Shortener Website with Registration and Authorization
+
+## 🔐 User Registration and Profile
+
+### Features:
+- User registration
+- Authorization and authentication
+- Profile updates:
+  - Username
+  - Email
+  - Name
+  - Password
+- Account deletion
+
+## 🔗 Link Creation
+
+### For authorized users:
+- Custom short link creation
+- Creating a chat linked to the short link
+
+### For all users (including unauthorized):
+- Creating a link with a random code
+
+## 💬 Chat Linked to a Short Link
+
+### Each message displays:
+- Timestamp
+- Author name
+- Delete message
+- Edit message
+
+## 🧹 Link Management
+
+### Only for authorized users:
+- Delete a specific link
+- Bulk delete all links
+- Delete user account
 
 <!-- DOCS_START -->
 # 📘 API Documentation
