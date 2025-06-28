@@ -7,6 +7,7 @@ from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
 from src.domain.link.exceptions.link_exceptions import LinkException, LinkNotFoundException
 from src.app.exceptions.link_exceptions import (
+	LinkServiceException,
 	InvalidAddLink, InvalidGetUrlByShortCode, InvalidGetAllLinksByOwnerId,
 	InvalidDeleteLinkByOwnerId, InvalidDeleteAllByOwnerId,
 )
@@ -51,7 +52,7 @@ class LinkService:
 				return self.get_url_by_alias(identifier, owner_id)
 			except LinkNotFoundException:
 				return self.get_url_by_short_code(identifier)
-		except LinkException as e:
+		except (LinkServiceException, LinkException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -90,7 +91,7 @@ class LinkService:
 				return self.delete_link_by_owner_id_by_alias(identifier, owner_id)
 			except LinkNotFoundException:
 				return self.delete_link_by_owner_id_by_short_code(identifier, owner_id)
-		except LinkException as e:
+		except (LinkServiceException, LinkException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
