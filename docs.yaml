@@ -2,7 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "FastAPI",
-    "version": "0.1.0"
+    "version": "0.1.4",
+    "description": "This is a API for creating and managing short links.",
   },
   "paths": {
     "/{short_code}": {
