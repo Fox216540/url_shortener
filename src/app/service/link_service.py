@@ -1,6 +1,7 @@
 import secrets
 import string
 from typing import List
+from pydantic import HttpUrl
 from uuid import UUID
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
@@ -9,6 +10,8 @@ from src.app.exceptions.link_exceptions import (
 	InvalidAddLink, InvalidGetUrlByShortCode, InvalidGetAllLinksByOwnerId,
 	InvalidDeleteLinkByOwnerId, InvalidDeleteAllByOwnerId,
 )
+from src.logger import error_logger
+
 
 class LinkService:
 	def __init__(self, repo: LinkRepository):
@@ -19,12 +22,12 @@ class LinkService:
 		alphabet = string.ascii_letters + string.digits
 		return ''.join(secrets.choice(alphabet) for _ in range(length))
 
-	def add_link(self, url: str, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Link:
+	def add_link(self, url: HttpUrl, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Link:
 		try:
 			max_attempts = 10
 			for _ in range(max_attempts):
 				short_code = self._generate_short_code()
-				if self._repo.check_short_code(short_code):
+				if not self._repo.check_short_code(short_code):
 					break
 			else:
 				raise InvalidAddLink()
