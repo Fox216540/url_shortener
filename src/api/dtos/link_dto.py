@@ -1,14 +1,13 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, HttpUrl
 
 
 class CreateLinkRequest(BaseModel):
-    url_origin: str
+    url_origin: HttpUrl
 
 
 class CreateLinkResponse(BaseModel):
-    url_short: Optional[str]
+    url_short: str
 
 
 class GetUrlOriginResponse(BaseModel):
-    url_origin: Optional[str]
+    url_origin: HttpUrl
