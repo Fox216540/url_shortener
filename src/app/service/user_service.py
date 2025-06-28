@@ -1,5 +1,6 @@
 from uuid import uuid4
 from uuid import UUID
+from pydantic import HttpUrl
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
@@ -19,7 +20,7 @@ from src.app.exceptions.user_exceptions import (
 	InvalidLogoutUser, InvalidLogoutAllUser, InvalidDeleteLinkByUser, InvalidDeleteAllLinksUser,
 	InvalidGetUserById
 )
-
+from src.logger import error_logger
 
 
 class UserService:
@@ -48,6 +49,7 @@ class UserService:
 		except (InvalidRegisterUser, UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidRegisterUser() from e
 
 	def login_user(self, email_or_username: str, password: str) -> UserWithTokens:
@@ -58,9 +60,10 @@ class UserService:
 		except (UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidLoginUser() from e
 
-	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Link:
+	def create_user_link(self, user_id: UUID, original_url: HttpUrl, has_room: bool = None, alias: str = None) -> Link:
 		try:
 			room_id = uuid4() if has_room else None
 			link = self._link_service.add_link(owner_id=user_id,
@@ -71,6 +74,7 @@ class UserService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidCreateUserLink() from e
 
 	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> User:
@@ -90,6 +94,7 @@ class UserService:
 		except (PasswordHasherException, UserException, InvalidChangePassword) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangePassword() from e
 
 	def change_username(self, user_id: UUID, username: str) -> UserWithAccessToken:
@@ -108,6 +113,7 @@ class UserService:
 		except (JwtException, UserException, InvalidChangeUsername) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeUsername() from e
 
 	def change_name(self, user_id: UUID, name: str) -> User:
@@ -123,6 +129,7 @@ class UserService:
 		except (UserException, InvalidChangeName) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeName() from e
 
 	def change_email(self, user_id: UUID, email: str) -> User:
@@ -140,6 +147,7 @@ class UserService:
 		except (UserException, InvalidChangeEmail) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeEmail() from e
 
 	def exists_email(self, email: str) -> bool:
@@ -148,6 +156,7 @@ class UserService:
 		except UserException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidExistsEmail() from e
 
 	def exists_username(self, username: str) -> bool:
@@ -156,6 +165,7 @@ class UserService:
 		except UserException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidExistsUsername() from e
 
 	def get_user_by_id(self, user_id: UUID) -> User | bool:
@@ -166,6 +176,7 @@ class UserService:
 		except UserException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserById() from e
 
 	def get_user_by_username(self, username: str) -> User | bool:
@@ -176,6 +187,7 @@ class UserService:
 		except UserException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserByUsername() from e
 
 	def get_user_by_email(self, email: str) -> User | bool:
@@ -186,6 +198,7 @@ class UserService:
 		except UserException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserById() from e
 
 	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
@@ -219,6 +232,7 @@ class UserService:
 		except (UserException, JwtException, PasswordHasherException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidRefreshTokens() from e
 
 	def logout_user(self, token: str) -> bool | None:
@@ -229,6 +243,7 @@ class UserService:
 		except (JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidLogoutUser() from e
 
 
@@ -240,6 +255,7 @@ class UserService:
 		except (JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidLogoutAllUser() from e
 
 	def delete_link_by_user(self, user_id: UUID, identifier: str) -> bool:
@@ -248,6 +264,7 @@ class UserService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteLinkByUser() from e
 
 	def delete_all_links_user(self, user_id: UUID) -> bool:
@@ -256,6 +273,7 @@ class UserService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteAllLinksUser() from e
 
 	def delete_user(self, user_id: UUID) -> bool:
@@ -265,4 +283,5 @@ class UserService:
 		except TokenStorageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteUser() from e

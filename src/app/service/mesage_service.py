@@ -11,6 +11,7 @@ from src.app.exceptions.message_exceptions import (
 	InvalidSaveMessage, InvalidResolveUsername, InvalidGetMessagesByDate, InvalidDeleteMessage,
 	InvalidChangeMessage
 )
+from src.logger import error_logger
 
 
 class MessageService:
@@ -29,6 +30,7 @@ class MessageService:
 		except MessageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidSaveMessage() from e
 
 	def get_messages_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> List[Message]:
@@ -37,6 +39,7 @@ class MessageService:
 		except MessageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetMessagesByDate() from e
 
 	def delete_message(self, message_id: UUID, user_id: str, room_id: UUID) -> bool:
@@ -45,6 +48,7 @@ class MessageService:
 		except MessageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteMessage() from e
 
 	def resolve_username(self, sender: str) -> str:
@@ -56,6 +60,7 @@ class MessageService:
 		except (UserException, InvalidGetUserById) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidResolveUsername() from e
 
 	def change_message(self, user_id: str, room_id: UUID, message_id: UUID, new_content: str) -> Message:
@@ -64,4 +69,5 @@ class MessageService:
 		except MessageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeMessage() from e

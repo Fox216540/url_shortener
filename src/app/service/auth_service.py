@@ -10,7 +10,7 @@ from src.app.exceptions.auth_exceptions import (
 	InvalidCreateAccessToken, InvalidDecode, InvalidCreateTokens, InvalidDeleteRefresh,
 	InvalidDeleteAllRefresh, InvalidExistsRefresh
 )
-
+from src.logger import error_logger
 
 
 class AuthService:
@@ -27,6 +27,7 @@ class AuthService:
 		except (JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidCreateTokens() from e
 
 	def create_access_token_by_user(self, user: User) -> UserWithAccessToken:
@@ -36,6 +37,7 @@ class AuthService:
 		except JwtException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidCreateAccessToken() from e
 
 	def decode(self, token: str) -> Dict:
@@ -44,6 +46,7 @@ class AuthService:
 		except JwtException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDecode() from e
 
 	def delete_refresh(self, jti: str, user_id: UUID) -> bool:
@@ -52,6 +55,7 @@ class AuthService:
 		except TokenStorageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteRefresh() from e
 
 	def delete_all_refresh(self, user_id: UUID) -> bool:
@@ -60,6 +64,7 @@ class AuthService:
 		except TokenStorageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteAllRefresh() from e
 
 	def exists_refresh(self, jti: str) -> bool:
@@ -68,4 +73,5 @@ class AuthService:
 		except TokenStorageException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidExistsRefresh() from e

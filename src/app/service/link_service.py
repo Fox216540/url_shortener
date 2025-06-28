@@ -42,6 +42,7 @@ class LinkService:
 		except (LinkException, InvalidAddLink) as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidAddLink() from e
 
 	def get_url_by_short_code(self, identifier: str, owner_id: UUID = None) -> Link:
@@ -53,6 +54,7 @@ class LinkService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUrlByShortCode() from e
 
 	def get_all_links_by_owner_id(self, owner_id: UUID) -> List[Link]:
@@ -61,6 +63,7 @@ class LinkService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetAllLinksByOwnerId() from e
 
 	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> bool:
@@ -72,6 +75,7 @@ class LinkService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteLinkByOwnerId() from e
 
 	def delete_all_by_owner_id(self, owner_id: UUID) -> bool:
@@ -80,4 +84,5 @@ class LinkService:
 		except LinkException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteAllByOwnerId() from e

@@ -5,7 +5,7 @@ from src.infra.websocket.exceptions.conn_manager_exception import ConnManagerExc
 from src.app.exceptions.websocket_exceptions import (
 	InvalidConnect, InvalidDisconnect, InvalidBroadcast
 )
-
+from src.logger import error_logger
 
 class WebsocketService:
 	def __init__(self, connect: ConnectionManager):
@@ -17,6 +17,7 @@ class WebsocketService:
 		except ConnManagerException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidConnect() from e
 
 	async def disconnect(self, websocket: WebSocket, room_id: UUID):
@@ -25,6 +26,7 @@ class WebsocketService:
 		except ConnManagerException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDisconnect() from e
 
 	async def broadcast(self, data: dict, room_id: UUID):
@@ -33,4 +35,5 @@ class WebsocketService:
 		except ConnManagerException as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidBroadcast() from e
