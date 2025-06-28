@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from uuid import UUID
 
 
 class Link(BaseModel):
-	original_url: str
+	original_url: HttpUrl
 	short_code: str
 	room_id: UUID | None = None
 	id: int | None = None

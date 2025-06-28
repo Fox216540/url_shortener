@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from uuid import UUID
 
 
 class User(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     username: str
     password: str
     id: UUID | None = None
