@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, HttpUrl, WebsocketUrl
 
 """
 USER REQUEST
@@ -36,7 +36,7 @@ class ChangePasswordRequest(BaseModel):
 
 class CreateUserLinkRequest(BaseModel):
 	alias: str | None = None
-	original_url: str
+	original_url: HttpUrl
 	has_room: bool | None = None
 
 
@@ -61,9 +61,9 @@ class ExistResponse(BaseModel):
 
 class CreateUserLinkResponse(BaseModel):
 	url_short: str
-	web_socket: str
+	web_socket: WebsocketUrl | None = None
 
 
 class UsersLinksResponse(BaseModel):
 	url_short: str
-	link: str
+	link: HttpUrl
