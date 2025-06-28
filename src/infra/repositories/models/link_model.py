@@ -1,6 +1,5 @@
 from src.infra.repositories.models.base import Base
 from sqlalchemy import Column, Integer, String, UniqueConstraint, ForeignKey
-import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 
@@ -11,9 +10,8 @@ class LinkORM(Base):
 	original_url = Column(String, nullable=False)
 	short_code = Column(String, unique=True, nullable=False)
 	alias = Column(String)
-	owner_id = Column(UUID(as_uuid=True), ForeignKey("users.uuid_id"), nullable=True)
+	owner_id = Column(UUID(as_uuid=True), ForeignKey("users.uuid_id", ondelete='CASCADE'), nullable=True)
 	room_id = Column(UUID(as_uuid=True), nullable=True)
-
 	__table_args__ = (
 		UniqueConstraint('owner_id', 'alias', name='uix_username_alias'),
 	)
