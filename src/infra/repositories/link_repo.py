@@ -6,7 +6,7 @@ from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
 from sqlalchemy import exists
-
+from src.logger import error_logger
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
@@ -24,6 +24,7 @@ class LinkRepositoryImpl(LinkRepository):
 				session.refresh(new_link)
 				return Link.from_orm(new_link)
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidCreateLink()
 
 	def check_short_code(self, short_code: str) -> bool:
@@ -33,6 +34,7 @@ class LinkRepositoryImpl(LinkRepository):
 					exists().where(LinkORM.short_code == short_code)
 				).scalar()
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidCheckShortCode() from e
 
 	def get_by_short_code(self, short_code: str) -> Link:
@@ -45,6 +47,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidGetLink() from e
 
 	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
@@ -60,6 +63,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidGetLink() from e
 
 	def get_all_by_owner_id(self, owner_id: UUID) -> List[Link]:
@@ -72,6 +76,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinksNotExist as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidGetAllLinks() from e
 
 	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> bool:
@@ -87,6 +92,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidDeleteLink() from e
 
 	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
@@ -102,6 +108,7 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinkNotExists as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidDeleteLink() from e
 
 	def delete_all_by_owner_id(self, owner_id: UUID) -> bool:
@@ -115,4 +122,5 @@ class LinkRepositoryImpl(LinkRepository):
 		except link_exception.InfraLinksNotExist as e:
 			raise e
 		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
 			raise link_exception.InfraInvalidDeleteAllLinks() from e
