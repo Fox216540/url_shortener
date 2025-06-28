@@ -29,7 +29,7 @@ Url shortener
   **Schema**:
     - **url_origin** (N/A) **(required)**: Url Origin
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -69,7 +69,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -104,20 +104,15 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **HTTP 401**: Unauthorized
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
-    - **detail** (string) : Authorization token missing || Invalid or expired token 
+    - **detail** (string) : This is BAD REQUEST
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
-
-- **HTTP 404**: Bad request
-  - **Content-Type**: `application/json`
-  **Schema**:
-    - **detail** (string) : This is BAD REQUEST
 
 - **HTTP 200**: Successful Response
   - **Content-Type**: `application/json`
@@ -155,7 +150,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -199,7 +194,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -242,7 +237,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -278,7 +273,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -303,7 +298,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -340,7 +335,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -386,7 +381,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -433,7 +428,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -479,7 +474,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -514,7 +509,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -553,7 +548,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -593,7 +588,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -630,7 +625,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -670,7 +665,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -700,7 +695,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -733,7 +728,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -776,7 +771,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
@@ -818,7 +813,7 @@ Content-Type: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
 
-- **HTTP 404**: Bad request
+- **HTTP 400**: Bad request
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : This is BAD REQUEST
