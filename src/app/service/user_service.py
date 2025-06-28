@@ -1,4 +1,3 @@
-from typing import Optional
 from uuid import uuid4
 from uuid import UUID
 from src.app.service.link_service import LinkService
@@ -30,7 +29,7 @@ class UserService:
 		self._link_service = link_service
 		self._auth_service = auth_service
 
-	def register_user(self, email: str, password: str, name: str, username: str) -> Optional[UserWithTokens]:
+	def register_user(self, email: str, password: str, name: str, username: str) -> UserWithTokens:
 		try:
 			if self._repo.exists_by_email(email):
 				raise InvalidRegisterUser()
@@ -51,7 +50,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidRegisterUser() from e
 
-	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
+	def login_user(self, email_or_username: str, password: str) -> UserWithTokens:
 		try:
 			user = self.get_user_by_username(email_or_username) or self.get_user_by_email(email_or_username)
 			self._hasher.verify(password, user.password)
@@ -61,7 +60,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidLoginUser() from e
 
-	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Optional[Link]:
+	def create_user_link(self, user_id: UUID, original_url: str, has_room: bool, alias: str = None) -> Link:
 		try:
 			room_id = uuid4() if has_room else None
 			link = self._link_service.add_link(owner_id=user_id,
@@ -74,7 +73,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidCreateUserLink() from e
 
-	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> Optional[User]:
+	def change_password(self, user_id: UUID, old_password: str, new_password: str) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
 
@@ -93,7 +92,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidChangePassword() from e
 
-	def change_username(self, user_id: UUID, username: str) -> Optional[UserWithAccessToken]:
+	def change_username(self, user_id: UUID, username: str) -> UserWithAccessToken:
 		try:
 			user = self.get_user_by_id(user_id)
 
@@ -111,7 +110,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidChangeUsername() from e
 
-	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
+	def change_name(self, user_id: UUID, name: str) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
 
@@ -126,7 +125,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidChangeName() from e
 
-	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
+	def change_email(self, user_id: UUID, email: str) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
 			if user.email == email:
@@ -207,7 +206,7 @@ class UserService:
 		except Exception as e:
 			raise e
 
-	def refresh_tokens(self, token: str) -> Optional[UserWithTokens]:
+	def refresh_tokens(self, token: str) -> UserWithTokens:
 		try:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
@@ -243,7 +242,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidLogoutAllUser() from e
 
-	def delete_link_by_user(self, user_id: UUID, identifier: str) -> Optional[bool]:
+	def delete_link_by_user(self, user_id: UUID, identifier: str) -> bool:
 		try:
 			return self._link_service.delete_link_by_owner_id(identifier, user_id)
 		except LinkException as e:
@@ -251,7 +250,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidDeleteLinkByUser() from e
 
-	def delete_all_links_user(self, user_id: UUID) -> Optional[bool]:
+	def delete_all_links_user(self, user_id: UUID) -> bool:
 		try:
 			return self._link_service.delete_all_by_owner_id(user_id)
 		except LinkException as e:
@@ -259,7 +258,7 @@ class UserService:
 		except Exception as e:
 			raise InvalidDeleteAllLinksUser() from e
 
-	def delete_user(self, user_id: UUID) -> Optional[bool]:
+	def delete_user(self, user_id: UUID) -> bool:
 		try:
 			self._auth_service.delete_all_refresh(user_id)
 			return self._repo.delete(user_id)
