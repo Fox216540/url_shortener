@@ -1,0 +1,7 @@
+###DATA
+@short_code = bvbjgvjhm
+
+###
+GET http://localhost:8000/{{short_code}}
+###
+POST http://localhost:8000/short
