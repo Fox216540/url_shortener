@@ -1,6 +1,5 @@
 import secrets
 import string
-from typing import Optional
 from typing import List
 from uuid import UUID
 from src.domain.link.models.link import Link
@@ -20,7 +19,7 @@ class LinkService:
 		alphabet = string.ascii_letters + string.digits
 		return ''.join(secrets.choice(alphabet) for _ in range(length))
 
-	def add_link(self, url: str, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Optional[Link]:
+	def add_link(self, url: str, owner_id: UUID = None, alias: str = None, room_id: UUID = None) -> Link:
 		try:
 			max_attempts = 10
 			for _ in range(max_attempts):
@@ -42,7 +41,7 @@ class LinkService:
 		except Exception as e:
 			raise InvalidAddLink() from e
 
-	def get_url_by_short_code(self, identifier: str, owner_id: UUID = None) -> Optional[Link]:
+	def get_url_by_short_code(self, identifier: str, owner_id: UUID = None) -> Link:
 		try:
 			link = self._repo.get_by_alias(identifier, owner_id)
 			if not link:
@@ -53,7 +52,7 @@ class LinkService:
 		except Exception as e:
 			raise InvalidGetUrlByShortCode() from e
 
-	def get_all_links_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
+	def get_all_links_by_owner_id(self, owner_id: UUID) -> List[Link]:
 		try:
 			return self._repo.get_all_by_owner_id(owner_id)
 		except LinkException as e:
@@ -61,7 +60,7 @@ class LinkService:
 		except Exception as e:
 			raise InvalidGetAllLinksByOwnerId() from e
 
-	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> bool:
 		try:
 			link = self._repo.delete_link_by_owner_id_by_alias(identifier, owner_id)
 			if not link:
@@ -72,7 +71,7 @@ class LinkService:
 		except Exception as e:
 			raise InvalidDeleteLinkByOwnerId() from e
 
-	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
+	def delete_all_by_owner_id(self, owner_id: UUID) -> bool:
 		try:
 			return self._repo.delete_all_by_owner_id(owner_id)
 		except LinkException as e:
