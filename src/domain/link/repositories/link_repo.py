@@ -71,7 +71,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
 		"""
 		Удаление ссылки по alias
 
@@ -83,7 +83,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete_all_by_owner_id(self, owner_id: UUID) -> Optional[bool]:
+	def delete_all_by_owner_id(self, owner_id: UUID) -> bool:
 		"""
 		Удаление всех ссылок
 
