@@ -1,5 +1,6 @@
 from uuid import UUID
 from sqlalchemy import exists
+from pydantic import EmailStr
 from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
 from src.infra.database import get_session
@@ -13,7 +14,7 @@ class UserRepositoryImpl(UserRepository):
 			with get_session() as session:
 				new_user = UserORM(
 					name=user.name,
-					email=user.email,
+					email=str(user.email),
 					username=user.username,
 					password=user.password,
 				)
@@ -52,7 +53,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidGetUserByUsername() from e
 
-	def get_by_email(self, email: str) -> User:
+	def get_by_email(self, email: EmailStr) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.email == email).first()
@@ -65,7 +66,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidGetUserByEmail() from e
 
-	def exists_by_email(self, email: str) -> bool:
+	def exists_by_email(self, email: EmailStr) -> bool:
 		try:
 			with get_session() as session:
 				return session.query(
@@ -130,7 +131,7 @@ class UserRepositoryImpl(UserRepository):
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise user_exception.InfraInvalidChangeName() from e
 
-	def change_email(self, user_id: UUID, email: str) -> User:
+	def change_email(self, user_id: UUID, email: EmailStr) -> User:
 		try:
 			with get_session() as session:
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from src.domain.user.models.user import User
 from uuid import UUID
+from pydantic import EmailStr
 
 class UserRepository(ABC):
 	@abstractmethod
@@ -36,7 +37,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_email(self, email: str) -> User:
+	def get_by_email(self, email: EmailStr) -> User:
 		"""
 		Возвращает пользователя по его id
 
@@ -47,7 +48,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def exists_by_email(self, email: str) -> bool:
+	def exists_by_email(self, email: EmailStr) -> bool:
 		"""
 		Проверяет существование пользователя с указанным email
 
@@ -103,7 +104,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_email(self, user_id: UUID, email: str) -> User:
+	def change_email(self, user_id: UUID, email: EmailStr) -> User:
 		"""
 		Меняет email у пользователя
 
