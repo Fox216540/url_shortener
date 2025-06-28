@@ -26,8 +26,8 @@ def get_original_link(request: Request,
 			if user and user.id:
 				user_id = user.id
 		status_logger.info(user_id)
-		url = link_service.get_url_by_short_code(short_code, user_id).original_url
-		return RedirectResponse(url)
+		url = link_service.get_url_by_short_code_or_alias(short_code, user_id).original_url
+		return RedirectResponse(str(url))
 	except Exception as e:
 		return error.handle(e)
 
