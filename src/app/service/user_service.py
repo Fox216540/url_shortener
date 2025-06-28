@@ -14,11 +14,15 @@ from src.domain.security.exceptions.jwt_exception import JwtException
 from src.domain.security.exceptions.token_storage_exception import TokenStorageException
 from src.domain.security.exceptions.password_hasher_exception import PasswordHasherException
 from src.app.exceptions.user_exceptions import (
-	InvalidRegisterUser, InvalidGetUserByUsername, InvalidDeleteUser, InvalidChangePassword,
-	InvalidChangeUsername, InvalidChangeName, InvalidChangeEmail, InvalidExistsEmail,
-	InvalidExistsUsername, InvalidCreateUserLink, InvalidLoginUser, InvalidRefreshTokens,
-	InvalidLogoutUser, InvalidLogoutAllUser, InvalidDeleteLinkByUser, InvalidDeleteAllLinksUser,
-	InvalidGetUserById
+	UserServiceException, UserDataException,
+	InvalidRegisterUser, InvalidGetUserByUsername, InvalidDeleteUser,
+	InvalidChangePassword,InvalidChangeUsername, InvalidChangeName,
+	InvalidChangeEmail, InvalidExistsEmail,InvalidExistsUsername,
+	InvalidCreateUserLink, InvalidLoginUser, InvalidRefreshTokens,
+	InvalidLogoutUser, InvalidLogoutAllUser, InvalidDeleteLinkByUser,
+	InvalidDeleteAllLinksUser, InvalidGetUserById, InvalidRefreshTokenPayloadException,
+	InvalidRefreshTokenType, PasswordIncorrectException, PasswordAlreadyExistException,
+	UsernameAlreadyExistException, NameAlreadyExistException, EmailAlreadyExistException,
 )
 from src.logger import error_logger
 
@@ -61,9 +65,14 @@ class UserService:
 				email_adapter = TypeAdapter(EmailStr)
 				email = email_adapter.validate_python(email_or_username)
 				user = self.get_user_by_email(email)
-			self._hasher.verify(password, user.password)
+			if not self._hasher.verify(password, user.password):
+				raise PasswordIncorrectException()
 			return self._auth_service.create_tokens_by_user(user)
-		except (UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
+		except (
+				UserServiceException, UserDataException,
+				UserException, PasswordHasherException,
+				JwtException, TokenStorageException
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -88,16 +97,20 @@ class UserService:
 			user = self.get_user_by_id(user_id)
 
 			if not self._hasher.verify(old_password, user.password):
-				raise InvalidChangePassword()
+				raise PasswordIncorrectException()
 
 			if self._hasher.verify(new_password, user.password):
-				raise InvalidChangePassword()
+				raise PasswordAlreadyExistException()
 
 			hash_password = self._hasher.hash(new_password)
 			new_user = self._repo.change_password(user_id, hash_password)
 
 			return new_user
-		except (PasswordHasherException, UserException, InvalidChangePassword) as e:
+		except (
+				UserException, UserServiceException,
+				UserDataException, PasswordHasherException,
+				InvalidChangePassword
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -107,16 +120,17 @@ class UserService:
 		try:
 			user = self.get_user_by_id(user_id)
 
-			if user.username == username:
-				raise InvalidChangeUsername()
-
-			if self._repo.exists_by_username(username):
-				raise InvalidChangeUsername()
+			if user.username == username or self._repo.exists_by_username(username):
+				raise UsernameAlreadyExistException()
 
 			new_user = self._repo.change_username(user_id, username)
 
 			return self._auth_service.create_access_token_by_user(new_user)
-		except (JwtException, UserException, InvalidChangeUsername) as e:
+		except (
+				UserServiceException, UserDataException,
+				JwtException, UserException,
+				InvalidChangeUsername
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -127,12 +141,15 @@ class UserService:
 			user = self.get_user_by_id(user_id)
 
 			if user.name == name:
-				raise InvalidChangeName()
+				raise NameAlreadyExistException()
 
 			new_user = self._repo.change_name(user_id, name)
 
 			return new_user
-		except (UserException, InvalidChangeName) as e:
+		except (
+				UserServiceException, UserDataException,
+				UserException, InvalidChangeName
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -141,16 +158,16 @@ class UserService:
 	def change_email(self, user_id: UUID, email: EmailStr) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
-			if user.email == email:
-				raise InvalidChangeEmail()
-
-			if self._repo.exists_by_email(email):
-				raise InvalidChangeEmail()
+			if user.email == email or not self._repo.exists_by_email(email):
+				raise EmailAlreadyExistException()
 
 			new_user = self._repo.change_email(user_id, email)
 
 			return new_user
-		except (UserException, InvalidChangeEmail) as e:
+		except (
+				UserServiceException, UserDataException,
+				UserException, InvalidChangeEmail
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -201,16 +218,16 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserById() from e
 
-	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
+	def _validate_refresh_token(self, token: str) -> tuple[str, UUID]:
 		try:
 			payload = self._auth_service.decode(token)
 			if payload.get("type") != "refresh":
-				return None
+				raise InvalidRefreshTokenType()
 
 			jti = payload.get("jti")
 			sub = payload.get("sub")
 			if not jti or not sub:
-				return None
+				raise InvalidRefreshTokenPayloadException()
 
 			user_id = UUID(sub)
 			self._auth_service.exists_refresh(jti)
@@ -229,7 +246,11 @@ class UserService:
 			self._auth_service.delete_refresh(jti, user_id=user.id)
 
 			return self._auth_service.create_tokens_by_user(user)
-		except (UserException, JwtException, PasswordHasherException, TokenStorageException) as e:
+		except (
+				UserServiceException, UserDataException,
+				UserException, JwtException,
+				PasswordHasherException, TokenStorageException
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -240,7 +261,7 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_refresh(jti, user_id)
-		except (JwtException, TokenStorageException) as e:
+		except (UserDataException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -251,7 +272,7 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_all_refresh(user_id)
-		except (JwtException, TokenStorageException) as e:
+		except (UserDataException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
