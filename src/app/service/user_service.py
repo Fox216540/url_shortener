@@ -8,7 +8,7 @@ from src.domain.user.models.user import User
 from src.domain.link.models.link import Link
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
 from src.domain.user.repositories.user_repo import UserRepository
-from src.domain.user.exceptions.user_exceptions import UserException
+from src.domain.user.exceptions.user_exceptions import UserException, UserNotFoundException
 from src.domain.link.exceptions.link_exceptions import LinkException
 from src.domain.security.exceptions.jwt_exception import JwtException
 from src.domain.security.exceptions.token_storage_exception import TokenStorageException
@@ -53,7 +53,7 @@ class UserService:
 
 	def login_user(self, email_or_username: str, password: str) -> Optional[UserWithTokens]:
 		try:
-			user = self.get_user_by_username(email_or_username) or self._repo.get_by_email(email_or_username)
+			user = self.get_user_by_username(email_or_username) or self.get_user_by_email(email_or_username)
 			self._hasher.verify(password, user.password)
 			return self._auth_service.create_tokens_by_user(user)
 		except (UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
@@ -159,21 +159,35 @@ class UserService:
 		except Exception as e:
 			raise InvalidExistsUsername() from e
 
-	def get_user_by_id(self, user_id: UUID) -> Optional[User]:
+	def get_user_by_id(self, user_id: UUID) -> User | bool:
 		try:
 			return self._repo.get_by_id(user_id)
+		except UserNotFoundException:
+			return False
 		except UserException as e:
 			raise e
 		except Exception as e:
 			raise InvalidGetUserById() from e
 
-	def get_user_by_username(self, username: str) -> Optional[User]:
+	def get_user_by_username(self, username: str) -> User | bool:
 		try:
 			return self._repo.get_by_username(username)
+		except UserNotFoundException:
+			return False
 		except UserException as e:
 			raise e
 		except Exception as e:
 			raise InvalidGetUserByUsername() from e
+
+	def get_user_by_email(self, email: str) -> User | bool:
+		try:
+			return self._repo.get_by_email(email)
+		except UserNotFoundException:
+			return False
+		except UserException as e:
+			raise e
+		except Exception as e:
+			raise InvalidGetUserById() from e
 
 	def _validate_refresh_token(self, token: str) -> tuple[str, UUID] | None:
 		try:
