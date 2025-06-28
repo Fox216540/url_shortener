@@ -41,9 +41,9 @@
 
 **Title:** FastAPI
 
-**Version:** 0.1.0
+**Version:** 0.1.4
 
-**Description:** 
+**Description:** This is a API for creating and managing short links.
 
 ---
 
