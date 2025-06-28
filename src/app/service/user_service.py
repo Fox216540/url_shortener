@@ -1,6 +1,6 @@
 from uuid import uuid4
 from uuid import UUID
-from pydantic import HttpUrl, EmailStr
+from pydantic import HttpUrl, EmailStr, TypeAdapter
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
@@ -58,7 +58,9 @@ class UserService:
 			try:
 				user = self.get_user_by_username(email_or_username)
 			except UserNotFoundException:
-				user = self.get_user_by_email(email_or_username)
+				email_adapter = TypeAdapter(EmailStr)
+				email = email_adapter.validate_python(email_or_username)
+				user = self.get_user_by_email(email)
 			self._hasher.verify(password, user.password)
 			return self._auth_service.create_tokens_by_user(user)
 		except (UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
@@ -233,7 +235,7 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidRefreshTokens() from e
 
-	def logout_user(self, token: str) -> bool | None:
+	def logout_user(self, token: str) -> bool:
 		try:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
@@ -244,7 +246,7 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidLogoutUser() from e
 
-	def logout_all_user(self, token: str) -> bool | None:
+	def logout_all_user(self, token: str) -> bool:
 		try:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
