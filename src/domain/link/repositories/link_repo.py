@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from src.domain.link.models.link import Link
-from typing import Optional
 from uuid import UUID
 from typing import List
 
@@ -16,7 +15,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def check_short_code(self, short_code: str) -> Optional[bool]:
+	def check_short_code(self, short_code: str) -> bool:
 		"""
 		Проверка на существование
 
@@ -26,7 +25,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_short_code(self, short_code: str) -> Optional[Link]:
+	def get_by_short_code(self, short_code: str) -> Link:
 		"""
 		Возвращает линк по short_code
 
@@ -37,7 +36,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Optional[Link]:
+	def get_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
 		"""
 		Возвращает линк по alias
 
@@ -49,7 +48,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_all_by_owner_id(self, owner_id: UUID) -> Optional[List[Link]]:
+	def get_all_by_owner_id(self, owner_id: UUID) -> List[Link]:
 		"""
 		Возвращает все ссылки по owner_id
 
@@ -60,7 +59,7 @@ class LinkRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> Optional[bool]:
+	def delete_link_by_owner_id_by_link_short_code(self, short_code: str, owner_id: UUID) -> bool:
 		"""
 		Удаление ссылки по short_code
 

@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 from src.domain.user.models.user import User
-from typing import Optional
 from uuid import UUID
 
 class UserRepository(ABC):
 	@abstractmethod
-	def save(self, user: User) -> Optional[User]:
+	def save(self, user: User) -> User:
 		"""
 	    Добавляет пользователя.
 
@@ -15,7 +14,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_id(self, user_id: UUID) -> Optional[User]:
+	def get_by_id(self, user_id: UUID) -> User:
 		"""
 		Возвращает пользователя по его id
 
@@ -26,7 +25,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_username(self, username: str) -> Optional[User]:
+	def get_by_username(self, username: str) -> User:
 		"""
 		Возвращает пользователя по его username
 
@@ -37,7 +36,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_email(self, email: str) -> Optional[User]:
+	def get_by_email(self, email: str) -> User:
 		"""
 		Возвращает пользователя по его id
 
@@ -48,7 +47,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def exists_by_email(self, email: str) -> Optional[bool]:
+	def exists_by_email(self, email: str) -> bool:
 		"""
 		Проверяет существование пользователя с указанным email
 
@@ -58,7 +57,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def exists_by_username(self, username: str) -> Optional[bool]:
+	def exists_by_username(self, username: str) -> bool:
 		"""
 		Проверяет существование пользователя с указанным username
 
@@ -68,7 +67,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_password(self, user_id: UUID, password: str) -> Optional[User]:
+	def change_password(self, user_id: UUID, password: str) -> User:
 		"""
 		Меняет пароль у пользователя
 
@@ -80,7 +79,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_username(self, user_id: UUID, username: str) -> Optional[User]:
+	def change_username(self, user_id: UUID, username: str) -> User:
 		"""
 		Меняет username у пользователя
 
@@ -92,7 +91,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_name(self, user_id: UUID, name: str) -> Optional[User]:
+	def change_name(self, user_id: UUID, name: str) -> User:
 		"""
 		Меняет name у пользователя
 
@@ -104,7 +103,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_email(self, user_id: UUID, email: str) -> Optional[User]:
+	def change_email(self, user_id: UUID, email: str) -> User:
 		"""
 		Меняет email у пользователя
 
@@ -116,7 +115,7 @@ class UserRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete(self, user_id: UUID) -> Optional[bool]:
+	def delete(self, user_id: UUID) -> bool:
 		"""
 		Удаляет пользователя
 

@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from src.domain.message.models.message import Message
-from typing import Optional, List
+from typing import List
 from datetime import datetime
 from uuid import UUID
 
 class MessageRepository(ABC):
 	@abstractmethod
-	def save(self, message: Message) -> Optional[Message]:
+	def save(self, message: Message) -> Message:
 		"""
 		Добавляет сообщение
 
@@ -16,7 +16,7 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> Optional[List[Message]]:
+	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> List[Message]:
 		"""
 		Возвращает сообщения с даты по дате
 
@@ -29,7 +29,7 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> Optional[bool]:
+	def delete(self, message_id: UUID, sender: str, room_id: UUID) -> bool:
 		"""
 		Удаляет сообщение по message_id и sender
 
@@ -42,7 +42,7 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Optional[Message]:
+	def change_text(self, message_id: UUID, sender: str, room_id: UUID, new_content: str) -> Message:
 		"""
 		Меняет текст сообщения по message_id, room_id и sender
 
