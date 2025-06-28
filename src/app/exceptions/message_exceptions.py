@@ -3,37 +3,37 @@ from src.core.exceptions.exception import Error
 LAYER  = "app/service/message_service"
 
 
-class MessageException(Error):
+class MessageServiceException(Error):
 	def __init__(self, message:str):
 		message = f"App: Message_service\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
 		super().__init__(message)
 
 
-class InvalidSaveMessage(MessageException):
+class InvalidSaveMessage(MessageServiceException):
 	"""Invalid Save Message"""
 	message = "Invalid Save Message"
 	def __init__(self):
 		super().__init__(message=self.message)
 
-class InvalidGetMessagesByDate(MessageException):
+class InvalidGetMessagesByDate(MessageServiceException):
 	"""Invalid Get Messages By Date"""
 	message = "Invalid Get Messages By Date"
 	def __init__(self):
 		super().__init__(message=self.message)
 
-class InvalidDeleteMessage(MessageException):
+class InvalidDeleteMessage(MessageServiceException):
 	"""Invalid Delete Message"""
 	message = "Invalid Delete Message"
 	def __init__(self):
 		super().__init__(message=self.message)
 
-class InvalidResolveUsername(MessageException):
+class InvalidResolveUsername(MessageServiceException):
 	"""Invalid Resolve Username"""
 	message = "Invalid Resolve Username"
 	def __init__(self):
 		super().__init__(message=self.message)
 
-class InvalidChangeMessage(MessageException):
+class InvalidChangeMessage(MessageServiceException):
 	"""Invalid Change Message"""
 	message = "Invalid Change Message"
 	def __init__(self):
