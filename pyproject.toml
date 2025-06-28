@@ -17,6 +17,7 @@ redis = "^6.2.0"
 pydantic = {extras = ["email"], version = "^2.11.7"}
 uvicorn = "^0.34.3"
 pyyaml = "^6.0.2"
+alembic = "^1.16.2"
 
 
 [build-system]
