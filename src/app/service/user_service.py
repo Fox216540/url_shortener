@@ -24,7 +24,8 @@ from src.logger import error_logger
 
 
 class UserService:
-	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService, auth_service: AuthService):
+	def __init__(self, repo: UserRepository, hasher: PasswordHasher, link_service: LinkService,
+	             auth_service: AuthService):
 		self._repo = repo
 		self._hasher = hasher
 		self._link_service = link_service
@@ -54,7 +55,10 @@ class UserService:
 
 	def login_user(self, email_or_username: str, password: str) -> UserWithTokens:
 		try:
-			user = self.get_user_by_username(email_or_username) or self.get_user_by_email(email_or_username)
+			try:
+				user = self.get_user_by_username(email_or_username)
+			except UserNotFoundException:
+				user = self.get_user_by_email(email_or_username)
 			self._hasher.verify(password, user.password)
 			return self._auth_service.create_tokens_by_user(user)
 		except (UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
@@ -168,33 +172,27 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidExistsUsername() from e
 
-	def get_user_by_id(self, user_id: UUID) -> User | bool:
+	def get_user_by_id(self, user_id: UUID) -> User:
 		try:
 			return self._repo.get_by_id(user_id)
-		except UserNotFoundException:
-			return False
 		except UserException as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserById() from e
 
-	def get_user_by_username(self, username: str) -> User | bool:
+	def get_user_by_username(self, username: str) -> User:
 		try:
 			return self._repo.get_by_username(username)
-		except UserNotFoundException:
-			return False
 		except UserException as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserByUsername() from e
 
-	def get_user_by_email(self, email: str) -> User | bool:
+	def get_user_by_email(self, email: str) -> User:
 		try:
 			return self._repo.get_by_email(email)
-		except UserNotFoundException:
-			return False
 		except UserException as e:
 			raise e
 		except Exception as e:
@@ -245,7 +243,6 @@ class UserService:
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidLogoutUser() from e
-
 
 	def logout_all_user(self, token: str) -> bool | None:
 		try:

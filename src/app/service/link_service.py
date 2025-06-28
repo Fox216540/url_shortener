@@ -5,7 +5,7 @@ from pydantic import HttpUrl
 from uuid import UUID
 from src.domain.link.models.link import Link
 from src.domain.link.repositories.link_repo import LinkRepository
-from src.domain.link.exceptions.link_exceptions import LinkException
+from src.domain.link.exceptions.link_exceptions import LinkException, LinkNotFoundException
 from src.app.exceptions.link_exceptions import (
 	InvalidAddLink, InvalidGetUrlByShortCode, InvalidGetAllLinksByOwnerId,
 	InvalidDeleteLinkByOwnerId, InvalidDeleteAllByOwnerId,
@@ -45,12 +45,30 @@ class LinkService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidAddLink() from e
 
-	def get_url_by_short_code(self, identifier: str, owner_id: UUID = None) -> Link:
+	def get_url_by_short_code_or_alias(self, identifier: str, owner_id: UUID = None) -> Link:
 		try:
-			link = self._repo.get_by_alias(identifier, owner_id)
-			if not link:
-				link = self._repo.get_by_short_code(identifier)
-			return link
+			try:
+				return self.get_url_by_alias(identifier, owner_id)
+			except LinkNotFoundException:
+				return self.get_url_by_short_code(identifier)
+		except LinkException as e:
+			raise e
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise InvalidGetUrlByShortCode() from e
+
+	def get_url_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
+		try:
+			return self._repo.get_by_alias(alias, owner_id)
+		except LinkException as e:
+			raise e
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise InvalidGetUrlByShortCode() from e
+
+	def get_url_by_short_code(self, short_code: str) -> Link:
+		try:
+			return self._repo.get_by_short_code(short_code)
 		except LinkException as e:
 			raise e
 		except Exception as e:
@@ -68,10 +86,28 @@ class LinkService:
 
 	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> bool:
 		try:
-			link = self._repo.delete_link_by_owner_id_by_alias(identifier, owner_id)
-			if not link:
-				link = self._repo.delete_link_by_owner_id_by_link_short_code(identifier, owner_id)
-			return link
+			try:
+				return self.delete_link_by_owner_id_by_alias(identifier, owner_id)
+			except LinkNotFoundException:
+				return self.delete_link_by_owner_id_by_short_code(identifier, owner_id)
+		except LinkException as e:
+			raise e
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise InvalidDeleteLinkByOwnerId() from e
+
+	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
+		try:
+			return self._repo.delete_link_by_owner_id_by_alias(alias, owner_id)
+		except LinkException as e:
+			raise e
+		except Exception as e:
+			error_logger.error(f"{str(e)}", exc_info=True)
+			raise InvalidDeleteLinkByOwnerId() from e
+
+	def delete_link_by_owner_id_by_short_code(self, short_code: str, owner_id: UUID) -> bool:
+		try:
+			return self._repo.delete_link_by_owner_id_by_link_short_code(short_code, owner_id)
 		except LinkException as e:
 			raise e
 		except Exception as e:
