@@ -1,6 +1,6 @@
 from uuid import uuid4
 from uuid import UUID
-from pydantic import HttpUrl
+from pydantic import HttpUrl, EmailStr
 from src.app.service.link_service import LinkService
 from src.domain.security.password_hasher import PasswordHasher
 from src.app.service.auth_service import AuthService
@@ -31,7 +31,7 @@ class UserService:
 		self._link_service = link_service
 		self._auth_service = auth_service
 
-	def register_user(self, email: str, password: str, name: str, username: str) -> UserWithTokens:
+	def register_user(self, email: EmailStr, password: str, name: str, username: str) -> UserWithTokens:
 		try:
 			if self._repo.exists_by_email(email):
 				raise InvalidRegisterUser()
@@ -136,7 +136,7 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeName() from e
 
-	def change_email(self, user_id: UUID, email: str) -> User:
+	def change_email(self, user_id: UUID, email: EmailStr) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
 			if user.email == email:
@@ -154,7 +154,7 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidChangeEmail() from e
 
-	def exists_email(self, email: str) -> bool:
+	def exists_email(self, email: EmailStr) -> bool:
 		try:
 			return self._repo.exists_by_email(email)
 		except UserException as e:
@@ -190,7 +190,7 @@ class UserService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUserByUsername() from e
 
-	def get_user_by_email(self, email: str) -> User:
+	def get_user_by_email(self, email: EmailStr) -> User:
 		try:
 			return self._repo.get_by_email(email)
 		except UserException as e:
