@@ -13,7 +13,7 @@ class LinkRepositoryImpl(LinkRepository):
 		try:
 			with get_session() as session:
 				new_link = LinkORM(
-					original_url=link.original_url,
+					original_url=str(link.original_url),
 					short_code=link.short_code,
 					owner_id=link.owner_id,
 					alias=link.alias,
