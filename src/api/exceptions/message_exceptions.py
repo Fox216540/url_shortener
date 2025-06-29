@@ -10,8 +10,8 @@ class MessageHandlerException(Error):
 
 
 class UserIdNotExist(MessageHandlerException):
-	""""""
-	message = "Us"
+	"""User ID not exist"""
+	message = "User ID not exist"
 	def __init__(self):
 		super().__init__(message=self.message)
 

@@ -6,7 +6,6 @@ from settings import URL
 from src.app.service.link_service import LinkService
 from src.app.service.user_service import UserService
 from src.api.exceptions.error import Error
-from src.logger import status_logger
 
 router = APIRouter(tags=["link"])
 
@@ -26,12 +25,10 @@ def get_original_link(request: Request,
 			user = user_service.get_user_by_username(candidate)
 			if user and user.id:
 				user_id = user.id
-		status_logger.info(user_id)
 		url = link_service.get_url_by_short_code_or_alias(short_code, user_id).original_url
 		return RedirectResponse(str(url))
 	except Exception as e:
 		return error.handle(e)
-
 
 @router.post("/short", response_model=CreateLinkResponse)
 def create_short_link(request: CreateLinkRequest,

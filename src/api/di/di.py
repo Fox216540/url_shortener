@@ -11,6 +11,8 @@ from src.infra.security.jwt_impl import JWTImpl
 from src.infra.security.token_storage_impl import TokenStorageImpl
 from src.infra.websocket.connection_manager import ConnectionManager
 from src.app.service.websocket_service import WebsocketService
+from src.app.service.health_service import HealthService
+from src.infra.health.health_impl import HealthImpl
 from src.api.exceptions.error import Error
 
 
@@ -48,3 +50,7 @@ def get_connection_manager() -> WebsocketService:
 def get_error() -> Error:
 	error = Error()
 	return error
+
+def get_health_service() -> HealthService:
+	health = HealthImpl()
+	return HealthService(health)

@@ -4,6 +4,7 @@ from src.api.link_handlers import router as link_router
 from src.api.user_handlers import router as user_router
 from src.api.message_websocket import router as websocket_router
 from src.api.message_handler import router as message_router
+from src.api.health_handler import router as health_router
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from src.logger import status_logger
@@ -39,10 +40,12 @@ app.add_middleware(
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)   # type: ignore
 app.add_middleware(JWTMiddleware)   # type: ignore
+app.include_router(health_router)
 app.include_router(websocket_router)
-app.include_router(link_router)
+
 app.include_router(user_router)
 app.include_router(message_router)
+app.include_router(link_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8000)

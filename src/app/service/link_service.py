@@ -49,16 +49,16 @@ class LinkService:
 	def get_url_by_short_code_or_alias(self, identifier: str, owner_id: UUID = None) -> Link:
 		try:
 			try:
-				return self.get_url_by_alias(identifier, owner_id)
+				return self._get_url_by_alias(identifier, owner_id)
 			except LinkNotFoundException:
-				return self.get_url_by_short_code(identifier)
+				return self._get_url_by_short_code(identifier)
 		except (LinkServiceException, LinkException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUrlByShortCode() from e
 
-	def get_url_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
+	def _get_url_by_alias(self, alias: str, owner_id: UUID = None) -> Link:
 		try:
 			return self._repo.get_by_alias(alias, owner_id)
 		except LinkException as e:
@@ -67,7 +67,7 @@ class LinkService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidGetUrlByShortCode() from e
 
-	def get_url_by_short_code(self, short_code: str) -> Link:
+	def _get_url_by_short_code(self, short_code: str) -> Link:
 		try:
 			return self._repo.get_by_short_code(short_code)
 		except LinkException as e:
@@ -88,16 +88,16 @@ class LinkService:
 	def delete_link_by_owner_id(self, identifier: str, owner_id: UUID) -> bool:
 		try:
 			try:
-				return self.delete_link_by_owner_id_by_alias(identifier, owner_id)
+				return self._delete_link_by_owner_id_by_alias(identifier, owner_id)
 			except LinkNotFoundException:
-				return self.delete_link_by_owner_id_by_short_code(identifier, owner_id)
+				return self._delete_link_by_owner_id_by_short_code(identifier, owner_id)
 		except (LinkServiceException, LinkException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteLinkByOwnerId() from e
 
-	def delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
+	def _delete_link_by_owner_id_by_alias(self, alias: str, owner_id: UUID) -> bool:
 		try:
 			return self._repo.delete_link_by_owner_id_by_alias(alias, owner_id)
 		except LinkException as e:
@@ -106,7 +106,7 @@ class LinkService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDeleteLinkByOwnerId() from e
 
-	def delete_link_by_owner_id_by_short_code(self, short_code: str, owner_id: UUID) -> bool:
+	def _delete_link_by_owner_id_by_short_code(self, short_code: str, owner_id: UUID) -> bool:
 		try:
 			return self._repo.delete_link_by_owner_id_by_link_short_code(short_code, owner_id)
 		except LinkException as e:
