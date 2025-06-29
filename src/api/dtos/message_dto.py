@@ -6,14 +6,16 @@ from datetime import datetime
 class DeleteMessageResponse(BaseModel):
 	message: str
 
+class ChangeMessageRequest(BaseModel):
+	new_content: str
+	user_id: str | None = None
 
 class ChangeMessageResponse(BaseModel):
 	message: str
 
 
 class DeleteMessageRequest(BaseModel):
-	message_id: UUID
-	room_id: UUID
+	user_id: str | None = None
 
 
 class MessageResponse(BaseModel):
@@ -21,3 +23,8 @@ class MessageResponse(BaseModel):
 	content: str
 	sender: str
 	created_at: datetime
+
+
+class WebSocketMessage(BaseModel):
+	sender: str
+	content: str
