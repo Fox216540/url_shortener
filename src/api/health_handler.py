@@ -8,11 +8,10 @@ from src.domain.health.exceptions.health_exceptions import (
 )
 from src.api.dtos.health_dto import HealthDbResponse, HealthTokenStorageResponse, HealthResponse
 from src.api.exceptions.error import Error
-from src.logger import status_logger
 
 router = APIRouter(tags=["health"])
 
-@router.get("/live")
+@router.get("/live", response_model=HealthResponse)
 def get_live_status():
 	return HealthResponse()
 
