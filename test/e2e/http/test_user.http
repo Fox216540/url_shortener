@@ -11,7 +11,7 @@
 @test_url = http://example.com
 @test_room = true
 @identifier = value1
-@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMmRhNThmZS02OGNiLTQ4N2UtOTNiOS1kN2JiYzEzZWVjZjQiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEyMTIxMTExIiwiZXhwIjoxNzUxMTQxMjc0fQ.CQaK--twg-dupt4nHWq0E1jqblPX7oh-jKK6oSpvOS0
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMmRhNThmZS02OGNiLTQ4N2UtOTNiOS1kN2JiYzEzZWVjZjQiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEyMTIxMTExIiwiZXhwIjoxNzUxMTUxMzMyfQ.P75ESfvAdxLxZ482rYoUrKSeL2D4kRMWLHyLshnc0f0
 
 ###
 GET http://localhost:8000/user/check-username?username={{test_username}}

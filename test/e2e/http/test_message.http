@@ -1,5 +1,36 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=PyCharm
+### DATA
+@test_room_id = 57e6c2a2-ecd2-40e4-be8e-23b4767bd328
+@test_message_id = a19f75df-6cd1-4d7d-ad9f-306792089fee
+@test_user_id = anon_6e36c234-a1da-4b1f-adb0-84055e8e1550
+@test_new_content = This is a test message!!!!!
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMmRhNThmZS02OGNiLTQ4N2UtOTNiOS1kN2JiYzEzZWVjZjQiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEyMTIxMTExIiwiZXhwIjoxNzUxMTY4MDcxfQ.HLZZ8drHfcbhlQU5kBxgP7-5KernD2qXDlRxBf27fAY
+
+GET http://localhost:8000/m/{{test_room_id}}
+###
+POST http://localhost:8000/m/{{test_room_id}}/{{test_message_id}}
+content-type: application/json
+
+{
+    "user_id": "{{test_user_id}}",
+    "new_content": "{{test_new_content}}"
+}
+###
+POST http://localhost:8000/m/{{test_room_id}}/{{test_message_id}}
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "new_content": "{{test_new_content}}"
+}
+###
+DELETE http://localhost:8000/m/{{test_room_id}}/{{test_message_id}}
+content-type: application/json
+
+{
+    "user_id": "{{test_user_id}}"
+}
 
 ###
+DELETE http://localhost:8000/m/{{test_room_id}}/{{test_message_id}}
+content-type: application/json
+Authorization: Bearer {{test_access_token}}

@@ -1,7 +1,12 @@
 ###DATA
-@short_code = bvbjgvjhm
-
+@test_short_code = bvbjgvjhm
+@test_short_url = http://example.com
 ###
-GET http://localhost:8000/{{short_code}}
+GET http://localhost:8000/{{test_short_code}}
 ###
 POST http://localhost:8000/short
+content-type: application/json
+
+{
+    "url_origin": "https://translate.google.com/"
+}
