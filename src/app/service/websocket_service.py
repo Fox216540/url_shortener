@@ -29,7 +29,7 @@ class WebsocketService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidDisconnect() from e
 
-	async def broadcast(self, data: dict, room_id: UUID):
+	async def broadcast(self, data: dict, room_id: UUID) -> None:
 		try:
 			await self._connect.broadcast(data=data, room_id=room_id)
 		except ConnManagerException as e:
