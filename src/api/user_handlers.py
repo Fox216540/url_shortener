@@ -302,6 +302,7 @@ def get_all_links(
 		username = raw_request.state.username
 		user_id = UUID(raw_request.state.user_id)
 		links = service.get_all_links_by_owner_id(user_id)
+		#TODO: выводить ссылки если с чатом, пусть с /с
 		return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}",
 		                           link=link.original_url) for link in links]
 	except Exception as e:

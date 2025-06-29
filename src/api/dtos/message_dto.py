@@ -17,7 +17,7 @@ class ChangeMessageResponse(BaseModel):
 class DeleteMessageRequest(BaseModel):
 	user_id: str | None = None
 
-
+#TODO: Добавить поле its me
 class MessageResponse(BaseModel):
 	id: UUID
 	content: str

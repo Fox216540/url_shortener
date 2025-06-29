@@ -9,8 +9,7 @@ from src.api.exceptions.error import Error
 
 router = APIRouter(tags=["link"])
 
-#TODO: Добавить обработку endpoint с /с чтобы передавалось room_id
-#TODO: в message_handler есть функция с получением чата
+#TODO: Добавить запись ws и original_url и room_id по short_code в куки и редирект на html файл чата: endpoint /link/short_code/c
 @router.get("/{short_code}")
 def get_original_link(request: Request,
                       short_code: str,
