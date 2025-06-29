@@ -1,0 +1,10 @@
+### Check health endpoint
+GET http://localhost:8000/live
+### Check all health
+GET http://localhost:8000/health
+### Check health database
+GET http://localhost:8000/health/db
+### Check health token
+GET http://localhost:8000/health/token
+### Check health another service which does not exist
+GET http://localhost:8000/health/another
