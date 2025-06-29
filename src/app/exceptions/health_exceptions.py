@@ -8,6 +8,11 @@ class HealthServiceException(Error):
 		message = f"App: Health\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
 		super().__init__(message)
 
+class InvalidGetAllHealthStatus(HealthServiceException):
+	"""Invalid Get All Health Status"""
+	message = "Invalid Get All Health Status"
+	def __init__(self):
+		super().__init__(message=self.message)
 
 class InvalidGetDbHealthStatus(HealthServiceException):
 	"""Invalid Get Db Health Status"""
