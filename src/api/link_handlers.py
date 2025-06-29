@@ -5,7 +5,7 @@ from src.api.di.di import get_link_service, get_user_service, get_error
 from settings import URL
 from src.app.service.link_service import LinkService
 from src.app.service.user_service import UserService
-from src.api.dtos.exceptions.error import Error
+from src.api.exceptions.error import Error
 from src.logger import status_logger
 
 router = APIRouter(tags=["link"])

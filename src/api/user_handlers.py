@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from pydantic import EmailStr
 from src.app.service.user_service import UserService
 from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
@@ -9,7 +10,7 @@ from src.api.dtos.success_user import *
 from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
 from typing import List
 from fastapi.responses import JSONResponse
-from src.api.dtos.exceptions.error import Error
+from src.api.exceptions.error import Error
 
 router = APIRouter(tags=["User"], prefix='/user')
 
@@ -35,7 +36,7 @@ def check_username(username: str,
 
 
 @router.get("/check-email", response_model=ExistResponse)
-def check_email(email: str,
+def check_email(email: EmailStr,
                 service: UserService = Depends(get_user_service),
                 error: Error = Depends(get_error)
                 ):
@@ -90,7 +91,6 @@ def login_user(request: LoginUserRequest,
                ):
 	try:
 		user = service.login_user(**request.model_dump())
-
 
 		response_data = UserWithAccessTokenResponse(
 			username=user.username,

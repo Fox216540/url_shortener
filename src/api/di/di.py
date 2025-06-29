@@ -11,7 +11,7 @@ from src.infra.security.jwt_impl import JWTImpl
 from src.infra.security.token_storage_impl import TokenStorageImpl
 from src.infra.websocket.connection_manager import ConnectionManager
 from src.app.service.websocket_service import WebsocketService
-from src.api.dtos.exceptions.error import Error
+from src.api.exceptions.error import Error
 
 
 def get_link_service() -> LinkService:

@@ -7,7 +7,7 @@ from src.app.service.websocket_service import WebsocketService
 from src.app.service.mesage_service import MessageService
 from src.app.service.auth_service import AuthService
 from src.app.service.user_service import UserService
-from src.api.dtos.exceptions.error import Error
+from src.api.exceptions.error import Error
 
 router = APIRouter(tags=["websocket"])
 

@@ -8,16 +8,14 @@ from src.api.dtos.message_dto import (
 	DeleteMessageResponse, MessageResponse, ChangeMessageResponse,
 	ChangeMessageRequest, DeleteMessageRequest
 )
+from src.api.exceptions.message_exceptions import UserIdNotExist
 from fastapi import Depends
 from src.api.di.di import get_message_service, get_connection_manager, get_error
-from src.api.dtos.exceptions.error import Error
+from src.api.exceptions.error import Error
 from src.api.dtos.success_message import *
 
 router = APIRouter(tags=["message"], prefix="/m")
-#TODO: Дописать ошибку "Не удалось удалить сообщение" в случае, если сообщение не найдено или не принадлежит пользователю
-#TODO: Дописать ошибку что user_id не None в случае, если пользователь не авторизован и не передал user_id в запросе
 #TODO: Понять код ошибки если jwt не валиден
-#TODO: Добавить ошибку в случае, если room_id не существует
 
 @router.delete("/{room_id}/{message_id}", response_model=DeleteMessageResponse)
 async def delete_message(
@@ -37,7 +35,7 @@ async def delete_message(
 		elif request:
 			user_id = request.user_id
 		else:
-			raise
+			raise UserIdNotExist()
 		service.delete_message(message_id=message_id, user_id=user_id, room_id=room_id)
 		await web_socket.broadcast(
 			{"action": "delete", "message_id": str(message_id)},

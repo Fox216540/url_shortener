@@ -4,7 +4,7 @@ from src.domain.message.exceptions.message_exceptions import (
 	InvalidDelete,
 	InvalidChangeText,
 	MessageNotExists,
-	MessagesNotExist
+	MessagesNotExist,
 )
 
 LAYER = "Infra/repositories/message"
