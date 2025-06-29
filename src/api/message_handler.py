@@ -15,7 +15,6 @@ from src.api.exceptions.error import Error
 from src.api.dtos.success_message import *
 
 router = APIRouter(tags=["message"], prefix="/m")
-#TODO: Понять код ошибки если jwt не валиден
 
 @router.delete("/{room_id}/{message_id}", response_model=DeleteMessageResponse)
 async def delete_message(
