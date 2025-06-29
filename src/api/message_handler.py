@@ -4,30 +4,40 @@ from datetime import datetime
 from uuid import UUID
 from src.app.service.mesage_service import MessageService
 from src.app.service.websocket_service import WebsocketService
-from src.api.dtos.message_dto import DeleteMessageResponse, MessageResponse, ChangeMessageResponse
+from src.api.dtos.message_dto import (
+	DeleteMessageResponse, MessageResponse, ChangeMessageResponse,
+	ChangeMessageRequest, DeleteMessageRequest
+)
 from fastapi import Depends
 from src.api.di.di import get_message_service, get_connection_manager, get_error
 from src.api.dtos.exceptions.error import Error
 from src.api.dtos.success_message import *
 
 router = APIRouter(tags=["message"], prefix="/m")
-
+#TODO: Дописать ошибку "Не удалось удалить сообщение" в случае, если сообщение не найдено или не принадлежит пользователю
+#TODO: Дописать ошибку что user_id не None в случае, если пользователь не авторизован и не передал user_id в запросе
+#TODO: Понять код ошибки если jwt не валиден
+#TODO: Добавить ошибку в случае, если room_id не существует
 
 @router.delete("/{room_id}/{message_id}", response_model=DeleteMessageResponse)
 async def delete_message(
 		raw_request: Request,
 		message_id: UUID,
 		room_id: UUID,
-		user_id: str = None,
+		request: DeleteMessageRequest | None = None,
 		service: MessageService = Depends(get_message_service),
 		web_socket: WebsocketService = Depends(get_connection_manager),
 		error: Error = Depends(get_error)
 ):
 	try:
 		user_id_from_state = getattr(raw_request.state, "user_id", None)
+		user_id = None
 		if user_id_from_state:
 			user_id = user_id_from_state
-
+		elif request:
+			user_id = request.user_id
+		else:
+			raise
 		service.delete_message(message_id=message_id, user_id=user_id, room_id=room_id)
 		await web_socket.broadcast(
 			{"action": "delete", "message_id": str(message_id)},
@@ -66,10 +76,9 @@ def get_history_of_chat(
 @router.post("/{room_id}/{message_id}", response_model=ChangeMessageResponse)
 async def change_message(
 		raw_request: Request,
+		request: ChangeMessageRequest,
 		message_id: UUID,
 		room_id: UUID,
-		new_content: str,
-		user_id: str = None,
 		service: MessageService = Depends(get_message_service),
 		web_socket: WebsocketService = Depends(get_connection_manager),
 		error: Error = Depends(get_error)
@@ -79,16 +88,17 @@ async def change_message(
 
 		if user_id_from_state:
 			user_id = user_id_from_state
-
+		else:
+			user_id = request.user_id
 		new_message = service.change_message(
 			user_id=user_id,
 			room_id=room_id,
-			new_content=new_content,
+			new_content=request.new_content,
 			message_id=message_id
 		)
 
 		await web_socket.broadcast(
-			{"action": "change", "message_id": str(new_message.id)},
+			dict(action="change", message_id=str(new_message.id), new_content=new_message.content),
 			room_id=room_id
 		)
 
