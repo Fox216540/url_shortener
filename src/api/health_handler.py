@@ -22,7 +22,7 @@ def get_all_status(
 ):
 	all_status = HealthAllStatus()
 	try:
-		health_service.get_all_health_status()
+		health_service.check_all_health_status()
 		return all_status
 	except InvalidTSConnection as e:
 		all_status.status = "error"
@@ -48,10 +48,10 @@ def get_status_of_project_object(
 ):
 	try:
 		if project_object == "db":
-			health_service.get_db_health_status()
+			health_service.check_db_health_status()
 			return HealthDbResponse()
 		elif project_object == "token":
-			health_service.get_ts_health_status()
+			health_service.check_ts_health_status()
 			return HealthTokenStorageResponse()
 		else:
 			raise NameOfHealthNotExist()
