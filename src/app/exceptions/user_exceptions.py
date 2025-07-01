@@ -4,12 +4,12 @@ LAYER  = "app/service/user_service"
 
 
 class UserException(Error):
-	def __init__(self, message:str):
-		message = f"App: User_service\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
-		super().__init__(message)
+	...
 
 class UserServiceException(UserException):
-	...
+	def __init__(self, message: str):
+		message = f"App: User_service\nLayer: {LAYER}\nMessage: {message} Error: Server Error"
+		super().__init__(message)
 
 class InvalidRegisterUser(UserServiceException):
 	"""Invalid Register User"""
@@ -121,54 +121,3 @@ class InvalidDeleteUser(UserServiceException):
 	def __init__(self):
 		super().__init__(message=self.message)
 
-class UserDataException(UserException):
-	...
-
-class InvalidRefreshTokenType(UserDataException):
-	"""Invalid Refresh Token Type"""
-	message = "Invalid Refresh Token Type"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class InvalidRefreshTokenPayloadException(UserDataException):
-	"""Invalid Refresh Token Payload Exception"""
-	message = "Invalid Refresh Token Payload Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class PasswordIncorrectException(UserDataException):
-	"""Password Incorrect Exception"""
-	message = "Password Incorrect Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class PasswordAlreadyExistException(UserDataException):
-	"""Password Already Exist Exception"""
-	message = "Password Already Exist Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class UsernameAlreadyExistException(UserDataException):
-	"""Username Already Exist Exception"""
-	message = "Username Already Exist Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class NameAlreadyExistException(UserDataException):
-	"""Username Already Exist Exception"""
-	message = "Username Already Exist Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)
-
-class EmailAlreadyExistException(UserDataException):
-	"""Email Already Exist Exception"""
-	message = "Email Already Exist Exception"
-
-	def __init__(self):
-		super().__init__(message=self.message)

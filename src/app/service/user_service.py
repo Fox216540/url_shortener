@@ -1,28 +1,40 @@
 from uuid import uuid4
 from uuid import UUID
+
 from pydantic import HttpUrl, EmailStr, TypeAdapter
-from src.app.service.link_service import LinkService
-from src.domain.security.password_hasher import PasswordHasher
-from src.app.service.auth_service import AuthService
-from src.domain.user.models.user import User
-from src.domain.link.models.link import Link
+
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
+
+from src.domain.security.password_hasher import PasswordHasher
+from src.domain.security.exceptions.password_hasher_exception import PasswordHasherException
+
+
+from src.domain.user.models.user import User
 from src.domain.user.repositories.user_repo import UserRepository
-from src.domain.user.exceptions.user_exceptions import UserException, UserNotFoundException
+from src.domain.user.exceptions.user_exceptions import (
+	UserException, UserNotFoundOrAlreadyExistException,
+	InvalidRefreshTokenPayloadOfUserException,
+	InvalidRefreshTokenOfUserType, PasswordIncorrectOfUserException,
+	PasswordOfUserAlreadyExistException,UsernameOfUserAlreadyExistException,
+	NameOfUserAlreadyExistException, EmailOfUserAlreadyExistException,
+)
+
+from src.domain.link.models.link import Link
 from src.domain.link.exceptions.link_exceptions import LinkException
+
 from src.domain.security.exceptions.jwt_exception import JwtException
 from src.domain.security.exceptions.token_storage_exception import TokenStorageException
-from src.domain.security.exceptions.password_hasher_exception import PasswordHasherException
+
+from src.app.service.link_service import LinkService
+from src.app.service.auth_service import AuthService
+
 from src.app.exceptions.user_exceptions import (
-	UserServiceException, UserDataException,
 	InvalidRegisterUser, InvalidGetUserByUsername, InvalidDeleteUser,
 	InvalidChangePassword,InvalidChangeUsername, InvalidChangeName,
 	InvalidChangeEmail, InvalidExistsEmail,InvalidExistsUsername,
 	InvalidCreateUserLink, InvalidLoginUser, InvalidRefreshTokens,
 	InvalidLogoutUser, InvalidLogoutAllUser, InvalidDeleteLinkByUser,
-	InvalidDeleteAllLinksUser, InvalidGetUserById, InvalidRefreshTokenPayloadException,
-	InvalidRefreshTokenType, PasswordIncorrectException, PasswordAlreadyExistException,
-	UsernameAlreadyExistException, NameAlreadyExistException, EmailAlreadyExistException,
+	InvalidDeleteAllLinksUser, InvalidGetUserById
 )
 from src.logger import error_logger
 
@@ -37,10 +49,10 @@ class UserService:
 
 	def register_user(self, email: EmailStr, password: str, name: str, username: str) -> UserWithTokens:
 		try:
-			if self._repo.exists_by_email(email):
-				raise InvalidRegisterUser()
-			elif self._repo.exists_by_username(username):
-				raise InvalidRegisterUser()
+			if self.exists_email(email):
+				raise EmailOfUserAlreadyExistException()
+			elif self.exists_username(username):
+				raise UsernameOfUserAlreadyExistException()
 			hash_password = self._hasher.hash(password)
 			user = User(
 				email=email,
@@ -51,7 +63,10 @@ class UserService:
 			saved = self._repo.save(user)
 
 			return self._auth_service.create_tokens_by_user(saved)
-		except (InvalidRegisterUser, UserException, PasswordHasherException, JwtException, TokenStorageException) as e:
+		except (
+			InvalidRegisterUser, UserException, PasswordHasherException,
+			JwtException, TokenStorageException
+		) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -61,15 +76,14 @@ class UserService:
 		try:
 			try:
 				user = self.get_user_by_username(email_or_username)
-			except UserNotFoundException:
+			except UserNotFoundOrAlreadyExistException:
 				email_adapter = TypeAdapter(EmailStr)
 				email = email_adapter.validate_python(email_or_username)
 				user = self.get_user_by_email(email)
 			if not self._hasher.verify(password, user.password):
-				raise PasswordIncorrectException()
+				raise PasswordIncorrectOfUserException()
 			return self._auth_service.create_tokens_by_user(user)
 		except (
-				UserServiceException, UserDataException,
 				UserException, PasswordHasherException,
 				JwtException, TokenStorageException
 		) as e:
@@ -97,19 +111,17 @@ class UserService:
 			user = self.get_user_by_id(user_id)
 
 			if not self._hasher.verify(old_password, user.password):
-				raise PasswordIncorrectException()
+				raise PasswordIncorrectOfUserException()
 
 			if self._hasher.verify(new_password, user.password):
-				raise PasswordAlreadyExistException()
+				raise PasswordOfUserAlreadyExistException()
 
 			hash_password = self._hasher.hash(new_password)
 			new_user = self._repo.change_password(user_id, hash_password)
 
 			return new_user
 		except (
-				UserException, UserServiceException,
-				UserDataException, PasswordHasherException,
-				InvalidChangePassword
+				UserException,PasswordHasherException,
 		) as e:
 			raise e
 		except Exception as e:
@@ -120,16 +132,14 @@ class UserService:
 		try:
 			user = self.get_user_by_id(user_id)
 
-			if user.username == username or self._repo.exists_by_username(username):
-				raise UsernameAlreadyExistException()
+			if user.username == username or self.exists_username(username):
+				raise UsernameOfUserAlreadyExistException()
 
 			new_user = self._repo.change_username(user_id, username)
 
 			return self._auth_service.create_access_token_by_user(new_user)
 		except (
-				UserServiceException, UserDataException,
 				JwtException, UserException,
-				InvalidChangeUsername
 		) as e:
 			raise e
 		except Exception as e:
@@ -141,14 +151,13 @@ class UserService:
 			user = self.get_user_by_id(user_id)
 
 			if user.name == name:
-				raise NameAlreadyExistException()
+				raise NameOfUserAlreadyExistException()
 
 			new_user = self._repo.change_name(user_id, name)
 
 			return new_user
 		except (
-				UserServiceException, UserDataException,
-				UserException, InvalidChangeName
+				UserException
 		) as e:
 			raise e
 		except Exception as e:
@@ -158,15 +167,14 @@ class UserService:
 	def change_email(self, user_id: UUID, email: EmailStr) -> User:
 		try:
 			user = self.get_user_by_id(user_id)
-			if user.email == email or not self._repo.exists_by_email(email):
-				raise EmailAlreadyExistException()
+			if user.email == email or self.exists_email(email):
+				raise EmailOfUserAlreadyExistException()
 
 			new_user = self._repo.change_email(user_id, email)
 
 			return new_user
 		except (
-				UserServiceException, UserDataException,
-				UserException, InvalidChangeEmail
+				UserException
 		) as e:
 			raise e
 		except Exception as e:
@@ -222,12 +230,12 @@ class UserService:
 		try:
 			payload = self._auth_service.decode(token)
 			if payload.get("type") != "refresh":
-				raise InvalidRefreshTokenType()
+				raise InvalidRefreshTokenOfUserType()
 
 			jti = payload.get("jti")
 			sub = payload.get("sub")
 			if not jti or not sub:
-				raise InvalidRefreshTokenPayloadException()
+				raise InvalidRefreshTokenPayloadOfUserException()
 
 			user_id = UUID(sub)
 			self._auth_service.exists_refresh(jti)
@@ -247,7 +255,6 @@ class UserService:
 
 			return self._auth_service.create_tokens_by_user(user)
 		except (
-				UserServiceException, UserDataException,
 				UserException, JwtException,
 				PasswordHasherException, TokenStorageException
 		) as e:
@@ -261,7 +268,7 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_refresh(jti, user_id)
-		except (UserDataException, JwtException, TokenStorageException) as e:
+		except (UserException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -272,7 +279,7 @@ class UserService:
 			result = self._validate_refresh_token(token)
 			jti, user_id = result
 			return self._auth_service.delete_all_refresh(user_id)
-		except (UserDataException, JwtException, TokenStorageException) as e:
+		except (UserException, JwtException, TokenStorageException) as e:
 			raise e
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
