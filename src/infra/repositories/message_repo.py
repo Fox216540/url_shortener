@@ -31,7 +31,7 @@ class MessageRepositoryImpl(MessageRepository):
 			first_date: datetime,
 			last_date: datetime,
 			room_id: UUID,
-			sender: UUID
+			sender: str
 	) -> List[Message]:
 		try:
 			with get_session() as session:

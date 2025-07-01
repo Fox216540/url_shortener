@@ -52,7 +52,14 @@ async def websocket_endpoint(websocket: WebSocket,
 				await manager.disconnect(websocket, room_id)
 				break
 			except Exception as e:
-				await manager.disconnect(websocket, room_id)
-				raise e
+					if websocket.client_state.name == "DISCONNECTED":
+						# Клиент уже отключён, повторно disconnect не вызываем
+						break
+					try:
+						await manager.disconnect(websocket, room_id)
+					except Exception:
+						# Игнорируем ошибку повторного disconnect
+						pass
+					raise e
 	except Exception as e:
 		error.handle(e)

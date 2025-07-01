@@ -12,11 +12,11 @@ class Message(BaseModel):
 	it_is_me: bool = False
 
 	@classmethod
-	def check_it_is_me(cls, user_id: UUID | None, sender: UUID) -> bool:
+	def check_it_is_me(cls, user_id: str | None, sender: str) -> bool:
 		return user_id is not None and user_id == sender
 
 	@classmethod
-	def from_orm(cls, orm_obj, user_id: UUID | None = None):
+	def from_orm(cls, orm_obj, user_id: str | None = None):
 		it_is_me = cls.check_it_is_me(user_id, orm_obj.sender)
 		return cls(
 			id=orm_obj.uuid_id,

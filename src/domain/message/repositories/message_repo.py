@@ -16,7 +16,7 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID, sender: UUID) -> List[Message]:
+	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID, sender: str ) -> List[Message]:
 		"""
 		Возвращает сообщения с даты по дате
 

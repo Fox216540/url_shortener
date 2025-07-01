@@ -18,7 +18,7 @@ class DeleteMessageRequest(BaseModel):
 	user_id: str | None = None
 
 class MessageRequest(BaseModel):
-	user_id: UUID
+	user_id: str
 
 class MessageResponse(BaseModel):
 	id: UUID
