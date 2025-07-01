@@ -13,6 +13,14 @@ class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
 		try:
 			with get_session() as session:
+				exists_query = session.query(
+					exists().where(
+						(LinkORM.owner_id == link.owner_id),
+						(LinkORM.alias == link.alias)
+					)
+				).scalar()
+				if exists_query:
+					raise link_exception.InfraLinkAlreadyExists()
 				new_link = LinkORM(
 					original_url=str(link.original_url),
 					short_code=link.short_code,
@@ -24,9 +32,8 @@ class LinkRepositoryImpl(LinkRepository):
 				session.commit()
 				session.refresh(new_link)
 				return Link.from_orm(new_link)
-		except sqlalchemy.exc.IntegrityError as e:
-				error_logger.error(f"{str(e)}", exc_info=True)
-				raise link_exception.InfraLinkAlreadyExists()
+		except link_exception.InfraLinkAlreadyExists as e:
+			raise e
 		except Exception as e:
 				error_logger.error(f"{str(e)}", exc_info=True)
 				raise link_exception.InfraInvalidCreateLink()
