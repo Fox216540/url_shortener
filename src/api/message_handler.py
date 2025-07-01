@@ -73,7 +73,8 @@ def get_history_of_chat(
 				id=message.id,
 				content=message.content,
 				sender=service.resolve_username(message.sender),
-				created_at=message.created_at
+				created_at=message.created_at,
+				it_is_me=message.it_is_me
 			) for message in list_messages
 		]
 	except Exception as e:
