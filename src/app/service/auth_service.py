@@ -1,10 +1,16 @@
 from uuid import UUID
+
 from typing import Dict
+
 from src.domain.security.jwt import JWT
+from src.domain.security.exceptions.jwt_exception import (
+	JwtException, RefreshTokenNotFound
+)
+
 from src.domain.user.models.user import User
 from src.domain.security.token_storage import TokenStorage
 from src.app.dtos.user_dto import UserWithTokens, UserWithAccessToken
-from src.domain.security.exceptions.jwt_exception import JwtException
+
 from src.domain.security.exceptions.token_storage_exception import TokenStorageException
 from src.app.exceptions.auth_exceptions import (
 	InvalidCreateAccessToken, InvalidDecode, InvalidCreateTokens, InvalidDeleteRefresh,
@@ -42,7 +48,10 @@ class AuthService:
 
 	def decode(self, token: str) -> Dict:
 		try:
-			return self._jwt.decode(token)
+			if token:
+				return self._jwt.decode(token)
+			else:
+				raise RefreshTokenNotFound()
 		except JwtException as e:
 			raise e
 		except Exception as e:

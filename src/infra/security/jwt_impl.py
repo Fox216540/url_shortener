@@ -36,6 +36,7 @@ class JWTImpl(JWT):
 			raise jwt_exception.InfraInvalidCreateRefreshToken() from e
 
 	def decode(self, token: str) -> dict:
+		error_logger.error(f"Decoding JWT token: {token}", exc_info=True)
 		try:
 			return jwt.decode(token, self.secret, algorithms=["HS256"])
 		except Exception as e:

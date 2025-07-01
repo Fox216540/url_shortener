@@ -6,6 +6,7 @@ from src.domain.link.exceptions.link_exceptions import LinkNotFoundException
 from src.domain.user.exceptions.user_exceptions import UserNotFoundOrAlreadyExistException
 from src.domain.message.exceptions.message_exceptions import MessageNotFoundException
 from src.domain.security.exceptions.token_storage_exception import TokenStorageNotFoundException
+from src.domain.security.exceptions.jwt_exception import JwtNotFoundException
 from src.domain.health.exceptions.health_exceptions import (
 	HealthServerException,
     HealthNotFoundException
@@ -26,7 +27,7 @@ class Error:
 		if isinstance(exc, (
 				LinkNotFoundException, UserNotFoundOrAlreadyExistException,
 				MessageNotFoundException, TokenStorageNotFoundException,
-				HealthNotFoundException
+				HealthNotFoundException, JwtNotFoundException
 		)):
 			raise HTTPException(
 				status_code=HTTP_400_BAD_REQUEST,
