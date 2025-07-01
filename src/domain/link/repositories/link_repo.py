@@ -10,6 +10,7 @@ class LinkRepository(ABC):
 		Добавляет линк
 
 		:param link: Link
+		:raise LinkAlreadyExists: Если линк уже есть
 		:raise InvalidCreateLink: Если не удалось добавить
 		"""
 		...
