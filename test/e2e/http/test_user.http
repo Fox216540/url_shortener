@@ -7,11 +7,11 @@
 @test_new_name = string
 @test_password = username111
 @test_new_password = username111
-@test_alias = value12
+@test_alias = value123
 @test_url = http://example.com
-@test_room = true
+@test_room = false
 @identifier = value1
-@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZjdjZjlhMi0wOWQ1LTQwZmMtYTVkZC04YzNmMTk0YmY4YzMiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEiLCJleHAiOjE3NTEzMDY3NTV9.alKZC4C-KlRpF8NDW72BtLjnS7fyt4wzpRmzOt-sCfw
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNGY3NmUzZS1mYzZjLTRmODAtOGFmNC1mOTYzMTViMWVlNjAiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEiLCJleHAiOjE3NTE0MTUzMDB9.Mrnlr3NZqr5fSIE32f24GPhSMX3bneokDVz0vQPO0Dc
 
 ###
 GET http://localhost:8000/user/check-username?username={{test_username}}

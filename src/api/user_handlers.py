@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request
-from pydantic import EmailStr
 from src.app.service.user_service import UserService
 from src.app.service.link_service import LinkService
 from src.api.dtos.user_dto import *
@@ -70,14 +69,13 @@ def create_user(request: CreateUserRequest,
 		)
 
 		response = JSONResponse(content=response_data.model_dump())
-
 		response.set_cookie(
 			key="refresh_token",
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/",
-			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
+			path="/api/user/refresh-tokens",
+			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS,
 		)
 		return response
 	except Exception as e:
@@ -105,7 +103,7 @@ def login_user(request: LoginUserRequest,
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/",
+			path="/api/user/refresh-tokens",
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 		)
 
@@ -261,7 +259,7 @@ def refresh_tokens(
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/",
+			path="/api/user/refresh-tokens",
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 		)
 
@@ -284,13 +282,13 @@ def create_link(request: CreateUserLinkRequest,
 			**request.model_dump()
 		)
 		short_identifier = link.alias or link.short_code
+		url_short = f"{username}.{URL}/{short_identifier}"
 		return CreateUserLinkResponse(
-			url_short=f"{username}.{URL}/{short_identifier}",
+			url_short=url_short+"/c" if link.room_id else url_short,
 			web_socket=f"ws://localhost:8000/ws/{link.room_id}" if link.room_id else None
 		)
 	except Exception as e:
 		return error.handle(e)
-
 
 @router.post("/my-links", response_model=List[UsersLinksResponse])
 def get_all_links(
@@ -302,8 +300,8 @@ def get_all_links(
 		username = raw_request.state.username
 		user_id = UUID(raw_request.state.user_id)
 		links = service.get_all_links_by_owner_id(user_id)
-		#TODO: выводить ссылки если с чатом, пусть с /с
-		return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}",
+
+		return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}/{'c' if link.room_id else ''}",
 		                           link=link.original_url) for link in links]
 	except Exception as e:
 		return error.handle(e)
