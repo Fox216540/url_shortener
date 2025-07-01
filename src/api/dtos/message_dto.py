@@ -17,12 +17,15 @@ class ChangeMessageResponse(BaseModel):
 class DeleteMessageRequest(BaseModel):
 	user_id: str | None = None
 
-#TODO: Добавить поле its me
+class MessageRequest(BaseModel):
+	user_id: UUID
+
 class MessageResponse(BaseModel):
 	id: UUID
 	content: str
 	sender: str
 	created_at: datetime
+	it_is_me: bool = False
 
 
 class WebSocketMessage(BaseModel):

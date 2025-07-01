@@ -27,7 +27,11 @@ class MessageRepositoryImpl(MessageRepository):
 			raise message_exception.InfraInvalidSave() from e
 
 	def get_by_date(
-			self, first_date: datetime, last_date: datetime, room_id: UUID
+			self,
+			first_date: datetime,
+			last_date: datetime,
+			room_id: UUID,
+			sender: UUID
 	) -> List[Message]:
 		try:
 			with get_session() as session:
@@ -43,7 +47,7 @@ class MessageRepositoryImpl(MessageRepository):
 				result = session.scalars(stmt).all()
 				if not result:
 					raise message_exception.InfraMessagesNotExist()
-				return [Message.from_orm(msg) for msg in result]
+				return [Message.from_orm(msg, sender) for msg in result]
 		except message_exception.InfraMessagesNotExist as e:
 			raise e
 		except Exception as e:

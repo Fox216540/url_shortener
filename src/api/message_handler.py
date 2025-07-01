@@ -6,7 +6,7 @@ from src.app.service.mesage_service import MessageService
 from src.app.service.websocket_service import WebsocketService
 from src.api.dtos.message_dto import (
 	DeleteMessageResponse, MessageResponse, ChangeMessageResponse,
-	ChangeMessageRequest, DeleteMessageRequest
+	ChangeMessageRequest, DeleteMessageRequest, MessageRequest
 )
 from src.api.exceptions.message_exceptions import UserIdNotExist
 from fastapi import Depends
@@ -50,14 +50,24 @@ async def delete_message(
 
 @router.get("/{room_id}", response_model=List[MessageResponse])
 def get_history_of_chat(
+		raw_request: Request,
 		room_id: UUID,
 		first_date: datetime,
 		last_date: datetime,
 		service: MessageService = Depends(get_message_service),
-		error: Error = Depends(get_error)
+		error: Error = Depends(get_error),
+		request: MessageRequest | None = None
 ):
 	try:
-		list_messages = service.get_messages_by_date(first_date, last_date, room_id)
+		user_id_from_state = getattr(raw_request.state, "user_id", None)
+		user_id = None
+		if user_id_from_state:
+			user_id = user_id_from_state
+		elif request:
+			user_id = request.user_id
+		else:
+			raise UserIdNotExist()
+		list_messages = service.get_messages_by_date(first_date, last_date, room_id, user_id)
 		return [
 			MessageResponse(
 				id=message.id,

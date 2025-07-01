@@ -16,13 +16,14 @@ class MessageRepository(ABC):
 		...
 
 	@abstractmethod
-	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> List[Message]:
+	def get_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID, sender: UUID) -> List[Message]:
 		"""
 		Возвращает сообщения с даты по дате
 
 		:param first_date: datetime
 		:param last_date: datetime
 		:param room_id: UUID
+		:param sender: UUID
 		:raise MessagesNotExist: Если нет сообщений
 	    :raise InvalidGetMessagesByDate: Если не удалось получить сообщения с даты по дате
 		"""

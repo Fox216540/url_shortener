@@ -33,9 +33,14 @@ class MessageService:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise InvalidSaveMessage() from e
 
-	def get_messages_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID) -> List[Message]:
+	def get_messages_by_date(self, first_date: datetime, last_date: datetime, room_id: UUID, sender: UUID) -> List[Message]:
 		try:
-			return self._repo.get_by_date(first_date=first_date, last_date=last_date, room_id=room_id)
+			return self._repo.get_by_date(
+				first_date=first_date,
+				last_date=last_date,
+				room_id=room_id,
+				sender=sender
+			)
 		except MessageException as e:
 			raise e
 		except Exception as e:
