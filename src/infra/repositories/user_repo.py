@@ -56,7 +56,7 @@ class UserRepositoryImpl(UserRepository):
 	def get_by_email(self, email: EmailStr) -> User:
 		try:
 			with get_session() as session:
-				user = session.query(UserORM).filter(UserORM.email == email).first()
+				user = session.query(UserORM).filter(UserORM.email == str(email)).first()
 				if not user:
 					raise user_exception.InfraUserNotExists()
 				return User.from_orm(user)
@@ -70,7 +70,7 @@ class UserRepositoryImpl(UserRepository):
 		try:
 			with get_session() as session:
 				return session.query(
-					exists().where(UserORM.email == email)
+					exists().where(UserORM.email == str(email))
 				).scalar()
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
@@ -137,7 +137,7 @@ class UserRepositoryImpl(UserRepository):
 				user = session.query(UserORM).filter(UserORM.uuid_id == user_id).first()
 				if not user:
 					raise user_exception.InfraUserNotExists()
-				user.email = email
+				user.email = str(email)
 				session.commit()
 				return User.from_orm(user)
 		except user_exception.InfraUserNotExists as e:
