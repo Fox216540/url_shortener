@@ -10,11 +10,6 @@ class LinkServerException(LinkException):
 		super().__init__(layer=layer, message=message, error="Server Error")
 
 
-class LinkNotFoundException(LinkException):
-	def __init__(self, layer:str, message:str):
-		super().__init__(layer=layer, message=message, error="Not Found Error")
-
-
 class InvalidCreateLink(LinkServerException):
 	"""Invalid Create Link"""
 	...
@@ -38,6 +33,10 @@ class InvalidDeleteLink(LinkServerException):
 class InvalidDeleteAllLinks(LinkServerException):
 	"""Invalid Delete All Links"""
 	...
+
+class LinkNotFoundException(LinkException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Not Found Error")
 
 class LinkNotExists(LinkNotFoundException):
 	"""Link Doesn't Exist"""

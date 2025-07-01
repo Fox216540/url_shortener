@@ -8,7 +8,7 @@ from src.api.dtos.message_dto import (
 	DeleteMessageResponse, MessageResponse, ChangeMessageResponse,
 	ChangeMessageRequest, DeleteMessageRequest, MessageRequest
 )
-from src.api.exceptions.message_exceptions import UserIdNotExist
+from src.domain.message.exceptions.message_exceptions import UserIdOfMessageNotExist
 from fastapi import Depends
 from src.api.di.di import get_message_service, get_connection_manager, get_error
 from src.api.exceptions.error import Error
@@ -34,7 +34,7 @@ async def delete_message(
 		elif request:
 			user_id = request.user_id
 		else:
-			raise UserIdNotExist()
+			raise UserIdOfMessageNotExist()
 		service.delete_message(message_id=message_id, user_id=user_id, room_id=room_id)
 		await web_socket.broadcast(
 			{"action": "delete", "message_id": str(message_id)},
@@ -66,7 +66,7 @@ def get_history_of_chat(
 		elif request:
 			user_id = request.user_id
 		else:
-			raise UserIdNotExist()
+			raise UserIdOfMessageNotExist()
 		list_messages = service.get_messages_by_date(first_date, last_date, room_id, user_id)
 		return [
 			MessageResponse(

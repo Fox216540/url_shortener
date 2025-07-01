@@ -1,13 +1,22 @@
 from fastapi import APIRouter, Depends
-from src.api.exceptions.health_exceptions import NameOfHealthNotExist
+
 from src.api.di.di import get_health_service, get_error
+
 from src.api.dtos.health_dto import HealthAllStatus
-from src.app.service.health_service import HealthService
-from src.domain.health.exceptions.health_exceptions import (
-	InvalidDbConnection, InvalidTSConnection, InvalidAllConnection
+
+from src.api.dtos.health_dto import (
+	HealthDbResponse, HealthTokenStorageResponse,
+	HealthResponse
 )
-from src.api.dtos.health_dto import HealthDbResponse, HealthTokenStorageResponse, HealthResponse
+
 from src.api.exceptions.error import Error
+
+from src.app.service.health_service import HealthService
+
+from src.domain.health.exceptions.health_exceptions import (
+	InvalidDbConnection, InvalidTSConnection,
+	InvalidAllConnection, NameOfHealthNotExist
+)
 
 router = APIRouter(tags=["health"])
 

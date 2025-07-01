@@ -9,9 +9,6 @@ class TokenStorageServerException(TokenStorageException):
 	def __init__(self, layer:str, message:str):
 		super().__init__(layer=layer, message=message, error="Server Error")
 
-class TokenStorageNotFoundException(TokenStorageException):
-	def __init__(self, layer:str, message:str):
-		super().__init__(layer=layer, message=message, error="Not Found Error")
 
 class InvalidSaveRefreshToken(TokenStorageServerException):
 	"""Invalid Save Refresh Token"""
@@ -28,6 +25,10 @@ class InvalidDeleteRefreshToken(TokenStorageServerException):
 class InvalidDeleteAllRefreshTokens(TokenStorageServerException):
 	"""Invalid Delete All Refresh Tokens"""
 	...
+
+class TokenStorageNotFoundException(TokenStorageException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Not Found Error")
 
 class RefreshTokensNotExist(TokenStorageNotFoundException):
 	"""Refresh Tokens Don't Exist"""

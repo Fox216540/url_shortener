@@ -1,17 +1,17 @@
 ### DATA
-@test_username = username12121111
-@test_new_username = username12121111
-@test_email = user22221111@example.com
-@test_new_email = user22221111@example.com
+@test_username = username1
+@test_new_username = username1
+@test_email = user2@example.com
+@test_new_email = user2@example.com
 @test_name = string
 @test_new_name = string
 @test_password = username111
 @test_new_password = username111
-@test_alias = value1
+@test_alias = value12
 @test_url = http://example.com
 @test_room = true
 @identifier = value1
-@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMmRhNThmZS02OGNiLTQ4N2UtOTNiOS1kN2JiYzEzZWVjZjQiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEyMTIxMTExIiwiZXhwIjoxNzUxMTUxMzMyfQ.P75ESfvAdxLxZ482rYoUrKSeL2D4kRMWLHyLshnc0f0
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZjdjZjlhMi0wOWQ1LTQwZmMtYTVkZC04YzNmMTk0YmY4YzMiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEiLCJleHAiOjE3NTEzMDY3NTV9.alKZC4C-KlRpF8NDW72BtLjnS7fyt4wzpRmzOt-sCfw
 
 ###
 GET http://localhost:8000/user/check-username?username={{test_username}}

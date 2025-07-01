@@ -10,11 +10,6 @@ class MessageServerException(MessageException):
 	def __init__(self, layer:str, message:str):
 		super().__init__(layer=layer, message=message, error="Server Error")
 
-class MessageNotFoundException(MessageException):
-	def __init__(self, layer:str, message:str):
-		super().__init__(layer=layer, message=message, error="Not Found Error")
-
-
 class InvalidSave(MessageServerException):
 	"""Invalid Save"""
 	...
@@ -34,6 +29,10 @@ class InvalidChangeText(MessageServerException):
 	"""Invalid Change Text"""
 	...
 
+class MessageNotFoundException(MessageException):
+	def __init__(self, layer:str, message:str):
+		super().__init__(layer=layer, message=message, error="Not Found Error")
+
 class MessageNotExists(MessageNotFoundException):
 	"""Message Doesn't Exist"""
 	...
@@ -41,3 +40,10 @@ class MessageNotExists(MessageNotFoundException):
 class MessagesNotExist(MessageNotFoundException):
 	"""Messages Don't Exist"""
 	...
+
+class UserIdOfMessageNotExist(MessageNotFoundException):
+	"""User ID of message not exist"""
+	message = "User ID not exist"
+	layer = "Domain/Message"
+	def __init__(self):
+		super().__init__(layer=self.layer, message=self.message)

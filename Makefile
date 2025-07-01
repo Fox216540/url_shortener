@@ -1,4 +1,4 @@
-.PHONY: install run test readme
+.PHONY: install run test readme mig
 
 install:
 	poetry install
@@ -11,3 +11,6 @@ test:
 
 readme:
 	poetry run python3 update_readme.py
+
+mig:
+	poetry run alembic upgrade head

@@ -1,8 +1,11 @@
 ###DATA
-@test_short_code = bvbjgvjhm
+@test_short_code = value1
 @test_short_url = http://example.com
+@test_username = username1
 ###
 GET http://localhost:8000/{{test_short_code}}
+###
+GET http://{{test_username}}.localhost:8000/value1{{test_short_code}}/c
 ###
 POST http://localhost:8000/short
 content-type: application/json
