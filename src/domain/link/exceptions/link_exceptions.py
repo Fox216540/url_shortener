@@ -46,3 +46,6 @@ class LinksNotExist(LinkNotFoundException):
 	"""Links Don't Exist"""
 	...
 
+class LinkAlreadyExists(LinkNotFoundException):
+	"""Link Already Exist"""
+	...

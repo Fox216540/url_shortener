@@ -7,6 +7,7 @@ from src.domain.link.exceptions.link_exceptions import (
 	InvalidDeleteAllLinks,
 	LinkNotExists,
 	LinksNotExist,
+	LinkAlreadyExists
 )
 
 LAYER = "Infra/repositories/link"
@@ -63,3 +64,7 @@ class InfraLinksNotExist(LinksNotExist):
 	def __init__(self):
 		super().__init__(layer=LAYER, message=self.message)
 
+class InfraLinkAlreadyExists(LinkAlreadyExists):
+	message = "Link Already Exists"
+	def __init__(self):
+		super().__init__(layer=LAYER, message=self.message)

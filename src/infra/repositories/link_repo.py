@@ -6,6 +6,7 @@ from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
 from sqlalchemy import exists
+import sqlalchemy.exc
 from src.logger import error_logger
 
 class LinkRepositoryImpl(LinkRepository):
@@ -23,9 +24,12 @@ class LinkRepositoryImpl(LinkRepository):
 				session.commit()
 				session.refresh(new_link)
 				return Link.from_orm(new_link)
+		except sqlalchemy.exc.IntegrityError as e:
+				error_logger.error(f"{str(e)}", exc_info=True)
+				raise link_exception.InfraLinkAlreadyExists()
 		except Exception as e:
-			error_logger.error(f"{str(e)}", exc_info=True)
-			raise link_exception.InfraInvalidCreateLink()
+				error_logger.error(f"{str(e)}", exc_info=True)
+				raise link_exception.InfraInvalidCreateLink()
 
 	def check_short_code(self, short_code: str) -> bool:
 		try:
