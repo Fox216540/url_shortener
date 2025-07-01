@@ -74,7 +74,7 @@ def create_user(request: CreateUserRequest,
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/api/user/refresh-tokens",
+			path="/user/refresh-tokens",
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS,
 		)
 		return response
@@ -103,7 +103,7 @@ def login_user(request: LoginUserRequest,
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/api/user/refresh-tokens",
+			path="/user/refresh-tokens",
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 		)
 
@@ -259,7 +259,7 @@ def refresh_tokens(
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/api/user/refresh-tokens",
+			path="/user/refresh-tokens",
 			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
 		)
 
