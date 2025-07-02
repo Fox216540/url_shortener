@@ -139,15 +139,20 @@ Content-Type: `application/json`
 
 **Responses:**
 
-- **HTTP 400**: Bad request
+- **HTTP 401**: Unauthorized
   - **Content-Type**: `application/json`
   **Schema**:
-    - **detail** (string) : This is BAD REQUEST
+    - **detail** (string) : Authorization token missing || Invalid or expired token 
 
 - **HTTP 500**: Internal Server Error
   - **Content-Type**: `application/json`
   **Schema**:
     - **detail** (string) : Internal Server Error
+
+- **HTTP 400**: Bad request
+  - **Content-Type**: `application/json`
+  **Schema**:
+    - **detail** (string) : This is BAD REQUEST
 
 - **HTTP 200**: Successful Response
   - **Content-Type**: `application/json`
@@ -322,7 +327,7 @@ Content-Type: `application/json`
 
 ---
 
-## `POST /user/logout_all`
+## `POST /user/logout-all`
 
 **Summary:** Logout All User
 
