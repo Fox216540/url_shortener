@@ -1,4 +1,4 @@
-from settings import ACCESS_SECRET
+from settings import config as cg
 from src.infra.repositories.link_repo import LinkRepositoryImpl
 from src.app.service.link_service import LinkService
 from src.infra.repositories.user_repo import UserRepositoryImpl
@@ -21,7 +21,7 @@ def get_link_service() -> LinkService:
 	return LinkService(repo)
 
 def get_auth_service() -> AuthService:
-	jwt = JWTImpl(ACCESS_SECRET)
+	jwt = JWTImpl(cg.ACCESS_SECRET)
 	token_storage = TokenStorageImpl()
 	return AuthService(jwt, token_storage)
 

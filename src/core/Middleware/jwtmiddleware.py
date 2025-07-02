@@ -4,7 +4,7 @@ from jose import jwt, JWTError, ExpiredSignatureError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
-from settings import ACCESS_SECRET
+from settings import config as cg
 from src.logger import status_logger
 
 PROTECTED_PATHS = ["/user/create-link",
@@ -30,7 +30,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
 	@staticmethod
 	def decode_token(token: str):
 		try:
-			payload = jwt.decode(token, ACCESS_SECRET, algorithms=["HS256"])
+			payload = jwt.decode(token, cg.ACCESS_SECRET, algorithms=["HS256"])
 			return payload
 		except ExpiredSignatureError:
 			# ⛔ токен истёк

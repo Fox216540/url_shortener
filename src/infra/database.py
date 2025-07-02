@@ -1,20 +1,19 @@
 from contextlib import contextmanager
-from settings import POOL_SIZE, POOL_MAX_SIZE
+from settings import config as cg
 import atexit
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from settings import DB_CONFIG
 #DATABASE_URL = f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"
 #DATABASE_URL = f"postgresql://user:password@localhost:5432/books"
 
 DATABASE_URL = (
-    f"postgresql+psycopg2://{DB_CONFIG['user']}:{DB_CONFIG['password']}"
-    f"@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['dbname']}"
+    f"postgresql+psycopg2://{cg.DB_CONFIG['user']}:{cg.DB_CONFIG['password']}"
+    f"@{cg.DB_CONFIG['host']}:{cg.DB_CONFIG['port']}/{cg.DB_CONFIG['dbname']}"
 )
 
-engine = create_engine(DATABASE_URL, pool_size=POOL_SIZE, max_overflow=POOL_MAX_SIZE)
+engine = create_engine(DATABASE_URL, pool_size=cg.POOL_SIZE, max_overflow=cg.POOL_MAX_SIZE)
 Session = sessionmaker(
     bind=engine,
     expire_on_commit=False

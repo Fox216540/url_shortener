@@ -1,9 +1,12 @@
 # redis_context.py
 import redis
+import os
 from contextlib import contextmanager
 import atexit
-from settings import REDIS_CONFIG
+
 from redis import ConnectionPool
+
+from settings import config as cg
 
 _pool: ConnectionPool | None = None
 _client = None
@@ -13,11 +16,11 @@ def get_redis_pool():
 	global _pool
 	if _pool is None:
 		_pool = redis.ConnectionPool(
-			host=REDIS_CONFIG["host"],
-			port=int(REDIS_CONFIG["port"]),
-			db=int(REDIS_CONFIG["db"]),
-			password=REDIS_CONFIG["password"] or None,
-			max_connections=int(REDIS_CONFIG["max_connections"]),
+			host=cg.REDIS_CONFIG["host"],
+			port=int(cg.REDIS_CONFIG["port"]),
+			db=int(cg.REDIS_CONFIG["db"]),
+			password=cg.REDIS_CONFIG["password"] or None,
+			max_connections=int(cg.REDIS_CONFIG["max_connections"]),
 			decode_responses=True,
 		)
 	return _pool

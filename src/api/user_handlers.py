@@ -6,7 +6,7 @@ from fastapi import Depends
 from uuid import UUID
 from src.api.di.di import get_user_service, get_link_service, get_error
 from src.api.dtos.success_user import *
-from settings import URL, BUFFER_SECONDS, REFRESH_TOKEN_TIME
+from settings import config as cg
 from typing import List
 from fastapi.responses import JSONResponse
 from src.api.exceptions.error import Error
@@ -75,7 +75,7 @@ def create_user(request: CreateUserRequest,
 			httponly=True,
 			samesite="lax",
 			path="/user/refresh-tokens",
-			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS,
+			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS,
 		)
 		return response
 	except Exception as e:
@@ -104,7 +104,7 @@ def login_user(request: LoginUserRequest,
 			httponly=True,
 			samesite="lax",
 			path="/user/refresh-tokens",
-			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
+			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS
 		)
 
 		return response
@@ -260,7 +260,7 @@ def refresh_tokens(
 			httponly=True,
 			samesite="lax",
 			path="/user/refresh-tokens",
-			max_age=REFRESH_TOKEN_TIME - BUFFER_SECONDS
+			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS
 		)
 
 		return response
@@ -282,7 +282,7 @@ def create_link(request: CreateUserLinkRequest,
 			**request.model_dump()
 		)
 		short_identifier = link.alias or link.short_code
-		url_short = f"{username}.{URL}/{short_identifier}"
+		url_short = f"{username}.{cg.URL}/{short_identifier}"
 		return CreateUserLinkResponse(
 			url_short=url_short+"/c" if link.room_id else url_short,
 			web_socket=f"ws://localhost:8000/ws/{link.room_id}" if link.room_id else None
@@ -301,7 +301,7 @@ def get_all_links(
 		user_id = UUID(raw_request.state.user_id)
 		links = service.get_all_links_by_owner_id(user_id)
 
-		return [UsersLinksResponse(url_short=f"{username}.{URL}/{link.alias if link.alias else link.short_code}/{'c' if link.room_id else ''}",
+		return [UsersLinksResponse(url_short=f"{username}.{cg.URL}/{link.alias if link.alias else link.short_code}/{'c' if link.room_id else ''}",
 		                           link=link.original_url) for link in links]
 	except Exception as e:
 		return error.handle(e)
