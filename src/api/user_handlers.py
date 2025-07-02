@@ -74,7 +74,7 @@ def create_user(request: CreateUserRequest,
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/user/refresh-tokens",
+			path="/user",
 			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS,
 		)
 		return response
@@ -103,7 +103,7 @@ def login_user(request: LoginUserRequest,
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/user/refresh-tokens",
+			path="/user",
 			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS
 		)
 
@@ -123,7 +123,7 @@ def logout_user(
 		service.logout_user(refresh_token)
 		response_data = UserResponse(message=success_message_logout_user)
 		response = JSONResponse(content=response_data.model_dump())
-		response.delete_cookie(key="refresh_token")
+		response.delete_cookie(key="refresh_token", path="/user")
 		return response
 	except Exception as e:
 		return error.handle(e)
@@ -142,7 +142,7 @@ def logout_all_user(
 		service.logout_all_user(refresh_token)
 		response_data = UserResponse(message=success_message_logout_all_user)
 		response = JSONResponse(content=response_data.model_dump())
-		response.delete_cookie(key="refresh_token")
+		response.delete_cookie(key="refresh_token", path="/user")
 		return response
 	except Exception as e:
 		return error.handle(e)
@@ -259,7 +259,7 @@ def refresh_tokens(
 			value=user.refresh_token,
 			httponly=True,
 			samesite="lax",
-			path="/user/refresh-tokens",
+			path="/user",
 			max_age=cg.REFRESH_TOKEN_TIME - cg.BUFFER_SECONDS
 		)
 
@@ -356,7 +356,7 @@ def delete_user(
 		service.delete_user(user_id=user_id)
 		response_data = UserResponse(message=success_message_delete_user)
 		response = JSONResponse(content=response_data.model_dump())
-		response.delete_cookie(key="refresh_token")
+		response.delete_cookie(key="refresh_token", path="/user")
 		return response
 	except Exception as e:
 		return error.handle(e)
