@@ -131,7 +131,7 @@ def logout_user(
 
 
 
-@router.post("/logout_all", response_model=UserResponse)
+@router.post("/logout-all", response_model=UserResponse)
 def logout_all_user(
 		request: Request,
 		service: UserService = Depends(get_user_service),

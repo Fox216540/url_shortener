@@ -172,7 +172,7 @@
           }
         ],
         "responses": {
-          "400": {
+          "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
@@ -517,7 +517,7 @@
         }
       }
     },
-    "/user/logout_all": {
+    "/user/logout-all": {
       "post": {
         "tags": [
           "User"
