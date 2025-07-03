@@ -639,6 +639,7 @@ Content-Type: `application/json`
   **Schema**:
     - Array of:
       - **url_short** (string) **(required)**: Url Short
+      - **short_code** (string) **(required)**: Short Code
       - **link** (string) **(required)**: Link
 
 
