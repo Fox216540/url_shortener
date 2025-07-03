@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 from typing import List
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from src.domain.message.models.message import Message
 from src.domain.message.repositories.message_repo import MessageRepository
 from src.infra.database import get_session
@@ -38,9 +38,11 @@ class MessageRepositoryImpl(MessageRepository):
 				stmt = (
 					select(MessageORM)
 					.where(
-						MessageORM.room_id == room_id,
-						MessageORM.created_at >= first_date,
-						MessageORM.created_at <= last_date
+						and_(
+							MessageORM.room_id == room_id,
+							MessageORM.created_at >= first_date,
+							MessageORM.created_at <= last_date
+						)
 					)
 					.order_by(MessageORM.created_at.asc())
 				)

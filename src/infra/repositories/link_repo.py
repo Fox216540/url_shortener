@@ -5,20 +5,21 @@ from src.infra.repositories.exceptions import link_exception
 from src.infra.repositories.models.link_model import LinkORM
 from uuid import UUID
 from typing import List
-from sqlalchemy import exists
-import sqlalchemy.exc
+from sqlalchemy import exists, and_
 from src.logger import error_logger
 
 class LinkRepositoryImpl(LinkRepository):
 	def create(self, link: Link) -> Link:
 		try:
 			with get_session() as session:
-				exists_query = session.query(
-					exists().where(
-						(LinkORM.owner_id == link.owner_id),
-						(LinkORM.original_url == str(link.original_url)),
+				exists_query = False
+				if link.alias:
+					condition = and_(
+						LinkORM.owner_id == link.owner_id,
+						LinkORM.alias == link.alias,
 					)
-				).scalar()
+					exists_query = session.query(exists().where(condition)).scalar()
+				
 				if exists_query:
 					raise link_exception.InfraLinkAlreadyExists()
 				new_link = LinkORM(
