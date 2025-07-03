@@ -2083,14 +2083,19 @@
             "type": "string",
             "title": "Url Short"
           },
+          "short_code": {
+            "type": "string",
+            "title": "Short Code"
+          },
           "link": {
             "type": "string",
             "title": "Link"
-          }
+          },
         },
         "type": "object",
         "required": [
           "url_short",
+          "short_code",
           "link"
         ],
         "title": "UsersLinksResponse"
