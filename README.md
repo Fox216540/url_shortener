@@ -597,6 +597,7 @@ Content-Type: `application/json`
   - **Content-Type**: `application/json`
   **Schema**:
     - **url_short** (string) **(required)**: Url Short
+    - **short_code** (string) **(required)**: Short Code
     - **web_socket** (N/A) : Web Socket
 
 - **HTTP 422**: Validation Error
