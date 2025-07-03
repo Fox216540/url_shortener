@@ -82,7 +82,7 @@ def delete_user(client, token):
 	assert response.status_code == 200
 
 
-def test_register_and_login(
+def test_functional_user(
 		client,
 		user_data,
 		user_link_data_with_room,

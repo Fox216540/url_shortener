@@ -1,5 +1,7 @@
 from src.core.exceptions.exception import Error
 
+LAYER = "Domain/Link"
+
 class LinkException(Error):
 	def __init__(self, layer:str, message:str, error:str):
 		message = f"Domain: Link\nLayer: {layer}\nMessage: {message}\nError: {error}"
@@ -49,3 +51,7 @@ class LinksNotExist(LinkNotFoundException):
 class LinkAlreadyExists(LinkNotFoundException):
 	"""Link Already Exist"""
 	...
+
+class RoomOfLinkNotExists(LinkNotFoundException):
+	def __init__(self):
+		super().__init__(layer=LAYER, message="Room of Link Not Found")

@@ -7,7 +7,7 @@ class CreateLinkRequest(BaseModel):
 
 
 class CreateLinkResponse(BaseModel):
-	url_short: str
+	url_short: HttpUrl
 
 
 class GetUrlOriginResponse(BaseModel):

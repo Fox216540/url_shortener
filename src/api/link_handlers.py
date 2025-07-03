@@ -7,6 +7,9 @@ from src.api.dtos.link_dto import (
 from src.api.di.di import get_link_service, get_user_service, get_error
 from settings import config as cg
 from src.app.service.link_service import LinkService
+from src.domain.link.exceptions.link_exceptions import (
+	RoomOfLinkNotExists
+)
 from src.app.service.user_service import UserService
 from src.api.exceptions.error import Error
 
@@ -48,6 +51,8 @@ def get_original_link_with_chat(
 		user_id = user.id
 		username = user.username
 		room_id = link_service.get_url_by_short_code_or_alias(short_code, user_id).room_id
+		if not room_id:
+			raise RoomOfLinkNotExists()
 		original_url = link_service.get_url_by_short_code_or_alias(short_code, user_id).original_url
 		ws = WebsocketUrl(f"ws://{cg.URL}/ws/{room_id}")
 		return GetUrlOriginWithChatResponse(
@@ -67,7 +72,7 @@ def create_short_link(request: CreateLinkRequest,
 		code = service.add_link(
 			request.url_origin,
 		).short_code
-		return CreateLinkResponse(url_short=f"{cg.URL}/{code}")
+		return CreateLinkResponse(url_short=HttpUrl(f"http://{cg.URL}/{code}"))
 	except Exception as e:
 		return error.handle(e)
 

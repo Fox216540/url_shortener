@@ -41,3 +41,9 @@ def user_link_data_without_alias_and_with_room():
 		"original_url": "https://translate.google.com/",
 		"has_room": True
 	}
+
+@pytest.fixture
+def link_data():
+	return {
+		"url_origin": "https://example.com",
+	}
