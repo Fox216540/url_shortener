@@ -16,7 +16,7 @@ class LinkRepositoryImpl(LinkRepository):
 				exists_query = session.query(
 					exists().where(
 						(LinkORM.owner_id == link.owner_id),
-						(LinkORM.alias == link.alias)
+						(LinkORM.original_url == str(link.original_url)),
 					)
 				).scalar()
 				if exists_query:
