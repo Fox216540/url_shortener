@@ -285,6 +285,7 @@ def create_link(request: CreateUserLinkRequest,
 		url_short = f"{username}.{cg.URL}/{short_identifier}"
 		return CreateUserLinkResponse(
 			url_short=url_short+"/c" if link.room_id else url_short,
+			short_code=short_identifier,
 			web_socket=f"ws://localhost:8000/ws/{link.room_id}" if link.room_id else None
 		)
 	except Exception as e:

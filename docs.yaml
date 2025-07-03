@@ -1823,6 +1823,10 @@
             "type": "string",
             "title": "Url Short"
           },
+          "short_code": {
+            "type": "string",
+            "title": "Short Code"
+          },
           "web_socket": {
             "anyOf": [
               {
@@ -1837,7 +1841,8 @@
         },
         "type": "object",
         "required": [
-          "url_short"
+          "url_short",
+          "short_code"
         ],
         "title": "CreateUserLinkResponse"
       },

@@ -61,6 +61,7 @@ class ExistResponse(BaseModel):
 
 class CreateUserLinkResponse(BaseModel):
 	url_short: str
+	short_code: str
 	web_socket: WebsocketUrl | None = None
 
 
