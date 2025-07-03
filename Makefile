@@ -25,7 +25,7 @@ test:
 		docker-compose exec -T db sh -c 'until pg_isready -U test -d test; do sleep 1; done' ; \
 		docker-compose exec -T redis sh -c 'until redis-cli ping | grep PONG; do sleep 1; done' ; \
 		echo "\n🔄 Applying migrations..." ; \
-		poetry run alembic upgrade head ; \
+		$(MAKE) mig ; \
 		echo "\n🔧 Running tests..." ; \
 		poetry run pytest test/e2e/pytest/ -v \
 			-W ignore::sqlalchemy.exc.MovedIn20Warning \
