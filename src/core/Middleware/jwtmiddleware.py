@@ -33,7 +33,6 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
 	def is_protected_path(self, path: str) -> bool:
 		for pattern in self.protected_path_patterns:
-			status_logger.info(f"Checking against pattern: {pattern}")
 			if pattern.match(path):
 				return True
 		return False
