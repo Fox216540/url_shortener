@@ -1,8 +1,9 @@
-from fastapi.responses import JSONResponse
-from starlette.status import HTTP_401_UNAUTHORIZED
+import re
 from jose import jwt, JWTError, ExpiredSignatureError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_401_UNAUTHORIZED
 from starlette.types import ASGIApp
 from settings import config as cg
 from src.logger import status_logger
@@ -13,19 +14,29 @@ PROTECTED_PATHS = ["/user/create-link",
                    "/user/change-email",
                    "/user/change-name",
                    "/user/my-links",
-                   "/user/link/",
+                   "/user/link/{link_id}",
                    "/user/links",
                    "/user/"
-                   ]  # пути, к которым применяется авторизация "/reg",
+                   ]
 
 
 class JWTMiddleware(BaseHTTPMiddleware):
 	def __init__(self, app: ASGIApp):
 		super().__init__(app)
+		# Преобразуем паттерны в регулярные выражения один раз при инициализации
+		self.protected_path_patterns = [
+			re.compile(
+				"^" + re.sub(r"\{[^/]+\}", r"[^/]+", path) + "$"
+			)
+			for path in PROTECTED_PATHS
+		]
 
-	@staticmethod
-	def is_protected_path(path: str) -> bool:
-		return path in PROTECTED_PATHS
+	def is_protected_path(self, path: str) -> bool:
+		for pattern in self.protected_path_patterns:
+			status_logger.info(f"Checking against pattern: {pattern}")
+			if pattern.match(path):
+				return True
+		return False
 
 	@staticmethod
 	def decode_token(token: str):
@@ -56,6 +67,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
 			):
 				request.state.user_id = payload["sub"]
 				request.state.username = payload["username"]
+				
 			elif self.is_protected_path(path):
 				status_logger.info(f"Invalid or expired token for path: {path}")
 				return JSONResponse(status_code=HTTP_401_UNAUTHORIZED, content={"detail": "Invalid or expired token"})

@@ -302,8 +302,11 @@ def get_all_links(
 		user_id = UUID(raw_request.state.user_id)
 		links = service.get_all_links_by_owner_id(user_id)
 
-		return [UsersLinksResponse(url_short=f"{username}.{cg.URL}/{link.alias if link.alias else link.short_code}/{'c' if link.room_id else ''}",
-		                           link=link.original_url) for link in links]
+		return [UsersLinksResponse(
+			url_short=f"{username}.{cg.URL}/{link.alias if link.alias else link.short_code}/{'c' if link.room_id else ''}",
+	        short_code=f"{link.alias if link.alias else link.short_code}",
+		    link=link.original_url
+		) for link in links]
 	except Exception as e:
 		return error.handle(e)
 

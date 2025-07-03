@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 
-from starlette.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE
+from starlette.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE, \
+	HTTP_401_UNAUTHORIZED
 
 from src.domain.link.exceptions.link_exceptions import LinkNotFoundException
 from src.domain.user.exceptions.user_exceptions import UserNotFoundOrAlreadyExistException
@@ -27,11 +28,19 @@ class Error:
 		if isinstance(exc, (
 				LinkNotFoundException, UserNotFoundOrAlreadyExistException,
 				MessageNotFoundException, TokenStorageNotFoundException,
-				HealthNotFoundException, JwtNotFoundException
+				HealthNotFoundException
 		)):
 			raise HTTPException(
 				status_code=HTTP_400_BAD_REQUEST,
 				detail=BadRequestErrorMessage
+			)
+		
+		if isinstance(exc, (
+				JwtNotFoundException,
+		)):
+			raise HTTPException(
+				status_code=HTTP_401_UNAUTHORIZED,
+				detail="JWT token not found or invalid."
 			)
 		
 		if isinstance(exc, HealthServerException):

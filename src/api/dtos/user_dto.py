@@ -67,4 +67,5 @@ class CreateUserLinkResponse(BaseModel):
 
 class UsersLinksResponse(BaseModel):
 	url_short: str
+	short_code: str
 	link: HttpUrl
