@@ -44,5 +44,3 @@ class Config:
 		self.DB_CONFIG = DB_CONFIG
 
 config = Config()
-
-print(config.DB_CONFIG)

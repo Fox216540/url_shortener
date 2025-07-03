@@ -9,8 +9,6 @@ from alembic import context
 
 from settings import config as cg
 
-print(cg.DB_CONFIG)
-
 DATABASE_URL = (
 	f"postgresql+psycopg2://{cg.DB_CONFIG['user']}:{cg.DB_CONFIG['password']}"
 	f"@{cg.DB_CONFIG['host']}:{cg.DB_CONFIG['port']}/{cg.DB_CONFIG['dbname']}"
