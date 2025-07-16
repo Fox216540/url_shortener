@@ -9,8 +9,9 @@ from src.logger import error_logger
 
 
 class JWTImpl(JWT):
-	def __init__(self, secret: str):
-		self.secret = secret
+	def __init__(self, refresh_secret: str, access_secret: str):
+		self.refresh_secret = refresh_secret
+		self.access_secret = access_secret
 
 	def create_access_token(self, user_id: UUID, username: str) -> str:
 		try:
@@ -18,7 +19,7 @@ class JWTImpl(JWT):
 			           "type": "access",
 			           "username": username,
 			           "exp": datetime.now() + timedelta(seconds=ACCESS_TOKEN_TIME)}
-			return jwt.encode(payload, self.secret, algorithm="HS256")
+			return jwt.encode(payload, self.access_secret, algorithm="HS256")
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise jwt_exception.InfraInvalidCreateAccessToken() from e
@@ -30,7 +31,7 @@ class JWTImpl(JWT):
 			           "jti": jti,
 			           "type": "refresh",
 			           "exp": datetime.now() + timedelta(seconds=REFRESH_TOKEN_TIME)}
-			return jwt.encode(payload, self.secret, algorithm="HS256"), jti
+			return jwt.encode(payload, self.refresh_secret, algorithm="HS256"), jti
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise jwt_exception.InfraInvalidCreateRefreshToken() from e
@@ -38,7 +39,7 @@ class JWTImpl(JWT):
 	def decode(self, token: str) -> dict:
 		error_logger.error(f"Decoding JWT token: {token}", exc_info=True)
 		try:
-			return jwt.decode(token, self.secret, algorithms=["HS256"])
+			return jwt.decode(token, self.refresh_secret, algorithms=["HS256"])
 		except Exception as e:
 			error_logger.error(f"{str(e)}", exc_info=True)
 			raise jwt_exception.InfraInvalidDecode() from e

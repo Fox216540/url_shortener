@@ -15,6 +15,7 @@ POOL_MAX_SIZE = int(os.getenv("POOL_MAX_SIZE", 20))
 URL = os.getenv("WEB_DOMAIN")
 
 ACCESS_SECRET = os.getenv("ACCESS_SECRET", "supersecretkey")
+REFRESH_SECRET = os.getenv("ACCESS_SECRET", "refreshsupersecretkey")
 
 REDIS_CONFIG = {
 	"host": os.getenv("REDIS_HOST"),
@@ -38,6 +39,7 @@ class Config:
 		self.ACCESS_TOKEN_TIME = ACCESS_TOKEN_TIME
 		self.REDIS_CONFIG = REDIS_CONFIG
 		self.ACCESS_SECRET = ACCESS_SECRET
+		self.REFRESH_SECRET = REFRESH_SECRET
 		self.URL = URL
 		self.POOL_MAX_SIZE = POOL_MAX_SIZE
 		self.POOL_SIZE = POOL_SIZE

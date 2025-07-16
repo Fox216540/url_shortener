@@ -28,7 +28,7 @@ class JWT(ABC):
     @abstractmethod
     def decode(self, token: str) -> dict:
         """
-        Расшифровывает и верифицирует любой токен.
+        Расшифровывает и верифицирует refresh токен.
 
         :param token: str
 	    :raise InvalidDecode: Если не удалось расшифровать токен

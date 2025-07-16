@@ -21,7 +21,7 @@ def get_link_service() -> LinkService:
 	return LinkService(repo)
 
 def get_auth_service() -> AuthService:
-	jwt = JWTImpl(cg.ACCESS_SECRET)
+	jwt = JWTImpl(cg.REFRESH_SECRET, cg.ACCESS_SECRET)
 	token_storage = TokenStorageImpl()
 	return AuthService(jwt, token_storage)
 
