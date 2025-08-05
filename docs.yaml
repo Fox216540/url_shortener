@@ -571,7 +571,7 @@
       }
     },
     "/user/change-password": {
-      "post": {
+      "patch": {
         "tags": [
           "User"
         ],
@@ -660,7 +660,7 @@
       }
     },
     "/user/change-username": {
-      "post": {
+      "patch": {
         "tags": [
           "User"
         ],
@@ -749,7 +749,7 @@
       }
     },
     "/user/change-email": {
-      "post": {
+      "patch": {
         "tags": [
           "User"
         ],
@@ -838,7 +838,7 @@
       }
     },
     "/user/change-name": {
-      "post": {
+      "patch": {
         "tags": [
           "User"
         ],

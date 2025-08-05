@@ -149,7 +149,7 @@ def logout_all_user(
 
 
 
-@router.post("/change-password", response_model=UserResponse)
+@router.patch("/change-password", response_model=UserResponse)
 def change_password(
 		request: ChangePasswordRequest,
 		raw_request: Request,
@@ -171,7 +171,7 @@ def change_password(
 		error.handle(e)
 
 
-@router.post("/change-username", response_model=UserWithAccessTokenResponse)
+@router.patch("/change-username", response_model=UserWithAccessTokenResponse)
 def change_username(
 		request: ChangeUsernameRequest,
 		raw_request: Request,
@@ -194,7 +194,7 @@ def change_username(
 		return error.handle(e)
 
 
-@router.post("/change-email", response_model=UserResponse)
+@router.patch("/change-email", response_model=UserResponse)
 def change_email(
 		request: ChangeEmailRequest,
 		raw_request: Request,
@@ -215,7 +215,7 @@ def change_email(
 		return error.handle(e)
 
 
-@router.post("/change-name", response_model=UserResponse)
+@router.patch("/change-name", response_model=UserResponse)
 def change_name(
 		request: ChangeNameRequest,
 		raw_request: Request,
