@@ -352,7 +352,7 @@ Content-Type: `application/json`
 
 ---
 
-## `POST /user/change-password`
+## `PATCH /user/change-password`
 
 **Summary:** Change Password
 
@@ -399,7 +399,7 @@ Content-Type: `application/json`
 
 ---
 
-## `POST /user/change-username`
+## `PATCH /user/change-username`
 
 **Summary:** Change Username
 
@@ -446,7 +446,7 @@ Content-Type: `application/json`
 
 ---
 
-## `POST /user/change-email`
+## `PATCH /user/change-email`
 
 **Summary:** Change Email
 
@@ -492,7 +492,7 @@ Content-Type: `application/json`
 
 ---
 
-## `POST /user/change-name`
+## `PATCH /user/change-name`
 
 **Summary:** Change Name
 
