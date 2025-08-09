@@ -19,7 +19,7 @@ def login_user(client, identifier, password):
 
 
 def change_password(client, token, old_password, new_password):
-	response = client.post("/user/change-password", json={
+	response = client.patch("/user/change-password", json={
 		"old_password": old_password,
 		"new_password": new_password
 	}, headers={"Authorization": f"Bearer {token}"})
@@ -27,21 +27,21 @@ def change_password(client, token, old_password, new_password):
 
 
 def change_email(client, token, new_email):
-	response = client.post("/user/change-email", json={
+	response = client.patch("/user/change-email", json={
 		"email": new_email
 	}, headers={"Authorization": f"Bearer {token}"})
 	assert response.status_code == 200
 
 
 def change_name(client, token, new_name):
-	response = client.post("/user/change-name", json={
+	response = client.patch("/user/change-name", json={
 		"name": new_name
 	}, headers={"Authorization": f"Bearer {token}"})
 	assert response.status_code == 200
 
 
 def change_username(client, token, new_username):
-	response = client.post("/user/change-username", json={
+	response = client.patch("/user/change-username", json={
 		"username": new_username
 	}, headers={"Authorization": f"Bearer {token}"})
 	assert response.status_code == 200
