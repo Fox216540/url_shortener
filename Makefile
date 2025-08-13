@@ -1,4 +1,4 @@
-.PHONY: install run readme mig test-mig test
+.PHONY: install run readme mig test-mig test prod
 
 install:
 	poetry install
@@ -32,4 +32,7 @@ test:
 			-W ignore::DeprecationWarning ; \
 		echo "\n🧹 Cleaning up..."
 		@docker-compose stop test-db test-redis && docker-compose rm -f -v test-db test-redis
+
+start:
+	docker-compose --profile prod up --build
 
