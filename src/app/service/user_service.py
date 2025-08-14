@@ -246,8 +246,7 @@ class UserService:
 
 	def refresh_tokens(self, token: str) -> UserWithTokens:
 		try:
-			result = self._validate_refresh_token(token)
-			jti, user_id = result
+			jti, user_id = self._validate_refresh_token(token)
 
 			user = self.get_user_by_id(user_id)
 
