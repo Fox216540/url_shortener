@@ -1,0 +1,105 @@
+### DATA
+@test_username = username1
+@test_new_username = username1
+@test_email = user2@example.com
+@test_new_email = user2@example.com
+@test_name = string
+@test_new_name = string
+@test_password = username111
+@test_new_password = username111
+@test_alias = value123
+@test_url = http://example.com
+@test_room = false
+@identifier = value1
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNGY3NmUzZS1mYzZjLTRmODAtOGFmNC1mOTYzMTViMWVlNjAiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEiLCJleHAiOjE3NTE0MTUzMDB9.Mrnlr3NZqr5fSIE32f24GPhSMX3bneokDVz0vQPO0Dc
+
+###
+GET http://localhost:8000/user/check-username?username={{test_username}}
+
+###
+GET http://localhost:8000/user/check-email?email={{test_email}}
+
+###
+POST http://localhost:8000/user/reg
+content-type: application/json
+
+{
+    "username": "{{test_username}}",
+    "email": "{{test_email}}",
+    "name": "{{test_name}}",
+    "password": "{{test_password}}"
+}
+###
+POST http://localhost:8000/user/login
+content-type: application/json
+
+{
+    "email_or_username": "{{test_email}}",
+    "password": "{{test_password}}"
+}
+###
+POST http://localhost:8000/user/logout
+Cookie: refresh_token
+###
+POST http://localhost:8000/user/logout_all
+Cookie: refresh_token
+
+###
+POST http://localhost:8000/user/change-password
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "old_password": "{{test_password}}",
+    "new_password": "{{test_new_password}}"
+}
+###
+POST http://localhost:8000/user/change-username
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "username": "{{test_new_username}}"
+}
+###
+POST http://localhost:8000/user/change-email
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "email": "{{test_new_email}}"
+}
+###
+POST http://localhost:8000/user/change-name
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "name": "{{test_new_name}}"
+}
+###
+POST http://localhost:8000/user/refresh-tokens
+Cookie: refresh_token
+###
+
+POST http://localhost:8000/user/create-link
+content-type: application/json
+Authorization: Bearer {{test_access_token}}
+
+{
+    "alias": "{{test_alias}}",
+    "original_url": "{{test_url}}",
+    "has_room": {{test_room}}
+}
+###
+POST http://localhost:8000/user/my-links
+Authorization: Bearer {{test_access_token}}
+###
+DELETE http://localhost:8000/user/link/{{identifier}}
+Authorization: Bearer {{test_access_token}}
+###
+DELETE http://localhost:8000/user/links
+Authorization: Bearer {{test_access_token}}
+###
+DELETE http://localhost:8000/user/
+Authorization: Bearer {{test_access_token}}

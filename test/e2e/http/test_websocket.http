@@ -1,0 +1,26 @@
+### DATA
+@test_url = ws://localhost:8000/ws/57e6c2a2-ecd2-40e4-be8e-23b4767bd328
+@test_access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMmRhNThmZS02OGNiLTQ4N2UtOTNiOS1kN2JiYzEzZWVjZjQiLCJ0eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJ1c2VybmFtZTEyMTIxMTExIiwiZXhwIjoxNzUxMTY4OTk0fQ.5l3LZP3wn9moSZdnlOeJNgSetcTQTUuBiAin-APOUm8
+@test_anon_user = anon_{{$random.uuid}}
+@test_message = Hello world!
+###
+WEBSOCKET {{test_url}}
+
+###
+WEBSOCKET {{test_url}}
+Content-Type: application/json // We use it for highlighting
+
+===
+{
+  "content": "{{test_message}}",
+  "sender": "{{test_anon_user}}"
+}
+
+###
+WEBSOCKET {{test_url}}
+Content-Type: application/json // We use it for highlighting
+
+{
+  "content": "{{test_message}}",
+  "sender": "{{test_access_token}}"
+}

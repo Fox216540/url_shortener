@@ -1,0 +1,17 @@
+###DATA
+@test_short_code = value1
+@test_short_url = username1.localhost:8000/value1/c
+@test_username = username1
+###
+GET http://localhost:8000/{{test_short_code}}
+###
+GET http://{{test_short_url}}
+###
+GET http://{{test_username}}.localhost:8000/value1{{test_short_code}}/c
+###
+POST http://localhost:8000/short
+content-type: application/json
+
+{
+    "url_origin": "https://translate.google.com/"
+}
